@@ -1,0 +1,20 @@
+{
+  "name": "ti",
+  "version": "1.0.0",
+  "description": "ti app",
+  "main": "/src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "thinker_ljn",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^5.0.0",
+    "koa": "^2.4.1",
+    "koa-bodyparser": "^3.2.0",
+    "koa-graphql": "0.7.3",
+    "koa-router": "^7.4.0",
+    "mysql": "^2.15.0"
+  },
+  "devDependencies": {}
+}
