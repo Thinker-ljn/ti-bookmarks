@@ -9,11 +9,11 @@ const BookmarkController = {
     let bk = new Bookmark()
     let result = await bk.save({
       name: 'test' + Math.random(),
-      url: 'test',
-      tag: 2
+      url: 'test22',
+      tag: 3
     })
 
-    return result
+    return bk
   }
 }
 
