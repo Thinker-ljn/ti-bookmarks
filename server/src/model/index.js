@@ -2,9 +2,16 @@ const db = require('../database')
 
 class Model {
   constructor (data = {}) {
-    this.$tableName = this.parseTableName()
+    this.$tableName = this.constructor.parseTableName()
     this.$primaryKey = 'id'
     this.$data = data
+  }
+
+  static async all () {
+    let tableName = this.parseTableName()
+
+    let result = await db.query('SELECT * FROM ' + tableName)
+    return result
   }
 
   async save (data = null) {
@@ -34,8 +41,8 @@ class Model {
     return result
   }
 
-  parseTableName () {
-    return this.constructor.name.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase().plural()
+  static parseTableName () {
+    return this.name.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase().plural()
   }
 }
 

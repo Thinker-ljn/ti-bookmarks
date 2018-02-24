@@ -19,9 +19,9 @@ const init = () => {
 
   const originalQueryMethod = connection.query.bind(connection)
   connection.query = (sql, cb) => new Promise((resolve, reject) => {
-    originalQueryMethod(sql, (e, rows, fields) => {
-      if (cb) return cb(e, rows, fields)
-      return e ? reject(e) : resolve({rows, fields})
+    originalQueryMethod(sql, (e, result, fields) => {
+      if (cb) return cb(e, result, fields)
+      return e ? reject(e) : resolve(result)
     })
   })
 }

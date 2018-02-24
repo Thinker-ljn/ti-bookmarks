@@ -1,8 +1,9 @@
 const Bookmark = require('../model/bookmark.js')
 
 const BookmarkController = {
-  index: function () {
-    return 'this is bookmark'
+  index: async function () {
+    let result = await Bookmark.all()
+    return result
   },
   create: async (formParams, urlParams) => {
     let bk = new Bookmark()
@@ -11,8 +12,8 @@ const BookmarkController = {
       url: 'test',
       tag: 2
     })
-    console.log(result.rows)
-    return result.rows.insertId
+
+    return result
   }
 }
 

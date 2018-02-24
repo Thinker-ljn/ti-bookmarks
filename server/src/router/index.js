@@ -36,7 +36,7 @@ const execFunction = async (execFnOrCtl, ctx, next) => {
   let params = parseParams(ctx)
   switch (type) {
     case 'function':
-      result = execFnOrCtl()
+      result = await execFnOrCtl()
       break
     case 'string':
       let [ctl, fn] = execFnOrCtl.split('@')
@@ -45,6 +45,7 @@ const execFunction = async (execFnOrCtl, ctx, next) => {
         result = await Controller[fn].apply(Controller, params)
       } catch (e) {
         console.log(e)
+        result = e
       }
       break
     default:
