@@ -30,7 +30,7 @@ const parseParams = (ctx) => {
   return [formParams, urlParams]
 }
 
-const execFunction = (execFnOrCtl, ctx, next) => {
+const execFunction = async (execFnOrCtl, ctx, next) => {
   let type = typeof execFnOrCtl
   let result = ''
   let params = parseParams(ctx)
@@ -42,7 +42,7 @@ const execFunction = (execFnOrCtl, ctx, next) => {
       let [ctl, fn] = execFnOrCtl.split('@')
       try {
         const Controller = require('../controller/' + ctl + '.js')
-        result = Controller[fn].apply(Controller, params)
+        result = await Controller[fn].apply(Controller, params)
       } catch (e) {
         console.log(e)
       }
@@ -66,8 +66,8 @@ const router = new Router()
 routes.forEach(route => {
   // p: route params, m: http methods, f: controller function
   let [m, p, f] = des(route)
-  router[m](p, (ctx, next) => {
-    execFunction(f, ctx, next)
+  router[m](p, async (ctx, next) => {
+    await execFunction(f, ctx, next)
   })
 })
 

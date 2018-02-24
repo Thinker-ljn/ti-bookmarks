@@ -4,14 +4,15 @@ const BookmarkController = {
   index: function () {
     return 'this is bookmark'
   },
-  create: (formParams, urlParams) => {
+  create: async (formParams, urlParams) => {
     let bk = new Bookmark()
-    bk.save({
+    let result = await bk.save({
       name: 'test' + Math.random(),
       url: 'test',
-      tag: 1
+      tag: 2
     })
-    return [formParams, urlParams]
+    console.log(result.rows)
+    return result.rows.insertId
   }
 }
 

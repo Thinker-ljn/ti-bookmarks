@@ -17,13 +17,20 @@ const init = () => {
     console.log('connected as id ' + connection.threadId)
   })
 
-  return connection
+  const originalQueryMethod = connection.query.bind(connection)
+  connection.query = (sql, cb) => new Promise((resolve, reject) => {
+    originalQueryMethod(sql, (e, rows, fields) => {
+      if (cb) return cb(e, rows, fields)
+      return e ? reject(e) : resolve({rows, fields})
+    })
+  })
 }
 
-const getDb = () => {
-  if (connection) return connection
 
-  return init()
+const getDb = () => {
+  if (!connection) init()
+
+  return connection
 }
 
 const db = getDb()
