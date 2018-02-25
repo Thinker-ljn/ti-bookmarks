@@ -51,8 +51,9 @@ const dispatch = async (execFnOrCtrl, ctx, next) => {
       try {
         const Controller = require('../controller/' + ctrl + '.js')
 
-        let params = parseParams(Controller[fn], ctx)
-        result = await Controller[fn].apply(Controller, params)
+        const controller = new Controller
+        let params = parseParams(controller[fn], ctx)
+        result = await controller[fn].apply(controller, params)
       } catch (e) {
         console.log(e)
         result = e

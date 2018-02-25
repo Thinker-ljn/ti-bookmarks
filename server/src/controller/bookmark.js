@@ -1,11 +1,13 @@
 const Bookmark = require('../model/bookmark.js')
+const Controller = require('./index')
 
-const BookmarkController = {
-  index: async function () {
+class BookmarkController extends Controller {
+  async index () {
     let result = await Bookmark.all()
     return result
-  },
-  create: async ($form) => {
+  }
+
+  async create ($form) {
     let bk = new Bookmark()
     await bk.save({
       name: 'test' + Math.random(),
