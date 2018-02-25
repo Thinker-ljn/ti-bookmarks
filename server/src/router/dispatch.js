@@ -1,25 +1,33 @@
+const parseUrlParamsValue = (ctx) => {
+  let route = ctx._matchedRoute
+  let params = ctx.params
+
+  let paramsKeys = route.split('/').filter(str => str.startsWith(':'))
+
+  return paramsKeys.map(key => params[key.slice(1)])
+}
+
 const parseParams = (ctrlFn, ctx) => {
   let fnParamKeys = parseCtrlFnParamList(ctrlFn)
 
   let formParams = ctx.method === 'GET' ? ctx.request.query : ctx.request.body
-  let urlParams = ctx.params
+  let urlParamsValue = parseUrlParamsValue(ctx)
 
   let defaultParams = {
     $request: ctx.request,
     $form: formParams,
-    $urlParams: urlParams,
+    $urlParams: ctx.params,
     $get: ctx.request.query,
     $post: ctx.request.body
   }
 
-  let currParams = [urlParams]
   let i = 0
 
   let params = fnParamKeys.map(pk => {
     let pv = defaultParams[pk]
 
     if (!pv) {
-      pv = currParams[i]
+      pv = urlParamsValue[i]
       i++
     }
     return pv

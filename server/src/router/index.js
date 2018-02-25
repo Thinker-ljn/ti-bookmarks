@@ -9,7 +9,8 @@ const routes = [
     m: 'get',
     f: 'bookmark@index'
   },
-  ['post', '/bookmarks', 'bookmark@create']
+  ['post', '/bookmarks', 'bookmark@create'],
+  ['delete', '/bookmarks/:id', 'bookmark@delete']
 ]
 
 const des = (route) => {

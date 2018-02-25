@@ -2,9 +2,6 @@ const db = require('../database')
 
 class Model {
   constructor (options = {}) {
-    this.$tableName =
-    this.$primaryKey = 'id'
-
     this.defProp('$tableName', this.constructor.parseTableName())
     this.defProp('$primaryKey', 'id')
 
@@ -16,6 +13,21 @@ class Model {
 
     let result = await db.query('SELECT * FROM ' + tableName)
     return result
+  }
+
+  static async find (id) {
+    let tableName = this.parseTableName()
+
+    let result = await db.query('SELECT * FROM ' + tableName + ' WHERE id = ' + id)
+
+    if (!result.length) {
+      throw 'Cannot find the model'
+    }
+
+    let model = new this
+
+    model.$data = result[0]
+    return model
   }
 
   async save (data = null) {
@@ -38,13 +50,23 @@ class Model {
     if (data) this.$data = data
 
     let pk = this.$primaryKey
-    let pkValue = this.$data.id
+    let pkValue = this.$data[pk]
 
     let fields = Object.keys(this.$data).filter(f => f !== pk)
 
     let sets = fields.map(f => ' `' + f + '` = \'' + this.$data[f] + '\'').join(',')
 
     let result = await db.query('UPDATE ' + this.$tableName + ' SET' + sets + ' WHERE ' + pk + ' = ' + pkValue)
+
+    return result
+  }
+
+  async delete (data = null) {
+    if (data) this.$data = data
+
+    if (!this.$data[this.$primaryKey]) throw 'need primaryKey'
+
+    let result = await db.query('DELETE FROM ' + this.$tableName + ' WHERE ' + this.$primaryKey + ' = ' + this.$data[this.$primaryKey])
 
     return result
   }

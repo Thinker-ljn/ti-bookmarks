@@ -10,11 +10,18 @@ class BookmarkController extends Controller {
   async create ($form) {
     let bk = new Bookmark()
     await bk.save({
-      name: 'test' + Math.random(),
-      url: 'test22',
-      tag: 3
+      name: $form.name,
+      url: $form.url,
+      tag: $form.tag_id
     })
 
+    return bk
+  }
+
+  async delete (id) {
+    let bk = await Bookmark.find(id)
+
+    await bk.delete()
     return bk
   }
 }
