@@ -1,0 +1,27 @@
+version: '3'
+services:
+  web:
+    container_name: ti_web01
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+    - "8888:8088"
+    volumes:
+    - .:/app
+    links:
+    - mysql
+
+  mysql:
+    restart: always
+    image: mysql:5.7.13
+    container_name: ti_mysql01
+    env_file:
+      - .env
+    volumes:
+      - ./storage/mysql:/var/lib/mysql
+    expose:
+      - "3306"
+    ports:
+      - "33061:3306"
