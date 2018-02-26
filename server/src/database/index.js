@@ -1,4 +1,6 @@
-let mysql = require('mysql')
+const mysql = require('mysql')
+const DB = require('./db')
+
 let connection
 const init = () => {
   connection = mysql.createConnection({
@@ -27,13 +29,13 @@ const init = () => {
 }
 
 
-const getDb = () => {
+const getConnection = () => {
   if (!connection) init()
 
   return connection
 }
 
-const db = getDb()
+const db = new DB(getConnection())
 module.exports = db
 
 // const db = require('./database')

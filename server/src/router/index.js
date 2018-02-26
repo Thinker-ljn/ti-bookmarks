@@ -5,7 +5,7 @@ const routes = [
     f: () => { return 'hello world!!!!!' }
   },
   {
-    p: '/bookmarks/:id',
+    p: '/bookmarks',
     m: 'get',
     f: 'bookmark@index'
   },

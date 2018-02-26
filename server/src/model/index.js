@@ -36,11 +36,7 @@ class Model {
       return this.update()
     }
 
-    let fields = Object.keys(this.$data)
-
-    let sets = fields.map(f => ' `' + f + '` = \'' + data[f] + '\'').join(',')
-
-    let result = await db.query('INSERT INTO ' + this.$tableName + ' SET' + sets)
+    let result = await db.insert(this.$tableName, this.$data)
 
     this.$data = {id: result.insertId}
     return result
@@ -49,24 +45,19 @@ class Model {
   async update (data = null) {
     if (data) this.$data = data
 
-    let pk = this.$primaryKey
-    let pkValue = this.$data[pk]
-
-    let fields = Object.keys(this.$data).filter(f => f !== pk)
-
-    let sets = fields.map(f => ' `' + f + '` = \'' + this.$data[f] + '\'').join(',')
-
-    let result = await db.query('UPDATE ' + this.$tableName + ' SET' + sets + ' WHERE ' + pk + ' = ' + pkValue)
+    let result = await db.update(this.$tableName, this.$data, this.$primaryKey)
 
     return result
   }
 
   async delete (data = null) {
     if (data) this.$data = data
+    let pk = this.$primaryKey
+    let pv = this.$data[pk]
 
-    if (!this.$data[this.$primaryKey]) throw 'need primaryKey'
+    if (!pv) throw 'need primaryKey'
 
-    let result = await db.query('DELETE FROM ' + this.$tableName + ' WHERE ' + this.$primaryKey + ' = ' + this.$data[this.$primaryKey])
+    let result = await db.delete(this.$tableName, pv, pk)
 
     return result
   }
