@@ -1,4 +1,4 @@
-FROM node:slim
+FROM node:8
 
 RUN npm install -g cnpm --registry=http://registry.npm.taobao.org
 RUN npm install -g nodemon --registry=http://registry.npm.taobao.org
