@@ -1,0 +1,15 @@
+version: '3'
+services:
+  react:
+    container_name: ti_react01
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+    - "8001:8001"
+    expose:
+      - "8001"
+    volumes:
+    - .:/app
+    command: sh -c "yarn start"
