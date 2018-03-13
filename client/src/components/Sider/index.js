@@ -5,7 +5,7 @@ import './index.scss'
 import AddTagModal from './AddTagModal'
 import ContextMenu from '@/components/ContextMenu'
 import { emit } from '@/components/ContextMenu/trigger'
-import { Layout, Tree } from 'antd'
+import { Layout, Tree, Modal, message } from 'antd'
 const { Sider } = Layout
 const { TreeNode } = Tree
 
@@ -17,11 +17,7 @@ class AppSider extends Component {
       showAddTagModal: false,
       tags: [{
         id: 0,
-        name: '标签',
-        children: [{
-          id: 1,
-          name: '前端'
-        }]
+        name: '标签'
       }],
       menu: [
         {
@@ -31,7 +27,8 @@ class AppSider extends Component {
         },
         {
           id: 2,
-          name: '移除'
+          name: '移除',
+          callback: this.handleDelTag.bind(this)
         }
       ]
     }
@@ -50,26 +47,40 @@ class AppSider extends Component {
     })
   }
 
+  handleDelTag (node) {
+    if (Number(node.props.eventKey) === 0) {
+      return message.error('不能删除根标签！')
+    }
+    Modal.confirm({
+      title: '确定要删除 ' + node.props.title + ' ?',
+      onOk: () => {
+        this.delTag(node)
+      }
+    })
+  }
+
+  delTag (node) {
+    const data = [...this.state.tags]
+    let id = node.props.eventKey
+    this.findNode(data, id, (item, index, arr) => {
+      arr.splice(index, 1)
+    })
+
+    this.setState({
+      tags: data
+    })
+  }
+
   addTag (name) {
     let node = {
       id: this.id++,
       name: name,
     }
 
-    const loop = (data, id, callback) => {
-      data.forEach((item) => {
-        if (item.id + '' === id + '') {
-          return callback(item)
-        }
-        if (item.children) {
-          loop(item.children, id, callback)
-        }
-      })
-    }
     const data = [...this.state.tags]
     let id = this.currNode.props.eventKey
 
-    loop(data, id, (item) => {
+    this.findNode(data, id, (item) => {
       if (!item.children) item.children = []
       item.children.push(node)
     })
@@ -80,6 +91,21 @@ class AppSider extends Component {
     this.currNode = null
 
     this.hideModal()
+  }
+
+  findNode (data, id, callback) {
+    const loop = (data, id, callback) => {
+      data.forEach((item, index, arr) => {
+        if (item.id + '' === id + '') {
+          return callback(item, index, arr)
+        }
+        if (item.children) {
+          loop(item.children, id, callback)
+        }
+      })
+    }
+
+    loop(data, id, callback)
   }
 
   hideModal () {
