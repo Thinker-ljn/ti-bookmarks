@@ -1,0 +1,31 @@
+.context-menu
+{
+    user-select: none;
+    position: fixed;
+    z-index: 1;
+
+    background-color: #555;
+    box-shadow: 0 2px 8px #ccc;
+    color: #ccc;
+
+    min-width: 100px;
+
+    li
+    {
+        height: 28px;
+        line-height: 28px;
+        padding-left: 14px;
+
+        &:not(:last-child)
+        {
+            border-bottom: 1px solid #222;
+        }
+
+        &:hover
+        {
+            background-color: #666;
+            color: #fff;
+        }
+    }
+
+}
