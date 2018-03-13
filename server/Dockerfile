@@ -18,6 +18,6 @@ ENV NODE_PATH=/home/node_modules
 
 WORKDIR /app
 
-EXPOSE 8888
+EXPOSE 8002
 
 CMD ["nodemon", "-L", "/app/src/index.js"]

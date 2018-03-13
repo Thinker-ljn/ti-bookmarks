@@ -5,12 +5,12 @@ const routes = [
     f: () => { return 'hello world!!!!!' }
   },
   {
-    p: '/bookmarks',
+    p: '/api/bookmarks',
     m: 'get',
     f: 'bookmark@index'
   },
-  ['post', '/bookmarks', 'bookmark@create'],
-  ['delete', '/bookmarks/:id', 'bookmark@delete']
+  ['post', '/api/bookmarks', 'bookmark@create'],
+  ['delete', '/api/bookmarks/:id', 'bookmark@delete']
 ]
 
 const des = (route) => {

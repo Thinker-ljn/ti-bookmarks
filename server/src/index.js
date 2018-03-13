@@ -6,9 +6,23 @@ const app = new Koa()
 const router = require('./router')
 const bodyParser = require('koa-bodyparser')
 
+app.use(function (ctx, next) {
+  if (ctx.method !== 'OPTIONS') {
+    return next();
+  }
+  if (!ctx.get('Access-Control-Request-Method')) {
+    // this not preflight request, ignore it
+    return next();
+  }
+  ctx.set('Access-Control-Allow-Origin', '*');
+  ctx.set('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+  ctx.set('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+  ctx.status = 204;
+});
+
 app.use(bodyParser())
 app.use(router.routes())
 
-app.listen(8088, function () {
-  console.log('app listening on port 8088!')
+app.listen(8002, function () {
+  console.log('app listening on port 8002!')
 })
