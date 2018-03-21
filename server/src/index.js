@@ -23,6 +23,6 @@ app.use(function (ctx, next) {
 app.use(bodyParser())
 app.use(router.routes())
 
-app.listen(8002, function () {
-  console.log('app listening on port 8002!')
+app.listen(80, function () {
+  console.log('app listening on port 80!')
 })
