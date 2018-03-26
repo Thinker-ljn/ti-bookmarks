@@ -11,6 +11,10 @@ class DB {
     return this.connection.escapeId(value)
   }
 
+  end () {
+    return this.connection.end()
+  }
+
   async query (sql) {
     let result = await this.connection.query(sql)
     return result

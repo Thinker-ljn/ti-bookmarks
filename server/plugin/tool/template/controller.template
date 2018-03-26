@@ -1,0 +1,7 @@
+const Controller = require('./index')
+
+class ${name}Controller extends Controller {
+
+}
+
+module.exports = ${name}Controller
