@@ -21,7 +21,7 @@ module.exports = {
       fs.mkdirSync(dir)
     }
 
-    let filePath = dir + '/' + type + '.js'
+    let filePath = dir + '/' + name + '.js'
     if (fs.existsSync(filePath)) {
       return console.error(`'${type}' already exist!`)
     }
