@@ -69,6 +69,7 @@ class ContextMenu extends Component {
       top: this.state.position.y + 'px',
       display: this.state.display
     }
+
     return (
       <ul styleName="context-menu" style={style} tabIndex="-1"
         onBlur={this.closeMenu}
