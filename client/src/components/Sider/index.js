@@ -6,6 +6,9 @@ import AddTagModal from './AddTagModal'
 import ContextMenu from '@/components/ContextMenu'
 import { emit } from '@/components/ContextMenu/trigger'
 import { Layout, Tree, Modal, message } from 'antd'
+
+import axios from 'axios'
+
 const { Sider } = Layout
 const { TreeNode } = Tree
 
@@ -72,17 +75,22 @@ class AppSider extends Component {
   }
 
   addTag (name) {
-    let node = {
-      id: this.id++,
-      name: name,
-    }
+    axios.post('/api/tags', {name: name})
+    .then((response) => {
+      console.log(response.data)
+      this.renderTag(response.data)
+    }, (err) => {
+      console.log(err)
+    })
+  }
 
+  renderTag (tag) {
     const data = [...this.state.tags]
     let id = this.currNode.props.eventKey
 
     this.findNode(data, id, (item) => {
       if (!item.children) item.children = []
-      item.children.push(node)
+      item.children.push(tag)
     })
 
     this.setState({

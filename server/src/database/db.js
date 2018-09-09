@@ -1,18 +1,27 @@
+const Builder = require('./query/builder')
 class DB {
   constructor (connection) {
     this.connection = connection
   }
 
-  escape (value) {
-    return this.connection.escape(value)
-  }
-
-  escapeId (value) {
-    return this.connection.escapeId(value)
-  }
-
   end () {
     return this.connection.end()
+  }
+
+  table (tableName) {
+    return new Builder(tableName)
+  }
+
+  async all (tableName) {
+    let builder = new Builder(tableName)
+    let sql = builder.select().get()
+    return await this.query(sql)
+  }
+
+  async find (tableName, id) {
+    let builder = new Builder(tableName)
+    let sql = builder.where('id', id).select().get()
+    return await this.query(sql)
   }
 
   async query (sql) {
@@ -21,11 +30,8 @@ class DB {
   }
 
   async insert (table, data) {
-    let fields = Object.keys(data)
-
-    let sets = fields.map(f => this.escapeId(f) + ' = ' + this.escape(data[f])).join(',')
-
-    let sql = 'INSERT INTO ' + this.escapeId(table) + ' SET ' + sets
+    let builder = new Builder(table)
+    let sql = builder.insert(data)
 
     console.log(sql)
     let result = await this.query(sql)
@@ -37,18 +43,18 @@ class DB {
     let pk = primaryKey
     let pkValue = data[pk]
 
-    let fields = Object.keys(data).filter(f => f !== pk)
+    let builder = new Builder(table)
+    let sql = builder.where(pk, pkValue).update(data)
 
-    let sets = fields.map(f => this.escapeId(f) + ' = ' + this.escape(data[f])).join(',')
-
-    let sql = 'UPDATE ' + this.escapeId(table) + ' SET ' + sets + ' WHERE ' + this.escapeId(pk) + ' = ' + this.escape(pkValue)
+    // let fields = Object.keys(data).filter(f => f !== pk)
     let result = await this.query(sql)
 
     return result
   }
 
   async delete (table, primaryValue, primaryKey) {
-    let sql = 'DELETE FROM ' + this.escapeId(table) + ' WHERE ' + this.escapeId(primaryKey) + ' = ' + this.escape(primaryValue)
+    let builder = new Builder(table)
+    let sql = builder.where(primaryValue, primaryKey).delete()
     let result = await db.query(sql)
 
     return result

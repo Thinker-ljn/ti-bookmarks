@@ -11,9 +11,22 @@ class BookmarkController extends Controller {
     let bk = new Bookmark()
     await bk.save({
       name: $form.name,
-      url: $form.url,
-      tag: $form.tag_id
+      url: $form.url
     })
+
+    if ($form.tag_id) {
+      await bk.tags().attach($form.tag_id)
+    }
+
+    return bk
+  }
+
+  async update ($form) {
+    let bk = Bookmark.find($form.id)
+    if ($form.name) bk.name = $form.name
+    if ($form.url) bk.url = $form.url
+
+    await bk.save()
 
     return bk
   }

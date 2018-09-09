@@ -30,7 +30,7 @@ class AddBookmark extends Component {
     axios.post('/api/bookmarks', {
       name: this.state.name,
       url: this.state.url,
-      tag_id: 0
+      tag_id: 1
     }).then((response) => {
       console.log(response)
     }, (err) => {

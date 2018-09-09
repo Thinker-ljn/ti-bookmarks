@@ -1,24 +1,26 @@
 const db = require('../database')
+const def = require('../lib/def.js')
+const Relation = require('../relation')
 
 class Model {
   constructor (options = {}) {
-    this.defProp('$tableName', this.constructor.parseTableName())
-    this.defProp('$primaryKey', 'id')
+    def.defProp(this, '$tableName', this.constructor.parseTableName())
+    def.defProp(this, '$primaryKey', 'id')
 
-    this.defData()
+    def.defData(this)
   }
 
   static async all () {
     let tableName = this.parseTableName()
 
-    let result = await db.query('SELECT * FROM ' + tableName)
+    let result = await db.all(tableName)
     return result
   }
 
   static async find (id) {
     let tableName = this.parseTableName()
 
-    let result = await db.query('SELECT * FROM ' + tableName + ' WHERE id = ' + id)
+    let result = await db.find(tableName, id)
 
     if (!result.length) {
       throw 'Cannot find the model'
@@ -66,33 +68,8 @@ class Model {
     return this.name.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase().plural()
   }
 
-  defProp (key, value) {
-    Object.defineProperty(this, key, {
-      enumerable: false,
-      writable: true,
-      configurable: false,
-      value: value
-    })
-  }
-
-  defData () {
-    let model = this
-    Object.defineProperty(this, '$data', {
-      enumerable: false,
-      configurable: false,
-      get: function () {
-        let d = {}
-        for (let k in model) {
-          d[k] = model[k]
-        }
-        return d
-      },
-      set: function (data) {
-        for (let k in data) {
-          model[k] = data[k] // .toString()
-        }
-      }
-    })
+  belongsToMany (classB) {
+    return new Relation(this, classB)
   }
 }
 

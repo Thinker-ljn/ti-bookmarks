@@ -18,9 +18,11 @@ class AppContent extends Component {
     axios.get('/api/bookmarks')
     .then((response) => {
       console.log(response.data)
-      this.setState({
-        bookmarks: response.data
-      })
+      if (Array.isArray(response.data)) {
+        this.setState({
+          bookmarks: response.data
+        })
+      }
     }, (err) => {
       console.log(err)
     })
