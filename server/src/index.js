@@ -1,7 +1,9 @@
 require('dotenv').config()
 String.prototype.plural = require('./lib/plural')
+const path = require('path')
 
 const Koa = require('koa')
+const serve = require('koa-static')
 const app = new Koa()
 const router = require('./router')
 const bodyParser = require('koa-bodyparser')
@@ -20,6 +22,7 @@ app.use(function (ctx, next) {
   ctx.status = 204;
 });
 
+app.use(serve(path.join(__dirname, '..', 'public')))
 app.use(bodyParser())
 app.use(router.routes())
 

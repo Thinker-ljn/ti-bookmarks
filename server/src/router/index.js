@@ -1,9 +1,15 @@
+var fs = require('fs');
+
+var readFileThunk = function(src) {
+  return new Promise(function (resolve, reject) {
+    fs.readFile(src, {'encoding': 'utf8'}, function (err, data) {
+      if(err) return reject(err);
+      resolve(data);
+    });
+  });
+}
+
 const routes = [
-  {
-    p: '/',
-    m: 'get',
-    f: () => { return 'hello world!!!!!' }
-  },
   {
     p: '/api/bookmarks',
     m: 'get',
