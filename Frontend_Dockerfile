@@ -2,9 +2,9 @@ FROM node:8
 
 RUN npm install -g cnpm --registry=http://registry.npm.taobao.org
 
-RUN mkdir -p /app
+RUN mkdir -p /app/client
 
-WORKDIR /app
+WORKDIR /app/client
 
 ENV PHANTOMJS_CDNURL=https://npm.taobao.org/mirrors/phantomjs/
 ENV BACKEND=http://node

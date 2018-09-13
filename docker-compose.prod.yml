@@ -1,0 +1,4 @@
+version: '3'
+services:
+  react:
+    command: sh -c "yarn && yarn build"
