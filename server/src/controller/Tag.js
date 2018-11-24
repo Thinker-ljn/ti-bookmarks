@@ -3,8 +3,31 @@ const Controller = require('./index')
 
 class TagController extends Controller {
   async index () {
-    let result = await Tag.all()
-    return result
+    let tags = await Tag.all()
+    let result = {
+      id: 0,
+      name: '标签',
+      children: []
+    }
+
+    let map = tags.reduce((prev, curr) => {
+      if (!prev[curr.parent_id]) prev[curr.parent_id] = []
+      prev[curr.parent_id].push(curr)
+      return prev
+    }, {})
+
+    function getTagChildren (node) {
+      const children = map[node.id] ? map[node.id] : []
+      let _children = []
+      for (let child of children) {
+        child.children = getTagChildren(child)
+        _children.push(child)
+      }
+      return _children
+    }
+    result.children = getTagChildren(result)
+
+    return [result]
   }
 
   async create ($form) {

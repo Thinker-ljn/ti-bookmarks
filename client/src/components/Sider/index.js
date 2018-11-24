@@ -39,6 +39,20 @@ class AppSider extends Component {
     this.currNode = null
   }
 
+
+  componentDidMount () {
+    axios.get('/api/tags')
+    .then((response) => {
+      if (Array.isArray(response.data)) {
+        this.setState({
+          tags: response.data
+        })
+      }
+    }, (err) => {
+      console.log(err)
+    })
+  }
+
   activeContextMenu (e, node) {
     emit(e, node)
   }
@@ -134,7 +148,7 @@ class AppSider extends Component {
       <Sider styleName="app-sider" width="300">
         <AddTagModal visible={showAddTagModal} onHide={this.hideModal.bind(this)} onOk={this.addTag.bind(this)}></AddTagModal>
         <ContextMenu data={menu}></ContextMenu>
-        <Tree onRightClick={({event, node}) => {this.activeContextMenu(event, node)}}>
+        <Tree expandedKeys={['0']} onRightClick={({event, node}) => {this.activeContextMenu(event, node)}}>
           {loop(tags)}
         </Tree>
       </Sider>
