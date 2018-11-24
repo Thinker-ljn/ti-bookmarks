@@ -31,32 +31,36 @@ class Grammar {
   }
 
   compileFrom (query, table) {
-    return 'from ' + table
+    return `from \`${table}\``
   }
 
   compileColumns (query, columns) {
     let select = query.distinct ? 'select distinct ' : 'select '
+    if (!Array.isArray(columns) || columns.length === 0) {
+      columns = '*'
+    } else {
+      columns = columns.map(column => `\`${column}\``).join(', ')
+    }
 
-    if (!Array.isArray(columns) || columns.length === 0) columns = ['*']
-    return select + columns.join(', ')
+    return select + columns
   }
 
   compileWheres (query, wheres) {
     let whereSql = ''
     for (let where of wheres) {
-      whereSql += `${where.boolean} ${where.column} ${where.operator} ? `
+      whereSql += `${where.boolean} \`${where.column}\` ${where.operator} ? `
     }
-    return whereSql.replace(/^(and|or)\s/, 'where ')
+    return whereSql.replace(/^(and|or)\s/, 'where ').replace(/\s$/, '')
   }
 
   compileInsert (query, data) {
     let table = query.from
     let keys = Object.keys(data[0])
-    let columns = keys.join(', ')
+    let columns = keys.map(k => `\`${k}\``).join(', ')
     let parameters = data.map(d => {
       return '(' + (new Array(keys.length)).fill('?').join(', ') + ')'
     }).join(', ')
-    return `insert into ${table} (${columns}) values ${parameters}`
+    return `insert into \`${table}\` (${columns}) values ${parameters}`
   }
 
   getInsertBindings (query, data) {
@@ -68,9 +72,9 @@ class Grammar {
 
   compileUpdate (query, data) {
     let table = query.from
-    let columns = Object.keys(data).map(column => column + ' = ?').join(', ')
+    let columns = Object.keys(data).map(column => `\`${column}\` = ?`).join(', ')
     let wheres = this.compileWheres(query, query.wheres)
-    return `update ${table} set ${columns} ${wheres}`
+    return `update \`${table}\` set ${columns} ${wheres}`
   }
 
   getUpdateBindings (query, data) {
@@ -88,7 +92,7 @@ class Grammar {
   compileDelete (query) {
     let table = query.from
     let wheres = this.compileWheres(query, query.wheres)
-    return `delete from ${table} ${wheres}`
+    return `delete from \`${table}\` ${wheres}`
   }
 }
 

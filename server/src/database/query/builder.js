@@ -28,7 +28,7 @@ class Builder {
     this.tableName = tableName
     this.from = tableName
     this.wheres = []
-    this.cloumns = []
+    this.columns = []
   }
 
   where () {
@@ -90,7 +90,7 @@ class Builder {
   }
 
   select () {
-    this.cloumns = [...arguments]
+    this.columns = [...arguments]
     return this
   }
 
