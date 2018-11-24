@@ -4,7 +4,7 @@
   "description": "ti app",
   "main": "/src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --require intelli-espower-loader test/**/*.js"
   },
   "author": "thinker_ljn",
   "license": "ISC",
@@ -17,5 +17,10 @@
     "koa-static": "^5.0.0",
     "mysql": "^2.15.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "espower-loader": "^1.2.2",
+    "intelli-espower-loader": "^1.0.1",
+    "mocha": "^5.2.0",
+    "power-assert": "^1.6.1"
+  }
 }
