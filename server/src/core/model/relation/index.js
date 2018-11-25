@@ -1,5 +1,5 @@
-const db = require('../database')
-const def = require('../lib/def.js')
+const db = require('@core/database')
+const def = require('@core/lib/def.js')
 
 class Relation {
   constructor (objA, cstcB, options) {
