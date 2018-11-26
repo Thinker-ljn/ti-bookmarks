@@ -46,7 +46,6 @@ class DB {
     let builder = new Builder(table)
     let sql = builder.where(pk, pkValue).update(data)
 
-    // let fields = Object.keys(data).filter(f => f !== pk)
     let result = await this.query(sql)
 
     return result
@@ -55,9 +54,30 @@ class DB {
   async delete (table, primaryValue, primaryKey) {
     let builder = new Builder(table)
     let sql = builder.where(primaryValue, primaryKey).delete()
-    let result = await db.query(sql)
+    let result = await this.query(sql)
 
     return result
+  }
+
+  async dropAllTable () {
+    let databaseName = this.connection.config.database
+    const DISABLE_FOREIGN_KEY = 'SET FOREIGN_KEY_CHECKS = 0;'
+    const ENABLE_FOREIGN_KEY = 'SET FOREIGN_KEY_CHECKS = 1;'
+    const GET_TABLES = `SELECT
+                          table_name
+                        FROM
+                          information_schema.tables
+                        WHERE
+                          table_schema = '${databaseName}';`
+
+    await this.query(DISABLE_FOREIGN_KEY)
+    let tables = await this.query(GET_TABLES)
+    for (let table of tables) {
+      let tableName = table.table_name
+      let dropTableSql = `DROP TABLE IF EXISTS ${tableName};`
+      await this.query(dropTableSql)
+    }
+    await this.query(ENABLE_FOREIGN_KEY)
   }
 }
 
