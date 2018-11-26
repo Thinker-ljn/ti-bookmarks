@@ -32,8 +32,6 @@ class DB {
   async insert (table, data) {
     let builder = new Builder(table)
     let sql = builder.insert(data)
-
-    console.log(sql)
     let result = await this.query(sql)
 
     return result
