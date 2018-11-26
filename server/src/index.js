@@ -1,5 +1,5 @@
-require('dotenv').config()
 require('module-alias/register')
+require('dotenv').config()
 String.prototype.plural = require('@core/lib/plural')
 const path = require('path')
 
