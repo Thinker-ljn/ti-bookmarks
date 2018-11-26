@@ -1,9 +1,9 @@
 const Model = require('./index')
 
-class Test extends Model {
+class SpacedRepetition extends Model {
   constructor () {
     super(...arguments)
   }
 }
 
-module.exports = Test
+module.exports = SpacedRepetition

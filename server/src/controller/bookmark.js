@@ -1,4 +1,4 @@
-const Bookmark = require('../model/Bookmark.js')
+const Bookmark = require('../model/bookmark.js')
 const Controller = require('./index')
 
 class BookmarkController extends Controller {
