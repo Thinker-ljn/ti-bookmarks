@@ -1,5 +1,5 @@
 module.exports = `
-  CREATE TABLE bookmark_tag (
+  CREATE TABLE IF NOT EXISTS bookmark_tag (
   bookmark_id int(11) NOT NULL,
   tag_id int(11) NOT NULL,
   PRIMARY KEY (bookmark_id, tag_id)

@@ -55,7 +55,7 @@ if (match) {
       return console.error(`Command '${command.name}' is not defined`)
     }
   }
-  return tool[namespace].apply(null, [type].concat(command.params))
+  return tool[namespace](type, ...command.params)
 } else {
   return console.error(`Need exec command!`)
 }

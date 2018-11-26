@@ -2,16 +2,16 @@ const routes = [
   {
     p: '/api/bookmarks',
     m: 'get',
-    f: 'Bookmark@index'
+    f: 'bookmark@index'
   },
-  ['post', '/api/bookmarks', 'Bookmark@create'],
-  ['patch', '/api/bookmarks', 'Bookmark@update'],
-  ['delete', '/api/bookmarks/:id', 'Bookmark@delete'],
+  ['post', '/api/bookmarks', 'bookmark@create'],
+  ['patch', '/api/bookmarks', 'bookmark@update'],
+  ['delete', '/api/bookmarks/:id', 'bookmark@delete'],
 
-  ['get', '/api/tags', 'Tag@index'],
-  ['post', '/api/tags', 'Tag@create'],
-  ['patch', '/api/tags', 'Tag@update'],
-  ['delete', '/api/tags/:id', 'Tag@delete']
+  ['get', '/api/tags', 'tag@index'],
+  ['post', '/api/tags', 'tag@create'],
+  ['patch', '/api/tags', 'tag@update'],
+  ['delete', '/api/tags/:id', 'tag@delete']
 ]
 
 const des = (route) => {

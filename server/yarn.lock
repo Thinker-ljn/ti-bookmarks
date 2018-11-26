@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-accepts@^1.2.2, accepts@^1.3.0:
+accepts@^1.2.2:
   version "1.3.5"
   resolved "http://registry.npm.taobao.org/accepts/download/accepts-1.3.5.tgz#eb777df6011723a3b14e8a72c0805c8e86746bd2"
   dependencies:
@@ -33,13 +33,6 @@ array-find@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/array-find/download/array-find-1.0.0.tgz#6c8e286d11ed768327f8e62ecee87353ca3e78b8"
 
-babel-runtime@^6.22.0:
-  version "6.26.0"
-  resolved "http://registry.npm.taobao.org/babel-runtime/download/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
-  dependencies:
-    core-js "^2.4.0"
-    regenerator-runtime "^0.11.0"
-
 balanced-match@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/balanced-match/download/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
@@ -62,10 +55,6 @@ browser-stdout@1.3.1:
 bytes@2.4.0:
   version "2.4.0"
   resolved "http://registry.npm.taobao.org/bytes/download/bytes-2.4.0.tgz#7d97196f9d5baf7f6935e25985549edd2a6c2339"
-
-bytes@3.0.0:
-  version "3.0.0"
-  resolved "http://registry.npm.taobao.org/bytes/download/bytes-3.0.0.tgz#d32815404d689699f85a4ea4fa8755dd13a96048"
 
 call-matcher@^1.0.0:
   version "1.1.0"
@@ -105,7 +94,7 @@ content-disposition@~0.5.0:
   version "0.5.2"
   resolved "http://registry.npm.taobao.org/content-disposition/download/content-disposition-0.5.2.tgz#0cf68bb9ddf5f2be7961c3a85178cb85dba78cb4"
 
-content-type@^1.0.0, content-type@^1.0.4:
+content-type@^1.0.0:
   version "1.0.4"
   resolved "http://registry.npm.taobao.org/content-type/download/content-type-1.0.4.tgz#e138cc75e040c727b1966fe5e5f8c9aee256fe3b"
 
@@ -125,10 +114,6 @@ cookies@~0.7.0:
 core-js@^2.0.0:
   version "2.5.7"
   resolved "http://registry.npm.taobao.org/core-js/download/core-js-2.5.7.tgz#f972608ff0cead68b841a16a932d0b183791814e"
-
-core-js@^2.4.0:
-  version "2.5.3"
-  resolved "http://registry.npm.taobao.org/core-js/download/core-js-2.5.3.tgz#8acc38345824f16d8365b7c9b4259168e8ed603e"
 
 core-util-is@~1.0.0:
   version "1.0.2"
@@ -393,15 +378,6 @@ event-emitter@~0.3.5:
     d "1"
     es5-ext "~0.10.14"
 
-express-graphql@^0.6.11:
-  version "0.6.12"
-  resolved "http://registry.npm.taobao.org/express-graphql/download/express-graphql-0.6.12.tgz#dfcb2058ca72ed5190b140830ad8cdbf76a9128a"
-  dependencies:
-    accepts "^1.3.0"
-    content-type "^1.0.4"
-    http-errors "^1.3.0"
-    raw-body "^2.3.2"
-
 fast-levenshtein@~2.0.4:
   version "2.0.6"
   resolved "http://registry.npm.taobao.org/fast-levenshtein/download/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
@@ -444,7 +420,7 @@ http-assert@^1.1.0:
     deep-equal "~1.0.1"
     http-errors "~1.6.1"
 
-http-errors@1.6.2, http-errors@^1.2.8, http-errors@^1.3.0, http-errors@^1.3.1, http-errors@^1.6.1, http-errors@~1.6.1:
+http-errors@^1.2.8, http-errors@^1.3.1, http-errors@~1.6.1:
   version "1.6.2"
   resolved "http://registry.npm.taobao.org/http-errors/download/http-errors-1.6.2.tgz#0a002cc85707192a7e7946ceedc11155f60ec736"
   dependencies:
@@ -475,10 +451,6 @@ http-errors@~1.6.2:
 iconv-lite@0.4.13:
   version "0.4.13"
   resolved "http://registry.npm.taobao.org/iconv-lite/download/iconv-lite-0.4.13.tgz#1f88aba4ab0b1508e8312acc39345f36e992e2f2"
-
-iconv-lite@0.4.19:
-  version "0.4.19"
-  resolved "http://registry.npm.taobao.org/iconv-lite/download/iconv-lite-0.4.19.tgz#f7468f60135f5e5dad3399c0a81be9a1603a082b"
 
 indexof@0.0.1:
   version "0.0.1"
@@ -547,15 +519,6 @@ koa-convert@^1.2.0:
   dependencies:
     co "^4.6.0"
     koa-compose "^3.0.0"
-
-koa-graphql@0.7.3:
-  version "0.7.3"
-  resolved "http://registry.npm.taobao.org/koa-graphql/download/koa-graphql-0.7.3.tgz#0686f17eebfd75f025978d1789bb65fbb21e9d9c"
-  dependencies:
-    babel-runtime "^6.22.0"
-    express-graphql "^0.6.11"
-    http-errors "^1.6.1"
-    thenify "^3.2.1"
 
 koa-is-json@^1.0.0:
   version "1.0.0"
@@ -868,15 +831,6 @@ qs@~4.0.0:
   version "4.0.0"
   resolved "http://registry.npm.taobao.org/qs/download/qs-4.0.0.tgz#c31d9b74ec27df75e543a86c78728ed8d4623607"
 
-raw-body@^2.3.2:
-  version "2.3.2"
-  resolved "http://registry.npm.taobao.org/raw-body/download/raw-body-2.3.2.tgz#bcd60c77d3eb93cde0050295c3f379389bc88f89"
-  dependencies:
-    bytes "3.0.0"
-    http-errors "1.6.2"
-    iconv-lite "0.4.19"
-    unpipe "1.0.0"
-
 raw-body@~2.1.2:
   version "2.1.7"
   resolved "http://registry.npm.taobao.org/raw-body/download/raw-body-2.1.7.tgz#adfeace2e4fb3098058014d08c072dcc59758774"
@@ -896,10 +850,6 @@ readable-stream@2.3.3:
     safe-buffer "~5.1.1"
     string_decoder "~1.0.3"
     util-deprecate "~1.0.1"
-
-regenerator-runtime@^0.11.0:
-  version "0.11.1"
-  resolved "http://registry.npm.taobao.org/regenerator-runtime/download/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
 
 resolve-path@^1.4.0:
   version "1.4.0"
@@ -978,7 +928,7 @@ thenify-all@^1.0.0:
   dependencies:
     thenify ">= 3.1.0 < 4"
 
-"thenify@>= 3.1.0 < 4", thenify@^3.2.1:
+"thenify@>= 3.1.0 < 4":
   version "3.3.0"
   resolved "http://registry.npm.taobao.org/thenify/download/thenify-3.3.0.tgz#e69e38a1babe969b0108207978b9f62b88604839"
   dependencies:

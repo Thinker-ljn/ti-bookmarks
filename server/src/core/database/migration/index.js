@@ -6,20 +6,26 @@ dotenv.config()
 const appPath = path.resolve(__dirname, '../../../../')
 const db = require('../index')
 
-module.exports = function () {
+module.exports = function (type = null) {
   const dir = appPath + '/src/database/migrations'
-  console.log(dir)
   const migrations = fs.readdirSync(dir)
 
-  migrations.forEach(function (filename) {
-    const fullname = path.join(dir, filename)
-    let stats = fs.statSync(fullname)
+  let migrationFn = function () {
+    migrations.forEach(function (filename) {
+      const fullname = path.join(dir, filename)
+      let stats = fs.statSync(fullname)
 
-    if (!stats.isDirectory()) {
-      const migration = require(fullname)
-      db.query(migration)
-    }
-  })
+      if (!stats.isDirectory()) {
+        const migration = require(fullname)
+        db.query(migration)
+      }
+    })
+    db.end()
+  }
 
-  db.end()
+  if (type === 'reset') {
+    db.dropAllTable().then(migrationFn, function (e) { console.log (e) })
+  } else {
+    migrationFn()
+  }
 }
