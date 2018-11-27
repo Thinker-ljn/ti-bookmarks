@@ -14,13 +14,15 @@ const make = function (type, name) {
     return console.error(`Command 'make:${type}' need argument 'name'`)
   }
 
-  let dir = path.resolve(process.cwd(), './src/' + type)
+  type = type.toLowerCase()
+  let dir = path.resolve(process.cwd(), './src/services/' + name)
 
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir)
   }
 
-  let filePath = dir + '/' + name + '.js'
+  let filename = type === 'controller' ? 'index' : name
+  let filePath = dir + '/' + filename + '.js'
   if (fs.existsSync(filePath)) {
     return console.error(`'${type}' already exist!`)
   }

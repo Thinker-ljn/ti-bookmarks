@@ -1,5 +1,5 @@
-const Bookmark = require('../model/bookmark.js')
-const Controller = require('./index')
+const Bookmark = require('./bookmark.js')
+const Controller = require('@core/controller')
 
 class BookmarkController extends Controller {
   async index () {

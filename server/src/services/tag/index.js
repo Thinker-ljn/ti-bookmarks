@@ -1,5 +1,5 @@
-const Tag = require('../model/Tag.js')
-const Controller = require('./index')
+const Tag = require('./tag.js')
+const Controller = require('@core/controller')
 
 class TagController extends Controller {
   async index () {

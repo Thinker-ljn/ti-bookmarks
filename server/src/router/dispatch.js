@@ -57,7 +57,7 @@ const dispatch = async (execFnOrCtrl, ctx, next) => {
     case 'string':
       let [ctrl, fn] = execFnOrCtrl.split('@')
       try {
-        const Controller = require('../controller/' + ctrl + '.js')
+        const Controller = require('../services/' + ctrl + '/index.js')
 
         const controller = new Controller
         let params = parseParams(controller[fn], ctx)
