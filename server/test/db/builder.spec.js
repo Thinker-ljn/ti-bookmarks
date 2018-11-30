@@ -1,7 +1,6 @@
 "use strict";
-let path = require('path')
-const assert = require('power-assert');
-const Builder = require(path.resolve(process.cwd(), './src/database/query/builder'))
+const assert = require('power-assert')
+const Builder = require('@core/database/query/builder')
 
 describe('Query Build', function () {
   describe('Select Query', function () {

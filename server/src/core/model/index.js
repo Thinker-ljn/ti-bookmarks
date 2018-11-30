@@ -4,6 +4,7 @@ const Relation = require('./relation')
 
 class Model {
   constructor (options = {}) {
+    def.defProp(this, '$modelName', this.constructor.name)
     def.defProp(this, '$tableName', this.constructor.parseTableName())
     def.defProp(this, '$primaryKey', 'id')
 
