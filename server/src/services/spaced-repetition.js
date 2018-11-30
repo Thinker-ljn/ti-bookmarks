@@ -3,7 +3,7 @@ const Cs133 = require('@core/lib/Cs133')
 
 const repetition = [2, 7, 14, 30, 90]
 class SpacedRepetition extends Model {
-  static add (model) {
+  static async add (model) {
     let currTime = Cs133.formatted
     for (let days of repetition) {
       let time = Cs133.dayOffset(days)
@@ -15,7 +15,7 @@ class SpacedRepetition extends Model {
       sr.model_id = model.id
       sr.execute_time = formatTime
       sr.created_at = currTime
-      sr.save()
+      await sr.save()
     }
   }
 }

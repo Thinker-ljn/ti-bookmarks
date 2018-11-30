@@ -1,4 +1,5 @@
 const Bookmark = require('./bookmark.js')
+const SpacedRepetition = require('../spaced-repetition')
 const Controller = require('@core/controller')
 
 class BookmarkController extends Controller {
@@ -18,6 +19,9 @@ class BookmarkController extends Controller {
       await bk.tags().attach($form.tag_id)
     }
 
+    if ($form.repeat) {
+      await SpacedRepetition.add(bk)
+    }
     return bk
   }
 
