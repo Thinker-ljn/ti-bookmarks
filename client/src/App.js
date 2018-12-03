@@ -3,7 +3,7 @@ import AppHeader from '@/components/Header'
 import AppSider from '@/components/Sider'
 import AppContent from '@/components/Content'
 
-import './app.css'
+import './App.css'
 
 import { Layout } from 'antd'
 const { Footer } = Layout
