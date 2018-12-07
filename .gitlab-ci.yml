@@ -1,0 +1,47 @@
+image: docker:latest
+
+services:
+- docker:dind
+
+variables:
+  CONTAINER_IMAGE: registry.gitlab.com/thinker-ljn/ti
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  only: master
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+
+  script:
+  # build client
+    - sed -i 's#http://registry.npm.taobao.org#https://registry.yarnpkg.com#' ./client/yarn.lock
+    - docker run -v "$(pwd):/app" node:8 /bin/sh -c "cd /app/client && yarn && yarn build"
+  # build server
+    - docker build --cache-from $CONTAINER_IMAGE:latest --tag $CONTAINER_IMAGE:$CI_COMMIT_SHA --tag $CONTAINER_IMAGE:latest -f gitlab-ci/build/Dockerfile .
+    - docker push $CONTAINER_IMAGE:$CI_COMMIT_SHA
+    - docker push $CONTAINER_IMAGE:latest
+
+deploy:
+  stage: deploy
+  only: master
+  before_script:
+  # set ssh client
+    - 'which ssh-agent || (apk add --update --no-cache openssh-client)'
+    - eval $(ssh-agent -s)
+    - mkdir -p ~/.ssh
+    - echo "$DEPLOY_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 700 ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - chmod 600 ~/.ssh/*
+  script:
+  # start deploy
+    - ssh -p26226 $DEPLOY_USER_SERVER "mkdir -p /www/ti"
+    - scp -P26226 -r gitlab-ci/deploy/* server/.env $DEPLOY_USER_SERVER:/www/ti
+    - ssh -p26226 $DEPLOY_USER_SERVER "cd /www/ti && sudo chmod +x deploy.sh && ./deploy.sh"

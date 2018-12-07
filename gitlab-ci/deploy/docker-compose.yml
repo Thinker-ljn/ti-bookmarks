@@ -1,0 +1,29 @@
+version: '3'
+services:
+  node:
+    container_name: ti_node01
+    image: registry.gitlab.com/thinker-ljn/ti:latest
+    restart: always
+    ports:
+    - "8100:80"
+    expose:
+    - "80"
+    links:
+    - mysql
+
+  mysql:
+    restart: always
+    image: mysql:5.7.13
+    container_name: ti_mysql01
+    env_file:
+      - .env
+    volumes:
+      - ti_mysql:/var/lib/mysql
+    expose:
+      - "3306"
+    ports:
+      - "33061:3306"
+
+
+volumes:
+  ti_mysql:
