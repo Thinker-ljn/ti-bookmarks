@@ -14,7 +14,8 @@ stages:
 
 build:
   stage: build
-  only: master
+  only:
+  - master
   before_script:
     - docker info
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
@@ -30,7 +31,8 @@ build:
 
 deploy:
   stage: deploy
-  only: master
+  only:
+    - master
   before_script:
   # set ssh client
     - 'which ssh-agent || (apk add --update --no-cache openssh-client)'
