@@ -12,10 +12,6 @@ module.exports = merge(baseConfig, {
   },
   devtool: '#cource-map',
   plugins: [
-    new HtmlWebPackPlugin({
-      template: "./public/index.html",
-      filename: "./index.html"
-    }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false

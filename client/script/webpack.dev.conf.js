@@ -9,10 +9,6 @@ module.exports = merge(baseConfig, {
   ],
   devtool: "#cheap-module-eval-source-map",
   plugins: [
-    new HtmlWebPackPlugin({
-      template: "./public/index.html",
-      filename: "./index.html"
-    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()
   ]
