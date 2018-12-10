@@ -41,8 +41,16 @@ module.exports = {
         test: /\.css$/,
         exclude: /node_modules/,
         use: ExtractTextPlugin.extract({
-          fallback: "style-loader?sourceMap",
-          use: "css-loader"
+          fallback: "style-loader",
+          use: [{
+            loader: "css-loader", // translates CSS into CommonJS
+            options: {
+              importLoaders: 1,
+              sourceMap: true,
+              modules: true,
+              localIdentName: "[path]___[name]__[local]___[hash:base64:5]"
+            }
+          }]
         })
       },
       {
