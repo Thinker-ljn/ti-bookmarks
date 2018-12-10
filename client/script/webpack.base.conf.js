@@ -1,4 +1,6 @@
 const path = require('path')
+const ExtractTextPlugin = require("extract-text-webpack-plugin")
+const HtmlWebPackPlugin = require("html-webpack-plugin")
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -38,37 +40,45 @@ module.exports = {
       {
         test: /\.css$/,
         exclude: /node_modules/,
-        use: [{
-            loader: "style-loader?sourceMap"
-        }, {
-            loader: "css-loader?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]"
-        }]
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader?sourceMap",
+          use: "css-loader"
+        })
       },
       {
         test: /\.css$/,
         exclude: /src/,
-        use: [{
-            loader: "style-loader"
-        }, {
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader?sourceMap",
+          use: {
             loader: "css-loader",
             options: {
               importLoaders: 1
             }
-        }]
+          }
+        })
       },
       {
         test: /\.scss$/,
-        use: [{
-            loader: "style-loader" // creates style nodes from JS strings
-        }, {
-            loader: "css-loader?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]" // translates CSS into CommonJS
-        }, {
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: [{
+            loader: "css-loader", // translates CSS into CommonJS
+            options: {
+              importLoaders: 1,
+              sourceMap: true,
+              modules: true,
+              localIdentName: "[path]___[name]__[local]___[hash:base64:5]"
+            }
+          }, {
             loader: "sass-loader" // compiles Sass to CSS
-        }]
+          }]
+        })
       }
     ]
   },
   plugins: [
+    new ExtractTextPlugin("./[name][hash:8].css"),
     new HtmlWebPackPlugin({
       template: "./public/index.html",
       filename: "./index.html",
