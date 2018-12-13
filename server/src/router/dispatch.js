@@ -52,23 +52,23 @@ const dispatch = async (execFnOrCtrl, ctx, next) => {
 
   switch (type) {
     case 'function':
-      result = await execFnOrCtrl()
+      result = await execFnOrCtrl(ctx)
       break
     case 'string':
       let [ctrl, fn] = execFnOrCtrl.split('@')
       try {
         const Controller = require('../services/' + ctrl + '/index.js')
 
-        const controller = new Controller
-        let params = parseParams(controller[fn], ctx)
-        result = await controller[fn].apply(controller, params)
+        const controller = new Controller(ctx)
+        const method = controller[fn]
+        let params = parseParams(method, ctx)
+        result = await method.apply(controller, params)
       } catch (e) {
-        console.log(e)
-        result = e
+        ctx.throw(e)
       }
       break
     default:
-      console.warn('route callback is not a function or a Controller methods')
+      ctx.throw(500, 'route callback is not a function or a Controller methods')
       break
   }
 

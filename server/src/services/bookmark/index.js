@@ -9,6 +9,18 @@ class BookmarkController extends Controller {
   }
 
   async create ($form) {
+    this.validate({
+      name: 'string',
+      url: 'url',
+      tag_id: {
+        required: false,
+        type: 'int'
+      },
+      repeat: {
+        required: false
+      }
+    }, $form)
+
     let bk = new Bookmark()
     await bk.save({
       name: $form.name,
