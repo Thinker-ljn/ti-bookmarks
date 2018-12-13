@@ -115,6 +115,11 @@ class Builder {
     return mysql.format(sql, this.getBindings())
   }
 
+  truncate () {
+    let sql = this.grammar.compileTruncate(this)
+    return mysql.format(sql)
+  }
+
   toSql () {
     return this.grammar.compileComponents(this)
   }

@@ -38,4 +38,13 @@ describe('Query Build', function () {
       assert(deleteSql === expectation)
     })
   })
+
+  describe('Truncate Query', function () {
+    it('Test 1', function () {
+      let builder = new Builder('table')
+      let truncateSql = builder.truncate()
+      let expectation = 'truncate table `table`'
+      assert(truncateSql === expectation)
+    })
+  })
 })

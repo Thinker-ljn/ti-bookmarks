@@ -94,6 +94,11 @@ class Grammar {
     let wheres = this.compileWheres(query, query.wheres)
     return `delete from \`${table}\` ${wheres}`
   }
+
+  compileTruncate (query) {
+    let table = query.from
+    return `truncate table \`${table}\``
+  }
 }
 
 module.exports = Grammar
