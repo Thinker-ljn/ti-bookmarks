@@ -9,51 +9,11 @@ class DB {
   }
 
   table (tableName) {
-    return new Builder(tableName)
+    return new Builder(tableName, this.connection)
   }
 
-  async all (tableName) {
-    let builder = new Builder(tableName)
-    let sql = builder.select().get()
-    return await this.query(sql)
-  }
-
-  async find (tableName, id) {
-    let builder = new Builder(tableName)
-    let sql = builder.where('id', id).select().get()
-    return await this.query(sql)
-  }
-
-  async query (sql) {
-    let result = await this.connection.query(sql)
-    return result
-  }
-
-  async insert (table, data) {
-    let builder = new Builder(table)
-    let sql = builder.insert(data)
-    let result = await this.query(sql)
-
-    return result
-  }
-
-  async update (table, data, primaryKey = 'id') {
-    let pk = primaryKey
-    let pkValue = data[pk]
-
-    let builder = new Builder(table)
-    let sql = builder.where(pk, pkValue).update(data)
-
-    let result = await this.query(sql)
-
-    return result
-  }
-
-  async delete (table, primaryValue, primaryKey) {
-    let builder = new Builder(table)
-    let sql = builder.where(primaryValue, primaryKey).delete()
-    let result = await this.query(sql)
-
+  async query (...args) {
+    let result = await this.connection.query(...args)
     return result
   }
 

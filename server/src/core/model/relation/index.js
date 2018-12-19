@@ -1,14 +1,15 @@
-const db = require('@core/database')
+const Builder = require('@core/database/query/builder')
 const def = require('@core/lib/def.js')
 
 class Relation {
-  constructor (objA, cstcB, options) {
+  constructor (objA, cstcB, connection, options) {
     def.defProp(this, '$oA', objA)
     def.defProp(this, '$keyA', this.formatKey(objA.constructor.name))
     def.defProp(this, '$keyB', this.formatKey(cstcB.name))
     def.defProp(this, '$tableName', this.constructor.parseTableName(objA.constructor, cstcB))
     def.defData(this)
 
+    this.connection = connection
     this.initData()
   }
 
@@ -36,16 +37,18 @@ class Relation {
       data[this.$keyB] = id
       datas.push(data)
     })
-    let result = await db.insert(this.$tableName, datas)
+    let query = new Builder(this.$tableName, this.connection)
+    let result = await query.insert(datas)
 
     return result
   }
 
   async detach (id) {
-    this.$data[this.$keyB] = id
-    let result = await db.delete(this.$tableName, this.$data)
+    // this.$data[this.$keyB] = id
+    // let query = new Builder(this.$tableName, this.connection)
+    // let result = await query.delete(this.$tableName, this.$data)
 
-    return result
+    // return result
   }
 }
 

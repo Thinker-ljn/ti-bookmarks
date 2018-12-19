@@ -20,11 +20,17 @@ const init = () => {
   })
 
   const originalQueryMethod = connection.query.bind(connection)
-  connection.query = (sql, cb) => new Promise((resolve, reject) => {
-    originalQueryMethod(sql, (e, result, fields) => {
+  connection.query = (sql, value, cb) => new Promise((resolve, reject) => {
+    if (typeof values === 'function') {
+      cb = value
+      value = void 0
+    }
+    let callback = (e, result, fields) => {
       if (cb) return cb(e, result, fields)
       return e ? reject(e) : resolve(result)
-    })
+    }
+
+    originalQueryMethod(sql, value, callback)
   })
 }
 
@@ -37,12 +43,3 @@ const getConnection = () => {
 
 const db = new DB(getConnection())
 module.exports = db
-
-// const db = require('./database')
-
-// db.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
-//   if (error) throw error
-//   console.log('The solution is: ', results[0].solution)
-// })
-
-// db.end()

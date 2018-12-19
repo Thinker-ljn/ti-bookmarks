@@ -1,4 +1,3 @@
-const mysql = require('mysql')
 const Grammar = require('./grammar')
 
 const operators = [
@@ -14,7 +13,7 @@ const operators = [
 // }
 
 class Builder {
-  constructor (tableName) {
+  constructor (tableName, connection) {
     this.grammar = new Grammar
     this.bindings = {
       select: [],
@@ -25,6 +24,7 @@ class Builder {
       union: []
     }
 
+    this.connection = connection
     this.tableName = tableName
     this.from = tableName
     this.wheres = []
@@ -85,39 +85,47 @@ class Builder {
     return [].concat.apply([], Object.keys(this.bindings).map(key => this.bindings[key]))
   }
 
-  get () {
-    return mysql.format(this.toSql(), this.getBindings())
-  }
-
   select () {
     this.columns = [...arguments]
     return this
   }
 
-  insert (data) {
+  async all () {
+    return await this.select().get()
+  }
+
+  async find (id) {
+    return await this.where('id', id).select().get()
+  }
+
+  async get () {
+    return await this.connection.query(this.toSql(), this.getBindings())
+  }
+
+  async insert (data) {
     if (!Array.isArray(data)) {
       data = [data]
     }
 
     let sql = this.grammar.compileInsert(this, data)
     let bindings = this.grammar.getInsertBindings(this, data)
-    return mysql.format(sql, bindings)
+    return await this.connection.query(sql, bindings)
   }
 
-  update (data) {
+  async update (data) {
     let sql = this.grammar.compileUpdate(this, data)
     let bindings = this.grammar.getUpdateBindings(this, data)
-    return mysql.format(sql, bindings)
+    return await this.connection.query(sql, bindings)
   }
 
-  delete () {
+  async delete () {
     let sql = this.grammar.compileDelete(this)
-    return mysql.format(sql, this.getBindings())
+    return await this.connection.query(sql, this.getBindings())
   }
 
-  truncate () {
+  async truncate () {
     let sql = this.grammar.compileTruncate(this)
-    return mysql.format(sql)
+    return await this.connection.query(sql)
   }
 
   toSql () {

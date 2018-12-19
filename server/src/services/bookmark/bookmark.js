@@ -1,6 +1,5 @@
-const Model = require('@core/model')
+const Model = require('@core').Model
 const Tag = require('../tag/tag.js')
-
 class Bookmark extends Model {
   constructor () {
     super(...arguments)

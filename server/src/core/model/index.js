@@ -1,6 +1,6 @@
-const db = require('../database')
 const def = require('../lib/def.js')
 const Relation = require('./relation')
+const Builder = require('@core/database/query/builder')
 
 class Model {
   constructor (options = {}) {
@@ -12,17 +12,11 @@ class Model {
   }
 
   static async all () {
-    let tableName = this.parseTableName()
-
-    let result = await db.all(tableName)
-    return result
+    return await this.newQuery().all()
   }
 
   static async find (id) {
-    let tableName = this.parseTableName()
-
-    let result = await db.find(tableName, id)
-
+    let result = await this.newQuery().find(id)
     if (!result.length) {
       throw 'Cannot find the model'
     }
@@ -39,7 +33,8 @@ class Model {
       return this.update()
     }
 
-    let result = await db.insert(this.$tableName, this.$data)
+    let query = this.constructor.newQuery()
+    let result = await query.insert(this.$data)
 
     this.$data = {id: result.insertId}
     return result
@@ -48,7 +43,9 @@ class Model {
   async update (data = null) {
     if (data) this.$data = data
 
-    let result = await db.update(this.$tableName, this.$data, this.$primaryKey)
+    let query = this.constructor.newQuery()
+    let pkValue = this.$data[this.$primaryKey]
+    let result = await query.where(this.$primaryKey, pkValue).update(this.$data)
 
     return result
   }
@@ -59,10 +56,24 @@ class Model {
     let pv = this.$data[pk]
 
     if (!pv) throw 'need primaryKey'
-
-    let result = await db.delete(this.$tableName, pv, pk)
+    let query = this.constructor.newQuery()
+    let result = await query.where(pk, pv).delete()
 
     return result
+  }
+
+  async truncate () {
+    let query = this.constructor.newQuery()
+    return await query.truncate()
+  }
+
+  static newQuery () {
+    if (!this.tableName) this.tableName = this.parseTableName()
+    return new Builder(this.tableName, this.connection)
+  }
+
+  static setConnection (connection) {
+    this.connection = connection
   }
 
   static parseTableName () {
