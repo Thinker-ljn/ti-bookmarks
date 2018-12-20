@@ -64,11 +64,15 @@ const dispatch = async (execFnOrCtrl, ctx, next) => {
         let params = parseParams(method, ctx)
         result = await method.apply(controller, params)
       } catch (e) {
-        ctx.throw(e)
+        // ctx.throw(e)
+        ctx.status = e.status || 500
+        result = e.stack
       }
       break
     default:
-      ctx.throw(500, 'route callback is not a function or a Controller methods')
+      // ctx.throw(405, )
+      ctx.status = 405
+      result = 'route callback is not a function or a Controller methods'
       break
   }
 

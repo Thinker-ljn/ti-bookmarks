@@ -26,6 +26,19 @@ app.use(function (ctx, next) {
 
 app.use(serve(path.join(__dirname, '..', 'public')))
 app.use(bodyParser())
+app.use(async (ctx, next) => {
+  let parseNumber = function (data) {
+    for (let k in data) {
+      let v = data[k]
+      if (/\d+/.test(v)) {
+        data[k] = Number(v)
+      }
+    }
+  }
+  parseNumber(ctx.request.query)
+  parseNumber(ctx.request.body)
+  await next();
+})
 app.use(router.routes())
 
 module.exports = app

@@ -17,7 +17,8 @@ class BookmarkController extends Controller {
         type: 'int'
       },
       repeat: {
-        required: false
+        required: false,
+        type: 'int'
       }
     }, $form)
 

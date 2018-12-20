@@ -81,7 +81,7 @@ class Model {
   }
 
   belongsToMany (classB) {
-    return new Relation(this, classB)
+    return new Relation(this, classB, this.constructor.connection)
   }
 }
 
