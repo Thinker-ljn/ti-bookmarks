@@ -1,0 +1,31 @@
+version: '3'
+services:
+  node:
+    container_name: ti_node01
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Backend_Dockerfile
+    volumes:
+    - ./server:/app
+    - ti_c_modules:/app/node_modules
+    command: sh -c "npm test"
+    links:
+    - mysql
+
+  mysql:
+    restart: always
+    image: mysql:5.7.13
+    container_name: ti_mysql01
+    env_file:
+      - ./server/.env
+    volumes:
+      - ti_mysql:/var/lib/mysql
+    expose:
+      - "3306"
+    ports:
+      - "33061:3306"
+
+volumes:
+  ti_c_modules:
+  ti_mysql:

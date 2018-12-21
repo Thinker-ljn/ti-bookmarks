@@ -31,6 +31,14 @@ class TagController extends Controller {
   }
 
   async create ($form) {
+    this.validate({
+      name: 'string',
+      parent_id: {
+        required: false,
+        type: 'int'
+      }
+    }, $form)
+
     let tag = new Tag()
     await tag.save({
       name: $form.name,
@@ -41,6 +49,17 @@ class TagController extends Controller {
   }
 
   async update ($form) {
+    this.validate({
+      id: 'int',
+      name: {
+        required: false,
+        type: 'string'
+      },
+      parent_id: {
+        required: false,
+        type: 'int'
+      }
+    }, $form)
     let tag = Tag.find($form.id)
     if ($form.name) tag.name = $form.name
     if ($form.parent_id) tag.parent_id = $form.parent_id

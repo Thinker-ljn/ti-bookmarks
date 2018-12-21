@@ -4,7 +4,7 @@
   "description": "ti app",
   "main": "/src/index.js",
   "scripts": {
-    "test": "mocha --reporter mocha-reporter -r intelli-espower-loader -r module-alias/register -w test/**/*.spec.js",
+    "test": "mocha -r intelli-espower-loader -r module-alias/register -w test/**/*.spec.js",
     "tool": "node src/core/tool/index.js"
   },
   "author": "thinker_ljn",
@@ -23,7 +23,6 @@
     "espower-loader": "^1.2.2",
     "intelli-espower-loader": "^1.0.1",
     "mocha": "^5.2.0",
-    "mocha-reporter": "^0.1.1",
     "power-assert": "^1.6.1",
     "supertest": "^3.3.0"
   },
