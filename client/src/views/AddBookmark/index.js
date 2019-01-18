@@ -5,6 +5,7 @@ import styles from './index.css'
 import axios from 'axios'
 import { Layout, Input, Row, Col, Button } from 'antd'
 const { Content, Header, Footer } = Layout
+import Tags from './Tags'
 
 class AddBookmark extends Component {
   constructor(props) {
@@ -65,6 +66,7 @@ class AddBookmark extends Component {
           </Header>
           <Content styleName="styles.content">
             {this.rows()}
+            <Tags></Tags>
           </Content>
           <Footer styleName="styles.footer">
             <Button type="primary" onClick={e => this.handleSubmit(e)}>提交</Button>

@@ -1,0 +1,13 @@
+.tags
+{
+  width: 100%;
+  white-space: nowrap;
+  overflow-x: auto;
+  .tag
+  {
+    display: inline-block;
+    width: 80px;
+    margin: 10px;
+    border: 1px solid #fff;
+  }
+}
