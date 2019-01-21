@@ -15,7 +15,7 @@ class AppContent extends Component {
   }
 
   componentDidMount () {
-    axios.get('/api/bookmarks')
+    axios.get('/api/bookmarks') 
     .then((response) => {
       console.log(response.data)
       if (Array.isArray(response.data)) {
@@ -29,12 +29,17 @@ class AppContent extends Component {
   }
 
   getQuickAddBookmark () {
-    let {port, host, protocol} = location
-    let url = protocol + '//' + host + (port ? `:${port}` : '')
-    console.log(location, port, host, protocol, url)
-    let exec = `(function(){var h = window.screen.availHeight;var w = window.screen.availWidth;window.open("${url}/add-bookmark?u="+encodeURIComponent(window.location.href)+"&t="+encodeURIComponent(document.title),"添加书签","height=340,width="+380+",top="+(h/2-165)+",left="+(w/2-185)+",toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no, status=no");})()`
-    let string = 'javascript:eval(decodeURIComponent(' + encodeURIComponent(exec) + '))'
-    return string
+    let {host, protocol} = location
+    let url = `${protocol}//${host}/add-bookmark?u=${encodeURIComponent(window.location.href)}&t=${encodeURIComponent(document.title)}`
+    let title = '添加书签'
+    let w = 340
+    let h = 380
+    let t = window.screen.availHeight/2 - h/2
+    let l = window.screen.availWidth/2 - w/2
+    let exec = `window.open("${url}","${title}","height=${h},width=${w},top=${t},left=${l},toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no, status=no")`
+    let execFn = `(function(){${exec}})()`
+    let command = 'javascript:eval(decodeURIComponent(' + encodeURIComponent(execFn) + '))'
+    return command
   }
 
   render () {
