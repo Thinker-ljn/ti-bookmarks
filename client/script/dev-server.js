@@ -8,6 +8,7 @@ var config = require('./config')
 var app = express();
 var compiler = webpack(webpackConfig);
 
+
 const proxyTable = config.dev.proxyTable
 // proxy api requests
 Object.keys(proxyTable).forEach(function (context) {
@@ -31,7 +32,8 @@ app.use(webpackDevMiddleware(compiler, {
   }
 }));
 
-app.use(require("webpack-hot-middleware")(compiler));
+let hotMiddleware = require("webpack-hot-middleware")(compiler)
+app.use(hotMiddleware);
 
 app.use('/', express.static(__dirname + '/../public'));
 
