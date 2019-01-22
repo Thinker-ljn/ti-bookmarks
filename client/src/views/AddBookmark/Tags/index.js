@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
+import Tag from './Tag'
 import './tags.scss'
 
 class Tags extends Component {
   constructor () {
     super()
+    this.tagContainer = React.createRef()
     this.state = {
       tags: [{
         id: 1,
@@ -43,25 +45,15 @@ class Tags extends Component {
 
   onWheel (e) {
     let offset = e.deltaY / 5
-    let target = e.target.tagName === 'SPAN' ? e.target.parentElement : e.target
+    let target = this.tagContainer.current
     target.scrollLeft += offset
   }
 
   render () {
-    let renderTag = function (tag) {
-      if (tag.children && tag.children.length) {
-        return <div styleName="tag-wrapper">
-          <span styleName="tag" key={tag.id} title={tag.name}>{tag.name}</span>
-          <div styleName="tag-wrapper">{tag.children.map(_tag => renderTag(_tag))}</div>
-        </div>
-      } else {
-        return <span styleName="tag" key={tag.id} title={tag.name}>{tag.name}</span>
-      }
-    }
     let tagsJsx = this.state.tags.map(tag => {
-      return renderTag(tag)
+      return <Tag tag={tag} key={tag.id}></Tag>
     })
-    return <div styleName="tags" onWheel={e => this.onWheel(e)}>
+    return <div styleName="tags" onWheel={e => this.onWheel(e)} ref={this.tagContainer}>
       {tagsJsx}
     </div>
   }

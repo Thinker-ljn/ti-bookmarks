@@ -5,7 +5,7 @@ import styles from './index.css'
 import axios from 'axios'
 import { Layout, Input, Row, Col, Button } from 'antd'
 const { Content, Header, Footer } = Layout
-import Tags from './Tags'
+import Tags from './Tags/index.js'
 
 class AddBookmark extends Component {
   constructor(props) {
