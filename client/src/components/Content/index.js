@@ -15,7 +15,7 @@ class AppContent extends Component {
   }
 
   componentDidMount () {
-    axios.get('/api/bookmarks') 
+    axios.get('/api/bookmarks')
     .then((response) => {
       console.log(response.data)
       if (Array.isArray(response.data)) {
@@ -32,7 +32,7 @@ class AppContent extends Component {
     let {host, protocol} = location
     let url = `${protocol}//${host}/add-bookmark?u=${encodeURIComponent(window.location.href)}&t=${encodeURIComponent(document.title)}`
     let title = '添加书签'
-    let w = 340
+    let w = 400
     let h = 380
     let t = window.screen.availHeight/2 - h/2
     let l = window.screen.availWidth/2 - w/2

@@ -7,10 +7,24 @@ class Tags extends Component {
     this.state = {
       tags: [{
         id: 1,
-        name: 'test1'
+        name: '学习',
+        children: [{
+          id: 7,
+          name: '学习1'
+        }, {
+          id: 8,
+          name: '学习2',
+          children: [{
+            id: 9,
+            name: '学习21'
+          }, {
+            id: 10,
+            name: '学习22'
+          }]
+        }]
       }, {
         id: 2,
-        name: 'test2'
+        name: '音乐鉴赏'
       }, {
         id: 3,
         name: 'test3'
@@ -27,12 +41,28 @@ class Tags extends Component {
     }
   }
 
+  onWheel (e) {
+    let offset = e.deltaY / 5
+    let target = e.target.tagName === 'SPAN' ? e.target.parentElement : e.target
+    target.scrollLeft += offset
+  }
+
   render () {
-    let tags = this.state.tags.map(tag => {
-      return <span styleName="tag" key={tag.id}>{tag.name}</span>
+    let renderTag = function (tag) {
+      if (tag.children && tag.children.length) {
+        return <div styleName="tag-wrapper">
+          <span styleName="tag" key={tag.id} title={tag.name}>{tag.name}</span>
+          <div styleName="tag-wrapper">{tag.children.map(_tag => renderTag(_tag))}</div>
+        </div>
+      } else {
+        return <span styleName="tag" key={tag.id} title={tag.name}>{tag.name}</span>
+      }
+    }
+    let tagsJsx = this.state.tags.map(tag => {
+      return renderTag(tag)
     })
-    return <div styleName="tags">
-      {tags}
+    return <div styleName="tags" onWheel={e => this.onWheel(e)}>
+      {tagsJsx}
     </div>
   }
 }

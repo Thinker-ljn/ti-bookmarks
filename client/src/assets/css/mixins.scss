@@ -1,0 +1,86 @@
+@mixin textOverflow ($width)
+{
+  display: inline-block;
+  width: $width;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@mixin scrollbar($colorReverse: false) {
+  $outerColor: if($colorReverse, rgba(85, 85, 85, 0.3), rgba(68, 68, 68, 0.3));
+  $innerColor: if($colorReverse, #444, #555);
+  &::-webkit-scrollbar[orient="vertical"]:not(:hover),
+  &::-webkit-scrollbar[orient="horizontal"]:not(:hover) {
+      opacity: 0 !important;
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  /* 水平方向上的滚动条 */
+  &::-webkit-scrollbar:horizontal {
+    height: 8px;
+  }
+  &::-webkit-scrollbar:not(:hover)
+  {
+    // opacity: 0 !important;
+  }
+  /* 左端的按钮 */
+  &::-webkit-scrollbar-button:horizontal:decrement:start {
+    width: 0.8rem;
+    height: 0.8rem;
+    background-size: 100%;
+    display: none;
+  }
+
+  /* 右端的按钮 */
+  &::-webkit-scrollbar-button:horizontal:increment:end {
+    width: 0.8rem;
+    height: 0.8rem;
+    background-size: 100%;
+    display: none;
+  }
+
+  /* 滚动条滑块 */
+  &::-webkit-scrollbar-thumb {
+    background: $innerColor;
+  }
+
+  /* 外层轨道 */
+  &::-webkit-scrollbar-track {
+    background: $outerColor;
+  }
+
+  /* 内层轨道，滚动条中间部分（除去） */
+  &::-webkit-scrollbar-track-piece {
+    background: $outerColor;
+  }
+
+  /* 滚动条两端的按钮 */
+  /* 上端的按钮 */
+  &::-webkit-scrollbar-button:decrement:start {
+    width: 0.8rem;
+    height: 0.8rem;
+    background-size: 100%;
+    display: none;
+  }
+
+  /* 下端的按钮 */
+  &::-webkit-scrollbar-button:increment:end {
+    width: 0.8rem;
+    height: 0.8rem;
+    background-size: 100%;
+    display: none;
+  }
+
+  /* 边角 */
+  &::-webkit-scrollbar-corner {
+    background: $outerColor;
+  }
+
+  /* 定义右下角拖动块的样式 */
+  &::-webkit-resizer {
+    background: $outerColor;
+  }
+}
