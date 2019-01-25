@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "moduleResolution": "node",
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "lib": [ "es6", "dom" ],
+    "module": "es6",
+    "jsx": "preserve",
+    "target": "es5"
+  },
+  "exclude": [
+    "node_modules",
+    "public"
+  ]
+}

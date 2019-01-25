@@ -20,7 +20,7 @@ class SingleBookmark extends Component {
     return (
       <li styleName="bookmark">
         <img src={favicon} styleName="favicon"/>
-        <a styleName="name" target="_blank"
+        <a styleName="name" target="_blank" rel="noopener noreferrer" // https://mathiasbynens.github.io/rel-noopener/
           href={bk.url} title={bk.name}
         >{bk.name}</a>
       </li>

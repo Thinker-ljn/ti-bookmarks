@@ -10,10 +10,10 @@ class AppHeader extends Component {
     return (
       <Header styleName="header">
         <Row styleName="header-content">
-          <Col span="2">
+          <Col span={2}>
               <span>Ti</span>
           </Col>
-          <Col span="20">
+          <Col span={20}>
             <SearchInput placeholder="输入关键字进行搜索"></SearchInput>
           </Col>
         </Row>

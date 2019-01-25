@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Tag from './Tag'
+import Tag from './Tag.tsx'
 import './tags.scss'
 
 class Tags extends Component {

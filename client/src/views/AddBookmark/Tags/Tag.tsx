@@ -1,7 +1,20 @@
-import React, { Component } from 'react'
+import * as React from 'react'
 import './tags.scss'
-class Tag extends Component {
-  constructor (props) {
+
+type tag = {
+  id: number,
+  name: string,
+  children?: tag[]
+}
+type TagProps = {
+  tag: tag
+}
+type TagState = {
+  expended: boolean
+}
+
+class Tag extends React.Component<TagProps, TagState> {
+  constructor (props: TagProps) {
     super(props)
 
     this.state = {
@@ -9,7 +22,7 @@ class Tag extends Component {
     }
   }
 
-  onClick () {
+  onClick = () => {
     let newStatus = !this.state.expended
     this.setState({expended: newStatus})
   }
@@ -17,7 +30,7 @@ class Tag extends Component {
   render () {
     let tag = this.props.tag
     let expended = this.state.expended
-    let tagJsx = <span styleName="tag" title={tag.name} onClick={e => this.onClick(e)}>{tag.name}</span>
+    let tagJsx = <span styleName="tag" title={tag.name} onClick={this.onClick}>{tag.name}</span>
     if (expended && tag.children && tag.children.length) {
       return <div styleName="tag-wrapper" key={tag.id}>
         {tagJsx}

@@ -1,11 +1,12 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const ExtractTextPlugin = require("extract-text-webpack-plugin")
+const ExtractTextPlugin = require("mini-css-extract-plugin")
 const baseConfig = require('./webpack.base.conf.js')
 const path = require('path')
 
 
 module.exports = merge(baseConfig, {
+  mode: 'production',
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, '../../server/public')

@@ -1,9 +1,9 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const ExtractTextPlugin = require("extract-text-webpack-plugin")
 const baseConfig = require('./webpack.base.conf.js')
 
 module.exports = merge(baseConfig, {
+  mode: 'development',
   entry: [
     // 'webpack-hot-middleware/client?reload=true'
     './script/dev-client'

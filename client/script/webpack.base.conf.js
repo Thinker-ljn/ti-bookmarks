@@ -15,7 +15,7 @@ module.exports = {
     publicPath: '/'
   },
   resolve: {
-    extensions: ['.js'],
+    extensions: ['ts', 'tsx', '.js'],
     alias: {
       '@': resolve('src'),
       '@css': resolve('src/assets/css')
@@ -28,12 +28,22 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         use: [{
           loader: 'babel-loader'
         }, {
           loader: 'eslint-loader'
+        }]
+      },
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        include: /src/,
+        use: [{
+          loader: 'babel-loader'
+        }, {
+          loader: 'awesome-typescript-loader'
         }]
       }
     ]
