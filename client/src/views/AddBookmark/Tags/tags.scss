@@ -17,6 +17,10 @@
     border-radius: 4px;
     cursor: pointer;
     @include textOverflow(60px);
+
+    &:hover {
+      opacity: 0.8;
+    }
   }
 
   @include scrollbar;
