@@ -1,11 +1,17 @@
-import React, { Component } from 'react'
-import Tag from './Tag.tsx'
+import * as React from 'react'
+import Tag, { tag, tagChangeEvent } from './Tag'
 import './tags.scss'
 
-class Tags extends Component {
-  constructor () {
-    super()
-    this.tagContainer = React.createRef()
+type tagsState = {
+  tags: tag[]
+}
+type tagsProps = {
+
+}
+class Tags extends React.Component<tagsProps, tagsState> {
+  private tagContainer = React.createRef<HTMLDivElement>()
+  constructor (props: tagsProps) {
+    super(props)
     this.state = {
       tags: [{
         id: 1,
@@ -43,17 +49,21 @@ class Tags extends Component {
     }
   }
 
-  onWheel (e) {
+  onWheel (e: React.WheelEvent) {
     let offset = e.deltaY / 5
-    let target = this.tagContainer.current
+    let target: HTMLDivElement = this.tagContainer.current
     target.scrollLeft += offset
+  }
+
+  updateSelectTag = (tag: tagChangeEvent) => {
+    console.log(tag)
   }
 
   render () {
     let tagsJsx = this.state.tags.map(tag => {
-      return <Tag tag={tag} key={tag.id}></Tag>
+      return <Tag onChange={this.updateSelectTag} tag={tag} key={tag.id}></Tag>
     })
-    return <div styleName="tags" onWheel={e => this.onWheel(e)} ref={this.tagContainer}>
+    return <div styleName="tags-container" onWheel={e => this.onWheel(e)} ref={this.tagContainer}>
       {tagsJsx}
     </div>
   }

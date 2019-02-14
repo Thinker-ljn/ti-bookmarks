@@ -3,13 +3,20 @@ import classNames from 'classnames'
 
 import './tags.scss'
 
-type tag = {
+export type tag = {
   id: number,
   name: string,
   children?: tag[]
 }
+
+export type tagChangeEvent = {
+  id: number,
+  name: string,
+  checked: boolean
+}
 type TagProps = {
-  tag: tag
+  tag: tag,
+  onChange?: (e: tagChangeEvent) => void
 }
 type TagState = {
   checked: boolean,
@@ -27,9 +34,15 @@ class Tag extends React.Component<TagProps, TagState> {
   }
 
   onClick = () => {
-    let {checked} = this.state
+    let checked = !this.state.checked
     this.setState({
-      checked: !checked
+      checked: checked
+    })
+    let {id, name} = this.props.tag
+    this.props.onChange({
+      id: id,
+      name: name,
+      checked: checked
     })
   }
 
@@ -41,6 +54,10 @@ class Tag extends React.Component<TagProps, TagState> {
     })
   }
 
+  onChildChange = (tag: tagChangeEvent) => {
+    this.props.onChange(tag)
+  }
+
   render () {
     let tag = this.props.tag
     let {checked, expended} = this.state
@@ -49,15 +66,16 @@ class Tag extends React.Component<TagProps, TagState> {
     let hasChild = tag.children && tag.children.length
     let expendedStyle = classNames({'has-children': hasChild, expended: expended})
     let tagJsx = <div styleName={styles} title={tag.name} onClick={this.onClick}>
-                <span>{tag.name}</span>
                 <span styleName={expendedStyle} onClick={this.doExpend}></span>
+                <span>{tag.name}</span>
               </div>
 
     if (hasChild) {
-      let children = expended ? <div styleName="tag-children">{tag.children.map(_tag => <Tag tag={_tag} key={_tag.id}></Tag>)}</div> : ''
+      let children = tag.children.map(_tag => <Tag tag={_tag} onChange={this.onChildChange} key={_tag.id}></Tag>)
+      let childrenRender = expended ? <div styleName="tag-children">{children}<span styleName="shrunken" onClick={this.doExpend}></span></div> : ''
       return <div styleName="tag-wrapper" key={tag.id}>
         {tagJsx}
-        {children}
+        {childrenRender}
       </div>
     } else {
       return tagJsx
