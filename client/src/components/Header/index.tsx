@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import * as React from 'react'
 import { Layout, Input, Row, Col } from 'antd'
 
 import './index.scss'
 const { Header } = Layout
 const SearchInput = Input.Search
 
-class AppHeader extends Component {
+export default class AppHeader extends React.Component<null, null> {
   render () {
     return (
       <Header styleName="header">
@@ -21,5 +21,3 @@ class AppHeader extends Component {
     )
   }
 }
-
-export default AppHeader

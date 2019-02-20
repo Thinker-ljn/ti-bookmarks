@@ -1,19 +1,39 @@
-import React, { Component } from 'react'
+import * as React from 'react'
 
 import './index.scss'
 
-import AddTagModal from './AddTagModal'
-import ContextMenu from '@/components/ContextMenu'
-import { emit } from '@/components/ContextMenu/trigger'
+import AddTagModal from './add-tag-modal'
+import ContextMenu, { menuItem } from '../context-menu'
+import { emit } from '../context-menu/trigger'
 import { Layout, Tree, Modal, message } from 'antd'
-
+import { AntTreeNode } from 'antd/lib/tree'
 import axios from 'axios'
 
 const { Sider } = Layout
 const { TreeNode } = Tree
+export type tag = {
+  id: number,
+  name: string,
+  children?: tag[]
+}
+interface tagMap {
+  [key: string]: tag;
+}
+type SiderState = {
+  showAddTagModal: boolean,
+  tags: tag[],
+  tagMap: tagMap,
+  menu: menuItem[]
+}
+type findNodeCbPayload = {
+  tag: tag, index: number, arr: tag[]
+}
+type findNodeCb = (payload: findNodeCbPayload) => void
 
-class AppSider extends Component {
-  constructor(props) {
+class AppSider extends React.Component<any, SiderState> {
+  // private id: number = 3
+  private currNode: any = null
+  constructor(props: any) {
     super(props)
 
     this.state = {
@@ -22,6 +42,7 @@ class AppSider extends Component {
         id: 0,
         name: '标签'
       }],
+      tagMap: {},
       menu: [
         {
           id: 1,
@@ -35,8 +56,6 @@ class AppSider extends Component {
         }
       ]
     }
-    this.id = 3
-    this.currNode = null
   }
 
 
@@ -53,18 +72,18 @@ class AppSider extends Component {
     })
   }
 
-  activeContextMenu (e, node) {
+  activeContextMenu (e: React.MouseEventHandler<any>, node: AntTreeNode) {
     emit(e, node)
   }
 
-  handleAddTag (node) {
+  handleAddTag (node: AntTreeNode) {
     this.currNode = node
     this.setState({
       showAddTagModal: true
     })
   }
 
-  handleDelTag (node) {
+  handleDelTag (node: AntTreeNode) {
     if (Number(node.props.eventKey) === 0) {
       return message.error('不能删除根标签！')
     }
@@ -76,10 +95,10 @@ class AppSider extends Component {
     })
   }
 
-  delTag (node) {
+  delTag (node: AntTreeNode) {
     const data = [...this.state.tags]
     let id = node.props.eventKey
-    this.findNode(data, id, (item, index, arr) => {
+    this.findNode(data, id, ({index, arr}) => {
       arr.splice(index, 1)
     })
 
@@ -88,7 +107,7 @@ class AppSider extends Component {
     })
   }
 
-  addTag (name) {
+  addTag (name: string) {
     axios.post('/api/tags', {name: name})
     .then((response) => {
       console.log(response.data)
@@ -98,13 +117,13 @@ class AppSider extends Component {
     })
   }
 
-  renderTag (tag) {
+  renderTag (tag: tag) {
     const data = [...this.state.tags]
     let id = this.currNode.props.eventKey
 
-    this.findNode(data, id, (item) => {
-      if (!item.children) item.children = []
-      item.children.push(tag)
+    this.findNode(data, id, ({tag: pTag}) => {
+      if (!pTag.children) pTag.children = []
+      pTag.children.push(tag)
     })
 
     this.setState({
@@ -115,14 +134,14 @@ class AppSider extends Component {
     this.hideModal()
   }
 
-  findNode (data, id, callback) {
-    const loop = (data, id, callback) => {
-      data.forEach((item, index, arr) => {
-        if (item.id + '' === id + '') {
-          return callback(item, index, arr)
+  findNode (data: tag[], id: number|string, callback: findNodeCb) {
+    const loop = (data: tag[], id: number|string, callback: findNodeCb) => {
+      data.forEach((tag, index, arr) => {
+        if (tag.id + '' === id + '') {
+          return callback({tag, index, arr})
         }
-        if (item.children) {
-          loop(item.children, id, callback)
+        if (tag.children) {
+          loop(tag.children, id, callback)
         }
       })
     }
@@ -137,11 +156,12 @@ class AppSider extends Component {
   }
 
   render () {
-    const loop = data => data.map((item) => {
-      if (item.children && item.children.length) {
-        return <TreeNode key={item.id} title={item.name}>{loop(item.children)}</TreeNode>
+    const loop = (tags: tag[]) => tags.map((tag) => {
+      let key: string = tag.id + ''
+      if (tag.children && tag.children.length) {
+        return <TreeNode key={key} title={tag.name}>{loop(tag.children)}</TreeNode>
       }
-      return <TreeNode key={item.id} title={item.name}/>
+      return <TreeNode key={key} title={tag.name}/>
     })
     const { menu, tags, showAddTagModal } = this.state
     return (

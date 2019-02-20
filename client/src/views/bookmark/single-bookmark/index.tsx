@@ -1,17 +1,23 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import * as React from 'react'
+import * as PropTypes from 'prop-types'
 
 import './index.scss'
+type bookmark = {
+  id: number,
+  name: string,
+  url: string
+}
 
-class SingleBookmark extends Component {
+type propsType = {
+  bookmark: bookmark
+}
+class SingleBookmark extends React.Component<propsType, null> {
   static propTypes = {
     bookmark: PropTypes.object
   }
 
-  constructor(props) {
+  constructor(props: propsType) {
     super(props)
-
-    this.state = {}
   }
 
   render () {

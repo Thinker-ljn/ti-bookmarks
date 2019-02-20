@@ -1,12 +1,20 @@
-import React, { Component } from 'react'
+import * as React from 'react'
 import { Layout } from 'antd'
-import SingleBookmark from '@/components/SingleBookmark'
+import SingleBookmark from '../single-bookmark'
 import './index.scss'
 
 import axios from 'axios'
 
-class AppContent extends Component {
-  constructor(props) {
+type bookmark = {
+  id: number,
+  name: string,
+  url: string
+}
+type stateType = {
+  bookmarks: bookmark[]
+}
+class AppContent extends React.Component<{}, stateType> {
+  constructor(props: {}) {
     super(props)
 
     this.state = {

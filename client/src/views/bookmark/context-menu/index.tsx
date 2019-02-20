@@ -1,12 +1,30 @@
-import React, { Component } from 'react'
-
+import * as React from 'react'
 import './index.scss'
 import {on, off} from './trigger'
 
-class ContextMenu extends Component {
-  constructor(props) {
+// import { tuple } from '@/util/type';
+
+export type menuItem = {
+  id: number,
+  name: string,
+  children?: menuItem[],
+  callback: (payload: any, item: menuItem, index : number) => void
+}
+type ContextMenuProps = {
+  data: menuItem[]
+}
+type ContextMenuState = {
+  position: {
+    x: number,
+    y: number
+  },
+  display: 'none' | 'inline-block',
+  payload: any
+}
+class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
+  private cmEle: HTMLUListElement = null
+  constructor(props: ContextMenuProps) {
     super(props)
-    this.cmEle = null
     this.state = {
       position: {
         x: 0,
@@ -29,7 +47,7 @@ class ContextMenu extends Component {
     off(this.activeMenu)
   }
 
-  clickLi (item, index) {
+  clickLi (item: menuItem, index: number) {
     if (item.callback && typeof item.callback === 'function') {
       item.callback(this.state.payload, item, index)
     }
@@ -37,7 +55,7 @@ class ContextMenu extends Component {
     this.closeMenu()
   }
 
-  activeMenu (e, payload = null) {
+  activeMenu (e: React.MouseEvent, payload: any = null) {
     this.setState({
       position: {
         x: e.clientX,
@@ -57,9 +75,9 @@ class ContextMenu extends Component {
   }
 
   render () {
-    const loop = data => data.map((item, index) => {
+    const loop = (data: menuItem[]) => data.map((item, index) => {
       if (item.children && item.children.length) {
-        return <ul key={item.id}>{arguments.callee(item.children)}</ul>
+        return <ul key={item.id}>{loop(item.children)}</ul>
       }
       return <li key={item.id} onClick={() => {this.clickLi(item, index)}}>{item.name}</li>
     })
@@ -71,7 +89,7 @@ class ContextMenu extends Component {
     }
 
     return (
-      <ul styleName="context-menu" style={style} tabIndex="-1"
+      <ul styleName="context-menu" style={style} tabIndex={-1}
         onBlur={this.closeMenu}
         ref={(el => {this.cmEle = el})}
       >

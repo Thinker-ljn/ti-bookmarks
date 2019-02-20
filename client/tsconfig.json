@@ -8,6 +8,11 @@
     "lib": [ "es6", "dom" ],
     "module": "es6",
     "jsx": "preserve",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "@css/*": ["src/assets/css/*"]
+    },
     "target": "es5"
   },
   "exclude": [

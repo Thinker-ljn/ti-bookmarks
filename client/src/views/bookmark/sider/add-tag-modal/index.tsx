@@ -1,18 +1,28 @@
-import React, { Component } from 'react'
+import * as React from 'react'
 
 import './index.scss'
-import PropTypes from 'prop-types'
+import * as PropTypes from 'prop-types'
 
 import { Input, Modal } from 'antd'
 
-class AddTagModal extends Component {
+type Props = {
+  visible: boolean,
+  onHide: () => void,
+  onOk: (name: string) => void
+}
+
+type State = {
+  tagName: string
+}
+
+class AddTagModal extends React.Component<Props, State> {
   static propTypes = {
     visible: PropTypes.bool,
     onHide: PropTypes.func,
     onOk: PropTypes.func
   }
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props)
 
     this.state = {
@@ -20,7 +30,7 @@ class AddTagModal extends Component {
     }
   }
 
-  handleTagNameChange = (e) => {
+  handleTagNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
       tagName: e.target.value
     })

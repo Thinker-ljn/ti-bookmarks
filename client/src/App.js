@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import AppHeader from '@/components/Header'
-import AppSider from '@/components/Sider'
-import AppContent from '@/components/Content'
+import AppHeader from '@/components/header'
+import Bookmark from '@/views/bookmark'
 
 import './App.css'
 
@@ -18,9 +17,7 @@ class App extends Component {
       <Layout styleName="app">
         <AppHeader></AppHeader>
         <Layout styleName="app-content">
-          <AppSider></AppSider>
-          <AppContent>
-          </AppContent>
+          <Bookmark></Bookmark>
         </Layout>
         <Footer>Footer</Footer>
       </Layout>
