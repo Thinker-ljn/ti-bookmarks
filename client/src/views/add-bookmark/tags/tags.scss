@@ -26,7 +26,7 @@
     @include textOverflow(60px);
 
     &:hover {
-      opacity: 0.8;
+      opacity: 0.7;
     }
 
     &.checked, &:hover {
@@ -34,27 +34,28 @@
     }
   }
 
-  .has-children, .shrunken
+  .has-children, .collapse
   {
     position: absolute;
     display: inline-block;
     width: 5px;
     height: 5px;
-    background-color: red;
+    background-color: #40a9ff;
     left: 4px;
     top: 8px;
+    border-radius: 5px;
   }
-  .expended, .shrunken
+  .expended, .collapse
   {
     background-color: transparent;
-    border-color: red;
+    border-color: #40a9ff;
     border-style: solid;
     border-width: 1px;
     border-bottom-width: 0;
     border-left-width: 0;
     transform: rotate(45deg);
   }
-  .shrunken
+  .collapse
   {
     transform: rotate(-135deg);
     left: initial;

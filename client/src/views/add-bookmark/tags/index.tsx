@@ -1,12 +1,13 @@
 import * as React from 'react'
-import Tag, { tag, tagChangeEvent } from './Tag'
+import Tag, { tag, tagChangeEvent } from './tag'
 import './tags.scss'
 
 type tagsState = {
   tags: tag[]
 }
 type tagsProps = {
-
+  tags: tag[],
+  onTagUpdate?: (tag: tagChangeEvent) => void
 }
 class Tags extends React.Component<tagsProps, tagsState> {
   private tagContainer = React.createRef<HTMLDivElement>()
@@ -56,11 +57,11 @@ class Tags extends React.Component<tagsProps, tagsState> {
   }
 
   updateSelectTag = (tag: tagChangeEvent) => {
-    console.log(tag)
+    this.props.onTagUpdate(tag)
   }
 
   render () {
-    let tagsJsx = this.state.tags.map(tag => {
+    let tagsJsx = this.props.tags.map(tag => {
       return <Tag onChange={this.updateSelectTag} tag={tag} key={tag.id}></Tag>
     })
     return <div styleName="tags-container" onWheel={e => this.onWheel(e)} ref={this.tagContainer}>
