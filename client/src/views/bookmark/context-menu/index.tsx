@@ -10,6 +10,7 @@ export type menuItem = {
   children?: menuItem[],
   callback: (payload: any, item: menuItem, index : number) => void
 }
+export type menu = menuItem[]
 type ContextMenuProps = {
   data: menuItem[]
 }

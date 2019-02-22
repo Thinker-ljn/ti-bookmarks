@@ -32,7 +32,7 @@ class AddBookmark extends React.Component<{}, State> {
   }
 
   componentDidMount () {
-    axios.get('/api/tags')
+    axios.get('tags')
     .then((response) => {
       if (Array.isArray(response.data)) {
         let tags = response.data
@@ -53,7 +53,7 @@ class AddBookmark extends React.Component<{}, State> {
   }
 
   handleSubmit = () => {
-    axios.post('/api/bookmarks', {
+    axios.post('bookmarks', {
       name: this.state.name,
       url: this.state.url,
       tag_id: 0

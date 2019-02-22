@@ -1,5 +1,5 @@
 import * as React from 'react'
-import AppSider from './sider'
+import AppSider from './sider/index'
 import AppContent from './content'
 import { Layout } from 'antd'
 

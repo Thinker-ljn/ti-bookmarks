@@ -23,7 +23,7 @@ class AppContent extends React.Component<{}, stateType> {
   }
 
   componentDidMount () {
-    axios.get('/api/bookmarks')
+    axios.get('bookmarks')
     .then((response) => {
       console.log(response.data)
       if (Array.isArray(response.data)) {

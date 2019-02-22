@@ -2,8 +2,9 @@ const Tag = require('./tag.js')
 const Controller = require('@core/controller')
 
 class TagController extends Controller {
-  async index () {
+  async index ($get) {
     let tags = await Tag.all()
+    if ($get.list) return tags
     let result = {
       id: 0,
       name: '标签',

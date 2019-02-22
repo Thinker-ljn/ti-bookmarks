@@ -40,8 +40,8 @@ services:
       - "8101"
     volumes:
     - .:/app
-    - ti_s_modules:/app/client/node_modules
     - ./client/node_modules:/app/client/node_modules
+    - ti_s_modules:/app/client/node_modules
     command: sh -c "yarn && yarn start"
     links:
     - node

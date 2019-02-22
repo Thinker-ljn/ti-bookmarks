@@ -4,7 +4,7 @@ import { hot } from 'react-hot-loader'
 
 import App from '@/App'
 import AddBookmark from '@/views/add-bookmark'
-console.log('router', AddBookmark)
+
 const router = () => (
   <Router>
     <Switch>
