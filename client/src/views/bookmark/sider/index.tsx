@@ -32,7 +32,6 @@ export default function AppSider () {
   let { useState } = React
   let tags: tag[] = useObservable(() => DH.get('tags', 'tagsTree'), [])
   let [showAddTagModal, setShowAddTagModal] = useState(false)
-  // let [currNode, setCurrNode] = useState(null)
 
   const addTag = (name: string) => {
     let params = {
@@ -81,13 +80,19 @@ export default function AppSider () {
     return <TreeNode key={key} title={tag.name}/>
   })
 
+  const renderTree = () => {
+    if (tags.length) {
+      return <Tree defaultExpandedKeys={['0']} onRightClick={({event, node}) => {activeContextMenu(event, node)}}>
+              {loop(tags)}
+            </Tree>
+    }
+  }
+
   return (
     <Sider styleName="app-sider" width="300">
       <AddTagModal visible={showAddTagModal} onHide={() => setShowAddTagModal(false)} onOk={addTag}></AddTagModal>
       <ContextMenu data={menu}></ContextMenu>
-      <Tree expandedKeys={['0']} onRightClick={({event, node}) => {activeContextMenu(event, node)}}>
-        {loop(tags)}
-      </Tree>
+      {renderTree()}
     </Sider>
   )
 }

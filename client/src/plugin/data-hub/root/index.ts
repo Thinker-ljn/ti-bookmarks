@@ -15,7 +15,7 @@ function useInterceptor (subject: rootSource) {
   })
 }
 
-export type absorbKey = 'tags' | 'bookmarks'
+export type absorbKey = keyof typeof apiMaps
 export type apisType = typeof apiMaps
 export type absorbMethod<T, K extends (keyof T)> = keyof T[K]
 export type absorbFn = (key: absorbKey, method: absorbMethod<apisType, absorbKey>, params: any) => any
@@ -26,7 +26,8 @@ export class Root {
     useInterceptor(this.source$)
   }
   absorb: absorbFn = (key, method, params) => {
-    let api = apiMaps[key][method]
+    let namespace = apiMaps[key]
+    let api = namespace[method]
     return api(params)
   }
 }

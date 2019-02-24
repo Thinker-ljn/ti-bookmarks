@@ -20,7 +20,6 @@ const bookmarksApi: bookmarksApi = {
   patch: () => {
     return axios.patch(`${key}`)
   }
-
 }
 
 export default bookmarksApi

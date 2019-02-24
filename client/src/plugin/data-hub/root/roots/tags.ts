@@ -1,9 +1,11 @@
 import axios from 'axios'
-import { Api } from './type'
+import { Api, apiFn } from './type'
 const key = 'tags'
 let init = false
 
-export interface tagsApi extends Api {}
+export interface tagsApi extends Api {
+  delete: apiFn
+}
 export type tagMethods = keyof tagsApi
 
 const tagsApis: tagsApi = {
