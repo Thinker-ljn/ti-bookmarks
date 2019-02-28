@@ -8,10 +8,10 @@ export default class Base {
 }
 
 export const filterAndScan = <T extends BranchData>(trunk$: TruckType, key: string) => {
-  type t = Extract<PacketData, T>
-  type BranchPacket = Packet<t>
+  type T0 = Extract<PacketData, T>
+  type BranchPacket = Packet<T0>
   return trunk$.pipe(
-    filter((Packet: BranchPacket) => Packet.key === key),
+    filter((packet: BranchPacket) => packet.key === key),
     scan((prev: T[]|null, curr: BranchPacket): T[] => {
       return accumulator(prev, curr)
     }, [])

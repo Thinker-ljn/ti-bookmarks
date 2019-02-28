@@ -1,12 +1,13 @@
 import Base from './base'
-import { tags$, tagsTree$, Tag } from '../branchs/tags'
+import { tags$, tagsTree$, tagsRelation$, Tag } from '../branchs/tags'
 
 class Tags extends Base<Tag[]> {
   constructor () {
     super({list: 1})
     this.source$ = tags$
     this.sources = {
-      tree$: tagsTree$
+      tree$: tagsTree$,
+      relation$: tagsRelation$
     }
   }
 }

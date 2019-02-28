@@ -1,12 +1,13 @@
 import axios from 'axios'
 import { Observable } from 'rxjs';
 
+export interface SourceType {
+  [key: string]: Observable<any>
+}
 class Base<T> {
   init: boolean
   source$: Observable<T>
-  sources: {
-    [key: string]: Observable<T>
-  }
+  sources: SourceType
   constructor (params?: any) {
     this.init = true
     let config = params ? {params} : {}

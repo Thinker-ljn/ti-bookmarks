@@ -26,7 +26,7 @@ export class Root {
 
 const root = new Root
 
-root.source$.subscribe(v => {
-  console.log('root', v)
-})
+// root.source$.subscribe(v => {
+//   console.log('root', v)
+// })
 export default root

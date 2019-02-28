@@ -1,4 +1,8 @@
 import { Packet }  from '../trunk'
+
+export type KeyStringMap<T> = {[key: string]: T}
+export type KeyNumberMap<T> = {[key: number]: T}
+
 export interface BranchData {
   id: number,
   updated_at?: any,
