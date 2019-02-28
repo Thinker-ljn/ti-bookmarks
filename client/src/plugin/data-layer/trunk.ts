@@ -2,18 +2,17 @@ import { ReplaySubject, Observable } from 'rxjs'
 import root from './root'
 import { merge, map } from 'rxjs/operators'
 import { AxiosResponse } from 'axios'
-import { tag } from './branch/tags'
+import { PacketData } from './branchs/types'
 
-export type packetData = tag[]
-export type packet<T> = {
+export type Packet<T> = {
   key: string,
   api: string,
   method: string,
   status: number,
   data: T
 }
-export type truckType = Observable<packet<packetData>>
-// export type action = 'init' | 'create' | 'update' | 'remove'
+export type TruckType = Observable<Packet<PacketData>>
+
 function generatePacket (response: AxiosResponse) {
   let {data, config, status} = response
   let {url: api, method} = config
@@ -28,7 +27,7 @@ function generatePacket (response: AxiosResponse) {
   return packet
 }
 
-let truck$: truckType = new ReplaySubject().pipe(
+let truck$: TruckType = new ReplaySubject().pipe(
   merge(root.source$),
   map((response: AxiosResponse) => generatePacket(response))
 )

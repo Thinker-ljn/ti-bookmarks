@@ -1,36 +1,25 @@
 import * as React from 'react'
-
-import './index.scss'
-
 import { Layout, Tree, Modal, message } from 'antd'
-import { useObservable } from 'rxjs-hooks'
 import ContextMenu, { menu } from '../context-menu'
 import AddTagModal from './add-tag-modal'
+import './index.scss'
+
 import { AntTreeNode } from 'antd/lib/tree'
+import DL, {Tag} from '@/plugin/data-layer'
+import { useObservable } from 'rxjs-hooks'
 import { emit } from '../context-menu/trigger'
-import DH from '@/plugin/data-hub'
 
 const { Sider } = Layout
 const { TreeNode } = Tree
-export type tag = {
-  id: number,
-  name: string,
-  children?: tag[],
-  parent_id?: number,
-  updated_at?: any,
-  created_at?: any
-}
 
 function activeContextMenu (e: React.MouseEventHandler<any>, node: AntTreeNode) {
   emit(e, node)
 }
 
-
-
 let currNodeId: number = 0
 export default function AppSider () {
   let { useState } = React
-  let tags: tag[] = useObservable(() => DH.get('tags', 'tagsTree'), [])
+  let tags: Tag[] = useObservable(() => DL.tags.get('tree'), [])
   let [showAddTagModal, setShowAddTagModal] = useState(false)
 
   const addTag = (name: string) => {
@@ -38,9 +27,8 @@ export default function AppSider () {
       name: name,
       parent_id: currNodeId
     }
-    DH.action('tags', 'post', params).then(() => {
-      setShowAddTagModal(false)
-    })
+
+    DL.tags.post(params)
   }
 
   const handleDelTag = (node: AntTreeNode) => {
@@ -51,7 +39,7 @@ export default function AppSider () {
       title: '确定要删除 ' + node.props.title + ' ?',
       onOk: () => {
         let id = node.props.eventKey
-        DH.action('tags', 'delete', {id: id})
+        DL.tags.delete({id: id})
       }
     })
   }
@@ -72,7 +60,7 @@ export default function AppSider () {
     }
   ]
 
-  const loop = (tags: tag[]) => tags.map((tag) => {
+  const loop = (tags: Tag[]) => tags.map((tag) => {
     let key: string = tag.id + ''
     if (tag.children && tag.children.length) {
       return <TreeNode key={key} title={tag.name}>{loop(tag.children)}</TreeNode>

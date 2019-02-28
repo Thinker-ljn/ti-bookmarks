@@ -1,10 +1,11 @@
-export interface branchData {
+import { Packet }  from '../trunk'
+export interface BranchData {
   id: number,
   updated_at?: any,
   created_at?: any
 }
-type mixFn = <T extends branchData> (prev: T[], curr: T | T[]) => T[]
-type singleFn = <T extends branchData> (prev: T[], curr: T) => T[]
+type mixFn = <T extends BranchData> (prev: T[], curr: T | T[]) => T[]
+type singleFn = <T extends BranchData> (prev: T[], curr: T) => T[]
 
 export const create: mixFn = function (prev, curr) {
   const singleCreate: singleFn = function (prev, curr) {
@@ -51,5 +52,14 @@ export const remove: mixFn = function (prev, curr) {
   for (let _curr of curr) {
     prev = singleRemove(prev, _curr)
   }
+  return prev
+}
+
+export const accumulator = <T extends BranchData>(prev: T[] | null, curr: Packet<T | T[]>): T[] => {
+  if (!prev) prev = []
+  let {data, method} = curr
+  if (method === 'get') prev = prev.concat(data)
+  if (method === 'post') prev = create(prev, data)
+  if (method === 'delete') prev = remove(prev, data)
   return prev
 }

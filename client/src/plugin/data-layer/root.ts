@@ -1,9 +1,8 @@
 import axios, { AxiosResponse } from 'axios'
 import { ReplaySubject } from 'rxjs'
-import apiMaps from './roots'
 const ROUTE_PREFIX = '/api/'
 
-function useInterceptor (subject: rootSource) {
+function useInterceptor (subject: RootSource) {
   axios.defaults.baseURL = ROUTE_PREFIX
   axios.interceptors.response.use(function (response) {
     subject.next(response)
@@ -14,22 +13,14 @@ function useInterceptor (subject: rootSource) {
   })
 }
 
-export type absorbKey = keyof typeof apiMaps
-export type apisType = typeof apiMaps
-export type absorbMethod<T, K extends (keyof T)> = keyof T[K]
-export type absorbFn = (key: absorbKey, method: absorbMethod<apisType, absorbKey>, params: any) => any
-export type rootSource = ReplaySubject<AxiosResponse>
+export type RootSource = ReplaySubject<AxiosResponse>
 
 export class Root {
-  source$: rootSource
+  source$: RootSource
+
   constructor () {
     this.source$ = new ReplaySubject
     useInterceptor(this.source$)
-  }
-  absorb: absorbFn = (key, method, params) => {
-    let namespace = apiMaps[key]
-    let api = namespace[method]
-    return api(params)
   }
 }
 
