@@ -32,20 +32,20 @@ export default function AddBookmarkModal (props: Props) {
   }
 
   const handleClose = () => {
-    window.close()
+    // window.close()
   }
 
   const onTagUpdate = (e: TagChangeEvent) => {
     let {tag, checked} = e
     let needDelete: number[] = []
     let newSet = new Set(checkedTags)
+    newSet.add(tag.id)
     if (checked) {
       let relation = tagsRelation[tag.id]
       if (relation) needDelete = needDelete.concat(relation.p, relation.c)
     } else {
       needDelete = [tag.id]
     }
-    console.log('needDelete', needDelete)
     for (let id of needDelete) {
       newSet.delete(id)
     }
@@ -74,7 +74,7 @@ export default function AddBookmarkModal (props: Props) {
         </Header>
         <Content styleName="content">
           {rows()}
-          <TagRow tags={tags[0] ? tags[0].children : []} onTagUpdate={onTagUpdate}></TagRow>
+          <TagRow tags={tags[0] ? tags[0].children : []} checkedList={checkedTags} onTagUpdate={onTagUpdate}></TagRow>
         </Content>
         <Footer styleName="footer">
           <Button type="primary" onClick={handleSubmit}>提交</Button>

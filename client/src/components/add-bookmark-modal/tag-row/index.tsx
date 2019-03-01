@@ -5,6 +5,7 @@ import {Tag} from '@/plugin/data-layer'
 
 type Props = {
   tags: Tag[],
+  checkedList: Set<number>,
   onTagUpdate?: (tag: TagChangeEvent) => void
 }
 
@@ -21,7 +22,7 @@ export default function TagRow (props: Props) {
   }
 
   let tagsJsx = props.tags.map(tag => {
-    return <SingleTag onChange={updateSelectTag} tag={tag} key={tag.id}></SingleTag>
+    return <SingleTag checkedList={props.checkedList} onChange={updateSelectTag} tag={tag} key={tag.id}></SingleTag>
   })
   return <div styleName="tags-container" onWheel={onWheel} ref={tagContainer}>
     {tagsJsx}

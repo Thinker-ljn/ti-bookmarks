@@ -12,18 +12,19 @@ export type TagChangeEvent = {
 
 type Props = {
   tag: Tag,
+  checkedList: Set<number>,
   onChange?: (e: TagChangeEvent) => void
 }
 
 const { useState } = React
 export default function SingleTag (props: Props) {
-  let [checked, setChecked] = useState(false)
+  // let [checked, setChecked] = useState(false)
   let [expended, setExpended] = useState(false)
 
   const onClick = () => {
     let tag = props.tag
     let newStatus = !checked
-    setChecked(newStatus)
+    // setChecked(newStatus)
     props.onChange({
       tag: tag,
       checked: newStatus
@@ -35,13 +36,13 @@ export default function SingleTag (props: Props) {
     setExpended(!expended)
   }
 
-  const onChildChange = (tag: TagChangeEvent) => {
-    setChecked(false)
-    props.onChange(tag)
+  const onChildChange = (e: TagChangeEvent) => {
+    props.onChange(e)
   }
 
   let tag = props.tag
 
+  let checked = props.checkedList.has(tag.id)
   let styles = (checked ? 'checked' : '') + ' tag'
 
   let hasChild = tag.children && tag.children.length
@@ -52,7 +53,7 @@ export default function SingleTag (props: Props) {
             </div>
 
   if (hasChild) {
-    let children = tag.children.map(_tag => <SingleTag tag={_tag} onChange={onChildChange} key={_tag.id}></SingleTag>)
+    let children = tag.children.map(_tag => <SingleTag tag={_tag} checkedList={props.checkedList} onChange={onChildChange} key={_tag.id}></SingleTag>)
     let childrenRender = expended ? <div styleName="tag-children">{children}<span styleName="collapse" onClick={doExpend}></span></div> : ''
     return <div styleName="tag-wrapper" key={tag.id}>
       {tagJsx}
