@@ -12,5 +12,5 @@ export interface Bookmark extends BranchData {
 export const bookmarks$ = filterAndScan<Bookmark>(trunk$, 'bookmarks')
 
 bookmarks$.subscribe(v => {
-  console.log('root', v)
+  console.log('bookmarks', v)
 })

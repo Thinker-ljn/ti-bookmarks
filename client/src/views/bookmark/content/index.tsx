@@ -24,7 +24,7 @@ function getQuickAddBookmark () {
 
 export default function BookmarkContent () {
   let bookmarks: Bookmark[] = useObservable(() => DL.bookmarks.get(), [])
-
+  console.log('call in content: ', bookmarks)
   let quickAdd = getQuickAddBookmark()
   const loopBk = function () {
     return bookmarks.map(bookmark => {

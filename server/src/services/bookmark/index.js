@@ -14,7 +14,11 @@ class BookmarkController extends Controller {
       url: 'url',
       tag_id: {
         required: false,
-        type: 'int'
+        type: 'string',
+        format: /^((\d+,?)+)?(\d+)$/,
+        convertType: (v) => {
+          return v + ''
+        }
       },
       repeat: {
         required: false,
@@ -29,7 +33,8 @@ class BookmarkController extends Controller {
     })
 
     if ($form.tag_id) {
-      await bk.tags().attach($form.tag_id)
+      let tagIds = $form.tag_id.split(',')
+      await bk.tags().attach(tagIds)
     }
 
     if ($form.repeat) {

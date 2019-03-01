@@ -4,6 +4,7 @@ import TagRow from './tag-row'
 import { TagChangeEvent } from './tag-row/single-tag'
 import DL, {Tag} from '@/plugin/data-layer'
 import { useObservable } from 'rxjs-hooks';
+import { useObjectState } from '@/plugin/hooks'
 import './index.scss'
 
 const { Content, Header, Footer } = Layout
@@ -15,7 +16,8 @@ type Props = {
 type Info = {[key: string]: string}
 export default function AddBookmarkModal (props: Props) {
   let { useState } = React
-  let [info, setInfo] = useState<Info>(props)
+  // let [info, setInfo] = useState<Info>(props)
+  let [infos, setInfos] = useObjectState<Info>(props)
   let [checkedTags, setCheckedTags] = useState<Set<number>>(new Set)
   let tags = useObservable<Tag[]>(() => DL.tags.get('tree'), [])
 
@@ -23,12 +25,19 @@ export default function AddBookmarkModal (props: Props) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
     let value = e.target.value
-    info[key] = value
-    setInfo(info)
+    // let newInfo = {[key]: value}
+    // setInfo(newInfo)
+    setInfos(key, value)
   }
 
   const handleSubmit = () => {
-
+    let checkeds = Array.from(checkedTags).join(',')
+    let params = {
+      name: infos.name,
+      url: infos.url,
+      tag_id: checkeds
+    }
+    DL.bookmarks.post(params)
   }
 
   const handleClose = () => {
@@ -53,13 +62,13 @@ export default function AddBookmarkModal (props: Props) {
   }
 
   const rows = () => {
-    let keys = Object.keys(info)
+    let keys = Object.keys(infos)
     return keys.map((key: string) => {
       return (
         <Row type="flex" align="middle" style={{ marginBottom: 16 }} key={key}>
            <Col offset={1} span={3}>{key}:</Col>
            <Col span={18}>
-             <Input value={info[key]} onChange={e => handleChange(e, key)}></Input>
+             <Input value={infos[key]} onChange={e => handleChange(e, key)}></Input>
           </Col>
         </Row>
       )
