@@ -1,5 +1,5 @@
 import { Packet, TruckType }  from '../trunk'
-import { filter, scan } from 'rxjs/operators'
+import { filter, scan, map } from 'rxjs/operators'
 import { BranchData, accumulator } from './util'
 import { PacketData } from './types'
 
@@ -14,6 +14,7 @@ export const filterAndScan = <T extends BranchData>(trunk$: TruckType, key: stri
     filter((packet: BranchPacket) => packet.key === key),
     scan((prev: T[]|null, curr: BranchPacket): T[] => {
       return accumulator(prev, curr)
-    }, [])
+    }, []),
+    map(data => data.slice(0)) 
   )
 }

@@ -5,6 +5,9 @@ class bookmarks extends Base<Bookmark[]> {
   constructor () {
     super()
     this.source$ = bookmarks$
+    this.sources = {
+      bk$: bookmarks$
+    }
   }
 }
 

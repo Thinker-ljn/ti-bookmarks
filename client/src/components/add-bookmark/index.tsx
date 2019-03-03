@@ -1,23 +1,25 @@
 import * as React from 'react'
-import { Layout, Input, Row, Col, Button } from 'antd'
+import { Layout, Input, Row, Col } from 'antd'
 import TagRow from './tag-row'
 import { TagChangeEvent } from './tag-row/single-tag'
 import DL, {Tag} from '@/plugin/data-layer'
 import { useObservable } from 'rxjs-hooks';
 import { useObjectState } from '@/plugin/hooks'
-import './index.scss'
-
-const { Content, Header, Footer } = Layout
 
 type Props = {
-  url: string,
-  name: string
+  url?: string,
+  name?: string
 }
 type Info = {[key: string]: string}
-export default function AddBookmarkModal (props: Props) {
-  let { useState } = React
-  // let [info, setInfo] = useState<Info>(props)
-  let [infos, setInfos] = useObjectState<Info>(props)
+const { forwardRef, useState, useImperativeHandle } = React
+
+const AddBookmarkModal = forwardRef((props: Props, ref) => {
+  let initState = {
+    name: props.name || '',
+    url: props.url || ''
+  }
+
+  let [infos, setInfos] = useObjectState<Info>(initState)
   let [checkedTags, setCheckedTags] = useState<Set<number>>(new Set)
   let tags = useObservable<Tag[]>(() => DL.tags.get('tree'), [])
 
@@ -25,23 +27,7 @@ export default function AddBookmarkModal (props: Props) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
     let value = e.target.value
-    // let newInfo = {[key]: value}
-    // setInfo(newInfo)
     setInfos(key, value)
-  }
-
-  const handleSubmit = () => {
-    let checkeds = Array.from(checkedTags).join(',')
-    let params = {
-      name: infos.name,
-      url: infos.url,
-      tag_id: checkeds
-    }
-    DL.bookmarks.post(params)
-  }
-
-  const handleClose = () => {
-    // window.close()
   }
 
   const onTagUpdate = (e: TagChangeEvent) => {
@@ -61,6 +47,18 @@ export default function AddBookmarkModal (props: Props) {
     setCheckedTags(newSet)
   }
 
+  useImperativeHandle(ref, () => ({
+    handleSubmit () {
+      let checkeds = Array.from(checkedTags).join(',')
+      let params = {
+        name: infos.name,
+        url: infos.url,
+        tag_id: checkeds
+      }
+      DL.bookmarks.post(params)
+    }
+  }));
+
   const rows = () => {
     let keys = Object.keys(infos)
     return keys.map((key: string) => {
@@ -76,20 +74,11 @@ export default function AddBookmarkModal (props: Props) {
   }
 
   return (
-    <Layout styleName="layout">
-      <Layout styleName="inner-layout">
-        <Header>
-          <h3 style={{ color: '#eee' }}>填写标签信息</h3>
-        </Header>
-        <Content styleName="content">
-          {rows()}
-          <TagRow tags={tags[0] ? tags[0].children : []} checkedList={checkedTags} onTagUpdate={onTagUpdate}></TagRow>
-        </Content>
-        <Footer styleName="footer">
-          <Button type="primary" onClick={handleSubmit}>提交</Button>
-          <Button style={{ marginLeft: 16 }} onClick={handleClose}>关闭</Button>
-        </Footer>
-      </Layout>
+    <Layout>
+      {rows()}
+      <TagRow tags={tags[0] ? tags[0].children : []} checkedList={checkedTags} onTagUpdate={onTagUpdate}></TagRow>
     </Layout>
   )
-}
+})
+
+export default AddBookmarkModal

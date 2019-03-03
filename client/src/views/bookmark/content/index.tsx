@@ -1,6 +1,7 @@
 import * as React from 'react'
-import { Layout } from 'antd'
+import { Layout, Modal, Button } from 'antd'
 import SingleBookmark from '../single-bookmark'
+import AddBookmark from '@/components/add-bookmark'
 import './index.scss'
 
 import DL, { Bookmark } from '@/plugin/data-layer'
@@ -22,23 +23,31 @@ function getQuickAddBookmark () {
   return command
 }
 
+const {useRef, useState} = React
 export default function BookmarkContent () {
-  let bookmarks: Bookmark[] = useObservable(() => DL.bookmarks.get(), [])
-  console.log('call in content: ', bookmarks)
+  let bookmarks = useObservable<Bookmark[]>(() => DL.bookmarks.get('bk'), [])
+  let [visible, setVisible] = useState(false)
+  let addBkRef = useRef(null)
   let quickAdd = getQuickAddBookmark()
-  const loopBk = function () {
-    return bookmarks.map(bookmark => {
-      return (
-        <SingleBookmark bookmark={bookmark} key={bookmark.id}></SingleBookmark>
-      )
-    })
+  const submitAddBk = () => {
+    addBkRef.current.handleSubmit()
+    setVisible(false)
   }
-
+  const loopBk = bookmarks.map((bookmark: Bookmark) => {
+    return <SingleBookmark bookmark={bookmark} key={bookmark.id}></SingleBookmark>
+  })
   return (
     <Layout styleName="content">
-      <h3 styleName="title">所有书签<a styleName="quick-add" href={quickAdd} title="拖拽至浏览器书签栏">快捷添加书签</a></h3>
+      <Modal title={'添加书签'} visible={visible} onOk={submitAddBk} onCancel={() => setVisible(false)}>
+        <AddBookmark ref={addBkRef}></AddBookmark>
+      </Modal>
+      <h3 styleName="title">
+        <span>所有书签</span>
+        <Button onClick={() => setVisible(true)}>添加书签</Button>
+        <a styleName="quick-add" href={quickAdd} title="拖拽至浏览器书签栏">快捷添加书签</a>
+      </h3>
       <ul>
-        {loopBk()}
+        {loopBk}
       </ul>
     </Layout>
   )
