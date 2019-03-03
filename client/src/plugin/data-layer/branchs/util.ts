@@ -1,69 +1,48 @@
 import { Packet }  from '../trunk'
+import { BranchData } from '../types'
 
-export type KeyStringMap<T> = {[key: string]: T}
-export type KeyNumberMap<T> = {[key: number]: T}
+type SingleFn = <T extends BranchData> (prev: T[], curr: T) => T[]
 
-export interface BranchData {
-  id: number,
-  updated_at?: any,
-  created_at?: any
-}
-type mixFn = <T extends BranchData> (prev: T[], curr: T | T[]) => T[]
-type singleFn = <T extends BranchData> (prev: T[], curr: T) => T[]
+type ExecFn<T extends BranchData> = (fn: SingleFn) => T[]
+type GetUpdateFn = <T extends BranchData> (prev: T[], curr: T | T[]) => ExecFn<T>
 
-export const create: mixFn = function (prev, curr) {
-  const singleCreate: singleFn = function (prev, curr) {
-    let item = prev.find(item => item.id === curr.id)
-    if (!item) prev.push(curr)
-    return prev
-  }
-  if (!Array.isArray(curr)) {
-    prev = singleCreate(prev, curr)
-    return prev
-  }
-  for (let _curr of curr) {
-    prev = singleCreate(prev, _curr)
-  }
+function findIndex<T extends BranchData> (prev: T[], curr: T): number {
+  return prev.findIndex(item => item.__uid__ === curr.__uid__ || item.id === curr.id)
+} 
+
+const singleUpdate: SingleFn = function (prev, curr) {
+  let index = findIndex(prev, curr)
+  if (index > -1) prev.splice(index, 1, curr)
+  else prev.push(curr)
   return prev
 }
 
-export const update: mixFn = function (prev, curr) {
-  const singleUpdate: singleFn = function (prev, curr) {
-    let index = prev.findIndex(item => item.id === curr.id)
-    if (index > -1) prev.splice(index, 1, curr)
-    return prev
-  }
-  if (!Array.isArray(curr)) {
-    prev = singleUpdate(prev, curr)
-    return prev
-  }
-  for (let _curr of curr) {
-    prev = singleUpdate(prev, _curr)
-  }
+const singleRemove: SingleFn = function (prev, curr) {
+  let index = findIndex(prev, curr)
+  if (index > -1) prev.splice(index, 1)
   return prev
 }
 
-export const remove: mixFn = function (prev, curr) {
-  const singleRemove: singleFn = function (prev, curr) {
-    let index = prev.findIndex(item => item.id === curr.id)
-    if (index > -1) prev.splice(index, 1)
+const getUpdateFn: GetUpdateFn = function (prev, curr) {
+  return function (SingleFn) {
+    if (!Array.isArray(curr)) {
+      prev = SingleFn(prev, curr)
+      return prev
+    }
+    for (let _curr of curr) {
+      prev = SingleFn(prev, _curr)
+    }
     return prev
   }
-  if (!Array.isArray(curr)) {
-    prev = singleRemove(prev, curr)
-    return prev
-  }
-  for (let _curr of curr) {
-    prev = singleRemove(prev, _curr)
-  }
-  return prev
 }
 
 export const accumulator = <T extends BranchData>(prev: T[] | null, curr: Packet<T | T[]>): T[] => {
   if (!prev) prev = []
   let {data, method} = curr
   if (method === 'get') prev = prev.concat(data)
-  if (method === 'post') prev = create(prev, data)
-  if (method === 'delete') prev = remove(prev, data)
+  let updateFn = getUpdateFn(prev, data)
+  if (method === 'post') prev = updateFn(singleUpdate)
+  if (method === 'patch') prev = updateFn(singleUpdate)
+  if (method === 'delete') prev = updateFn(singleRemove)
   return prev
 }

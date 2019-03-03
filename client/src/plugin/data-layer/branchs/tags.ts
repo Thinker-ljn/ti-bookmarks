@@ -1,6 +1,6 @@
 import trunk$ from '../trunk'
 import { map } from 'rxjs/operators'
-import { BranchData, KeyNumberMap } from './util'
+import { BranchData, KeyNumberMap } from '../types'
 import { filterAndScan } from './base'
 
 export interface Tag extends BranchData {

@@ -2,7 +2,7 @@ import { ReplaySubject, Observable } from 'rxjs'
 import root from './root'
 import { merge, map, filter } from 'rxjs/operators'
 import { AxiosResponse } from 'axios'
-import { PacketData } from './branchs/types'
+import { PacketData } from './types'
 
 export type Packet<T> = {
   key: string,
@@ -30,7 +30,7 @@ function generatePacket (response: AxiosResponse) {
 let truck$: TruckType = new ReplaySubject().pipe(
   merge(root.source$),
   map((response: AxiosResponse) => generatePacket(response)),
-  filter((packet) => packet.status === 200)
+  filter((packet: Packet<PacketData>) => packet.status === 200)
 )
 truck$.subscribe(v => {
   console.log('truck', v)

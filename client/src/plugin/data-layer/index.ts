@@ -4,4 +4,4 @@ const DataLayer: any = initDL()
 
 export default DataLayer
 
-export * from './branchs/types'
+export * from './types'

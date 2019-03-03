@@ -1,5 +1,5 @@
 import trunk$ from '../trunk'
-import { BranchData } from './util'
+import { BranchData } from '../types'
 import { filterAndScan } from './base'
 
 export interface Bookmark extends BranchData {

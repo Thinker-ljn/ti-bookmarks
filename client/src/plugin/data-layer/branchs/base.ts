@@ -1,13 +1,14 @@
 import { Packet, TruckType }  from '../trunk'
 import { filter, scan, map } from 'rxjs/operators'
-import { BranchData, accumulator } from './util'
-import { PacketData } from './types'
+import { accumulator } from './util'
+import { BranchData, PacketData } from '../types'
+import { Observable } from 'rxjs';
 
 export default class Base {
 
 }
 
-export const filterAndScan = <T extends BranchData>(trunk$: TruckType, key: string) => {
+export const filterAndScan = <T extends BranchData>(trunk$: TruckType, key: string): Observable<T[]> => {
   type T0 = Extract<PacketData, T>
   type BranchPacket = Packet<T0>
   return trunk$.pipe(
@@ -15,6 +16,6 @@ export const filterAndScan = <T extends BranchData>(trunk$: TruckType, key: stri
     scan((prev: T[]|null, curr: BranchPacket): T[] => {
       return accumulator(prev, curr)
     }, []),
-    map(data => data.slice(0)) 
+    map((data: T[]) => data.slice(0)) 
   )
 }
