@@ -1,13 +1,13 @@
 import { Tag } from './branchs/tags'
 import { Bookmark } from './branchs/bookmarks'
 
-export type KeyStringMap<T> = {[key: string]: T}
-export type KeyNumberMap<T> = {[key: number]: T}
-export type PendindStatus = 'creating' | 'updating' | 'deleting'
+export type KeyMap<T> = {[key: string]: T}
+export type IndexMap<T> = {[index: number]: T}
+export type PendingStatus = 'creating' | 'updating' | 'deleting'
 export interface BranchData {
-  id: number,
-  __uid__?: number,
-  __status__?: PendindStatus,
+  id?: number,
+  __key__?: string,
+  __status__?: PendingStatus,
   updated_at?: any,
   created_at?: any
 }

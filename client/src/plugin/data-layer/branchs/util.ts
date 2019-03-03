@@ -7,7 +7,7 @@ type ExecFn<T extends BranchData> = (fn: SingleFn) => T[]
 type GetUpdateFn = <T extends BranchData> (prev: T[], curr: T | T[]) => ExecFn<T>
 
 function findIndex<T extends BranchData> (prev: T[], curr: T): number {
-  return prev.findIndex(item => item.__uid__ === curr.__uid__ || item.id === curr.id)
+  return prev.findIndex(item => item.id === curr.id)
 } 
 
 const singleUpdate: SingleFn = function (prev, curr) {
