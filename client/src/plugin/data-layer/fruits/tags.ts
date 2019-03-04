@@ -64,18 +64,20 @@ const geneRelation = (tags: Tag[]) => {
   return relation
 }
 
-export const tagsTree$ = tags$.pipe(
-  map((data: Tags) => toTree(data))
-)
-
-export const tagsRelation$ = tagsTree$.pipe(
-  map((data: Tag[]) => geneRelation(data))
-)
-
 class TagsFruit extends Base<Tag> {
   constructor () {
     super({list: 1})
-    this.source$ = tags$
+    this.initSource()
+  }
+
+  initSource () {
+    this.source$ = this.handlePending(tags$)
+    const tagsTree$ = this.source$.pipe(
+      map((data: Tags) => toTree(data))
+    )
+    const tagsRelation$ = tagsTree$.pipe(
+      map((data: Tag[]) => geneRelation(data))
+    )
     this.customSources = {
       tree$: tagsTree$,
       relation$: tagsRelation$

@@ -1,21 +1,21 @@
 import axios from 'axios'
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { BranchData, PendingStatus, IndexMap, KeyMap } from '../types'
-import { combineLatest, scan } from 'rxjs/operators';
+import { combineLatest, scan, merge } from 'rxjs/operators';
 export interface SourceType {
   [key: string]: Observable<any>
 }
 
 let uid = 0
-const getUniqueId = () => {
-  return (++uid) + ''
+const getUniqueId = (id: number = 0) => {
+  return id + '-' + (++uid)
 }
 const getPendingData = <T extends BranchData>(data: T, status: PendingStatus = 'creating'): [T, any] => {
   let _data = {...data}
-  let __key__  = _data.__key__ = getUniqueId()
+  let __key__  = _data.__key__ = getUniqueId(_data.id)
   _data.__status__ = status
-  
-  let config = {params: __key__}
+
+  let config = {params: {__key__}}
   return [_data, config]
 }
 
@@ -46,15 +46,17 @@ class Base<T extends BranchData> {
           return [udAndDl, create]
         }
         return prev
-      }, [{}, []])
+      }, [{}, []]),
+      merge(of([{}, []])) // merge a default map value, because the combineLatest api emit initail value util all of internal observables have emitted first value
     )
-    
-    return source$.pipe(
+
+    let mixSrc = source$.pipe(
       combineLatest(map$, (source: T[], pending: [IndexMap<T>, T[]]) => {
         let [udAndDl, create] = pending
         source = source.map(s => {
-          if (s.__key__ && udAndDl[s.id] && udAndDl[s.id].__key__ > s.__key__) {
-            return udAndDl[s.id]
+          let __key__ = {s}
+          if (__key__ && udAndDl[s.id] && (udAndDl[s.id].__key__) > s.__key__) {
+            return {...udAndDl[s.id], __key__}
           }
           return s
         })
@@ -69,10 +71,11 @@ class Base<T extends BranchData> {
             source.push(p)
           }
         })
-
         return source
       })
     )
+
+    return mixSrc
   }
 
   get namespace () {
@@ -89,6 +92,7 @@ class Base<T extends BranchData> {
   post (postData: T) {
     let [pendingData, config] = getPendingData(postData)
     this.pending$.next(pendingData)
+    // console.log(config)
     axios.post(this.namespace, postData, config)
     return this.get()
   }

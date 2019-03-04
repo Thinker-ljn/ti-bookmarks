@@ -9,21 +9,24 @@ export type Packet<T> = {
   api: string,
   method: string,
   status: number,
+  __key__?: string,
   data: T
 }
 export type TruckType = Observable<Packet<PacketData>>
 
-function generatePacket (response: AxiosResponse) {
+function generatePacket<T> (response: AxiosResponse): Packet<T> {
   let {data, config, status} = response
-  let {url: api, method} = config
+  let {url: api, method, params} = config
   let key = api.replace(/(\/api\/)([^\/\?]+)([\/\?\#\:]?.*)/, '$2')
-  let packet = {
+  let packet: Packet<T> = {
     key,
     api,
     data,
     method,
     status
   }
+
+  if (params && params.__key__) packet.__key__ = params.__key__
   return packet
 }
 

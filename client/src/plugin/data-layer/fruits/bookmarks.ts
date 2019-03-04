@@ -4,10 +4,11 @@ import { bookmarks$, Bookmark } from '../branchs/bookmarks'
 class bookmarks extends Base<Bookmark> {
   constructor () {
     super()
-    this.source$ = bookmarks$
-    this.customSources = {
-      bk$: bookmarks$
-    }
+    this.initSource()
+  }
+
+  initSource () {
+    this.source$ = this.handlePending(bookmarks$)
   }
 }
 

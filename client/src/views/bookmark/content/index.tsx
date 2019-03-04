@@ -25,7 +25,7 @@ function getQuickAddBookmark () {
 
 const {useRef, useState} = React
 export default function BookmarkContent () {
-  let bookmarks = useObservable<Bookmark[]>(() => DL.bookmarks.get('bk'), [])
+  let bookmarks = useObservable<Bookmark[]>(() => DL.bookmarks.get(), [])
   let [visible, setVisible] = useState(false)
   let addBkRef = useRef(null)
   let quickAdd = getQuickAddBookmark()
@@ -34,7 +34,7 @@ export default function BookmarkContent () {
     setVisible(false)
   }
   const loopBk = bookmarks.map((bookmark: Bookmark) => {
-    return <SingleBookmark bookmark={bookmark} key={bookmark.id}></SingleBookmark>
+    return <SingleBookmark bookmark={bookmark} key={bookmark.__key__}></SingleBookmark>
   })
   return (
     <Layout styleName="content">

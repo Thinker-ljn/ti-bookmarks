@@ -14,7 +14,10 @@ function SingleBookmark (props: propsType) {
       <img src={favicon} styleName="favicon"/>
       <a styleName="name" target="_blank" rel="noopener noreferrer" // https://mathiasbynens.github.io/rel-noopener/
         href={bk.url} title={bk.name}
-      >{bk.name}</a>
+      >
+        <span>{bk.name}</span>
+        {bk.__status__ ? <span>{bk.__status__}</span> : '' }
+      </a>
     </li>
   )
 }

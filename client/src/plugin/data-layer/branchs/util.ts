@@ -8,7 +8,7 @@ type GetUpdateFn = <T extends BranchData> (prev: T[], curr: T | T[]) => ExecFn<T
 
 function findIndex<T extends BranchData> (prev: T[], curr: T): number {
   return prev.findIndex(item => item.id === curr.id)
-} 
+}
 
 const singleUpdate: SingleFn = function (prev, curr) {
   let index = findIndex(prev, curr)
@@ -38,7 +38,8 @@ const getUpdateFn: GetUpdateFn = function (prev, curr) {
 
 export const accumulator = <T extends BranchData>(prev: T[] | null, curr: Packet<T | T[]>): T[] => {
   if (!prev) prev = []
-  let {data, method} = curr
+  let {data, method, __key__} = curr
+  if (!Array.isArray(data) && __key__) data.__key__ = __key__
   if (method === 'get') prev = prev.concat(data)
   let updateFn = getUpdateFn(prev, data)
   if (method === 'post') prev = updateFn(singleUpdate)

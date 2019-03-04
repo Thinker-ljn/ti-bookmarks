@@ -8,6 +8,14 @@ export default class Base {
 
 }
 
+const addKey = function <T extends BranchData>(data: T[]) {
+  // since we used react hooks, we need a new array reference to update our UI
+  return data.slice(0).map(d => {
+    if (!d.__key__) d.__key__ = d.id + '-0'
+    return d
+  })
+}
+
 export const filterAndScan = <T extends BranchData>(trunk$: TruckType, key: string): Observable<T[]> => {
   type T0 = Extract<PacketData, T>
   type BranchPacket = Packet<T0>
@@ -16,6 +24,6 @@ export const filterAndScan = <T extends BranchData>(trunk$: TruckType, key: stri
     scan((prev: T[]|null, curr: BranchPacket): T[] => {
       return accumulator(prev, curr)
     }, []),
-    map((data: T[]) => data.slice(0)) 
+    map((data: T[]) => addKey(data))
   )
 }

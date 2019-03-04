@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Layout, Input, Row, Col } from 'antd'
 import TagRow from './tag-row'
 import { TagChangeEvent } from './tag-row/single-tag'
-import DL, {Tag} from '@/plugin/data-layer'
+import DL, { Tag } from '@/plugin/data-layer'
 import { useObservable } from 'rxjs-hooks';
 import { useObjectState } from '@/plugin/hooks'
 
