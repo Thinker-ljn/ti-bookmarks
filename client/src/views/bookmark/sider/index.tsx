@@ -8,6 +8,7 @@ import { AntTreeNode } from 'antd/lib/tree'
 import DL, {Tag} from '@/plugin/data-layer'
 import { useObservable } from 'rxjs-hooks'
 import { emit } from '../context-menu/trigger'
+import { Dictionary } from 'lodash';
 
 const { Sider } = Layout
 const { TreeNode } = Tree
@@ -19,7 +20,8 @@ function activeContextMenu (e: React.MouseEventHandler<any>, node: AntTreeNode) 
 let currNodeId: number = 0
 export default function AppSider () {
   let { useState } = React
-  let tags: Tag[] = useObservable(() => DL.tags.get('tree'), [])
+  let tagsTree: Tag[] = useObservable(() => DL.tags.get('tree'), [])
+  let tagsMap: Dictionary<Tag> = useObservable(() => DL.tags.get('map'), {})
   let [showAddTagModal, setShowAddTagModal] = useState(false)
 
   const addTag = (name: string) => {
@@ -38,7 +40,7 @@ export default function AppSider () {
     Modal.confirm({
       title: '确定要删除 ' + node.props.title + ' ?',
       onOk: () => {
-        let id = node.props.eventKey
+        let id = tagsMap[node.props.eventKey].id
         DL.tags.delete({id: id})
       }
     })
@@ -50,7 +52,7 @@ export default function AppSider () {
       name: '添加',
       callback: (node: AntTreeNode) => {
         setShowAddTagModal(true)
-        currNodeId = Number(node.props.eventKey)
+        currNodeId = tagsMap[node.props.eventKey].id
       }
     },
     {
@@ -60,8 +62,15 @@ export default function AppSider () {
     }
   ]
 
+  const onSelect = (selectedKeys: string[]) => {
+    let key = selectedKeys.pop()
+    let tag = tagsMap[key]
+
+    console.log(tag)
+  }
+
   const loop = (tags: Tag[]) => tags.map((tag) => {
-    let key: string = tag.id + ''
+    let key: string = tag.__key__ || '0'
     if (tag.children && tag.children.length) {
       return <TreeNode key={key} title={tag.name}>{loop(tag.children)}</TreeNode>
     }
@@ -69,10 +78,14 @@ export default function AppSider () {
   })
 
   const renderTree = () => {
-    if (tags.length) {
-      return <Tree defaultExpandedKeys={['0']} onRightClick={({event, node}) => {activeContextMenu(event, node)}}>
-              {loop(tags)}
-            </Tree>
+    if (tagsTree.length) {
+      return <Tree
+        defaultExpandedKeys={['0']}
+        onRightClick={({event, node}) => {activeContextMenu(event, node)}}
+        onSelect={onSelect}
+      >
+        {loop(tagsTree)}
+      </Tree>
     }
   }
 

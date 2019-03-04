@@ -93,6 +93,10 @@
   version "2.2.7"
   resolved "http://registry.npm.taobao.org/@types/classnames/download/@types/classnames-2.2.7.tgz#fb68cc9be8487e6ea5b13700e759bfbab7e0fefd"
 
+"@types/lodash@^4.14.121":
+  version "4.14.121"
+  resolved "http://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.121.tgz#9327e20d49b95fc2bf983fc2f045b2c6effc80b9"
+
 "@types/prop-types@*":
   version "15.7.0"
   resolved "http://registry.npm.taobao.org/@types/prop-types/download/@types/prop-types-15.7.0.tgz#4c48fed958d6dcf9487195a0ef6456d5f6e0163a"

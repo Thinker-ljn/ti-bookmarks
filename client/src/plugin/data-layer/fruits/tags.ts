@@ -2,6 +2,7 @@ import Base from './base'
 import { map } from 'rxjs/operators'
 import { IndexMap } from '../types'
 import { tags$, Tag } from '../branchs/tags'
+import { keyBy } from 'lodash'
 
 type Tags = Tag[]
 type TagMap = {[key: string]: Tags}
@@ -72,6 +73,10 @@ class TagsFruit extends Base<Tag> {
 
   initSource () {
     this.source$ = this.handlePending(tags$)
+
+    const tagsMap$ = this.source$.pipe(
+      map((data: Tags) => keyBy(data, '__key__'))
+    )
     const tagsTree$ = this.source$.pipe(
       map((data: Tags) => toTree(data))
     )
@@ -80,7 +85,8 @@ class TagsFruit extends Base<Tag> {
     )
     this.customSources = {
       tree$: tagsTree$,
-      relation$: tagsRelation$
+      relation$: tagsRelation$,
+      map$: tagsMap$
     }
   }
 }

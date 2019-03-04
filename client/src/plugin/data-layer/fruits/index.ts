@@ -21,7 +21,6 @@ const initDL = () => {
           let theClass = fruitsClasses[key]
           fruits[key] = new theClass
         }
-        console.log('get', key, fruits[key])
         return fruits[key]
       },
       set () {
