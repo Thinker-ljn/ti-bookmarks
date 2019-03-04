@@ -11,7 +11,8 @@ const routes = [
   ['get', '/api/tags', 'tag@index'],
   ['post', '/api/tags', 'tag@create'],
   ['patch', '/api/tags', 'tag@update'],
-  ['delete', '/api/tags/:id', 'tag@delete']
+  ['delete', '/api/tags/:id', 'tag@delete'],
+  ['get', '/api/tags/:id/bookmarks', 'tag@bookmarks']
 ]
 
 const des = (route) => {

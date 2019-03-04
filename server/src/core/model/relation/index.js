@@ -17,6 +17,10 @@ class Relation {
     return [cstcA.name, cstcB.name].sort().join('_').toLowerCase()
   }
 
+  get builder () {
+    return new Builder(this.$tableName, this.connection)
+  }
+
   initData () {
     this.$data[this.$keyA] = this.$oA.id
   }
@@ -37,18 +41,28 @@ class Relation {
       data[this.$keyB] = id
       datas.push(data)
     })
-    let query = new Builder(this.$tableName, this.connection)
-    let result = await query.insert(datas)
+
+    let result = await this.builder.insert(datas)
 
     return result
   }
 
-  async detach (id) {
-    // this.$data[this.$keyB] = id
-    // let query = new Builder(this.$tableName, this.connection)
-    // let result = await query.delete(this.$tableName, this.$data)
+  async getIds () {
+    let query = this.builder.where(this.$keyA, this.$oA.id)
+    return await query.select(this.$keyB).get()
+  }
 
-    // return result
+  async get () {
+    let query = this.builder.where(this.$keyA, this.$oA.id)
+    let result = await query.get()
+    return result
+  }
+
+  async detach (id) {
+    let query = this.builder.where(this.$keyA, this.$oA.id)
+    let result = await query.where(this.$keyB, id).delete()
+
+    return result
   }
 }
 

@@ -76,6 +76,12 @@ class TagController extends Controller {
     await tag.delete()
     return tag
   }
+
+  async bookmarks (id) {
+    let tag = await Tag.find(id)
+    let tagBkIds = await tag.bookmarks().getIds()
+    return {[id]: tagBkIds.map(bk => bk.bookmark_id)}
+  }
 }
 
 module.exports = TagController
