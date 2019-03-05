@@ -1,6 +1,6 @@
 import initDL from './fruits/index'
 
-const DataLayer: any = initDL()
+const DataLayer = initDL()
 
 export default DataLayer
 

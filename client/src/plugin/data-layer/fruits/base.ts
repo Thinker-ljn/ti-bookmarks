@@ -32,7 +32,7 @@ class Base<T extends BranchData> {
     axios.get(this.namespace, config)
   }
 
-  handlePending (source$: Observable<T[]>) {
+  handlePending (source$: Observable<T[]>): Observable<T[]> {
     let map$ = this.pending$.pipe(
       scan((prev: [IndexMap<T>, T[]], curr: T) => {
         let id = curr.id
@@ -50,7 +50,7 @@ class Base<T extends BranchData> {
       merge(of([{}, []])) // merge a default map value, because the combineLatest api emit initail value util all of internal observables have emitted first value
     )
 
-    let mixSrc = source$.pipe(
+    let mixSrc: Observable<T[]> = source$.pipe(
       combineLatest(map$, (source: T[], pending: [IndexMap<T>, T[]]) => {
         let [udAndDl, create] = pending
         source = source.map(s => {
@@ -84,9 +84,15 @@ class Base<T extends BranchData> {
 
   get (key?: string) {
     if (!key) return this.source$
-    key = key.replace(/^(.*[^$])(\$?)$/, '$1$$')
-    let source = this.customSources[key]
-    return source
+    let sourceKey = key.replace(/^(.*[^$])(\$?)$/, '$1$$')
+    let source = this.customSources[sourceKey]
+    if (!source) {
+      return source
+    }
+    
+    if (typeof (this as any)[key] === 'function') {
+      return (this as any)[key]()
+    }
   }
 
   post (postData: T) {

@@ -1,19 +1,17 @@
 import tags from './tags'
 import bookmarks from './bookmarks'
-// import base from './base'
+import { KeyMap } from '../types'
 
-type MapObj = {
-  [key: string]: any
-}
-const fruitsClasses: MapObj = {
-  tags,
-  bookmarks
+type Union = typeof tags | typeof  bookmarks
+const fruitsClasses: KeyMap<Union> = {
+  tags: tags,
+  bookmarks: bookmarks
 }
 
-const fruits: MapObj = {}
+const fruits: KeyMap<InstanceType<Union>> = {}
 
 const initDL = () => {
-  let DL: any = Object.create(null)
+  let DL: typeof fruits = Object.create(null)
   for (let key in fruitsClasses) {
     Object.defineProperty(DL, key, {
       get () {
