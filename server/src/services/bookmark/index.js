@@ -32,14 +32,17 @@ class BookmarkController extends Controller {
       url: $form.url
     })
 
+    let tagIds = []
+
     if ($form.tag_id) {
-      let tagIds = $form.tag_id.split(',')
+      tagIds = $form.tag_id.split(',')
       await bk.tags().attach(tagIds)
     }
 
     if ($form.repeat) {
       await SpacedRepetition.add(bk)
     }
+    bk.tags = tagIds
     return bk
   }
 
