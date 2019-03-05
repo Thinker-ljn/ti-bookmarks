@@ -86,13 +86,14 @@ class Base<T extends BranchData> {
     if (!key) return this.source$
     let sourceKey = key.replace(/^(.*[^$])(\$?)$/, '$1$$')
     let source = this.customSources[sourceKey]
-    if (!source) {
-      return source
-    }
-    
-    if (typeof (this as any)[key] === 'function') {
-      return (this as any)[key]()
-    }
+    return source
+    // if (!source) {
+    //   return source
+    // }
+
+    // if (typeof (this as any)[key] === 'function') {
+    //   return (this as any)[key]()
+    // }
   }
 
   post (postData: T) {

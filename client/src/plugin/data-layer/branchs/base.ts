@@ -16,11 +16,11 @@ const addKey = function <T extends BranchData>(data: T[]) {
   })
 }
 
-export const filterAndScan = <T extends BranchData>(trunk$: TruckType, key: string): Observable<T[]> => {
+export const filterAndScan = <T extends BranchData>(trunk$: TruckType, api: string): Observable<T[]> => {
   type T0 = Extract<PacketData, T>
   type BranchPacket = Packet<T0>
   return trunk$.pipe(
-    filter((packet: BranchPacket) => packet.key === key),
+    filter((packet: BranchPacket) => packet.api === api),
     scan((prev: T[]|null, curr: BranchPacket): T[] => {
       return accumulator(prev, curr)
     }, []),

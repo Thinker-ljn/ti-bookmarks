@@ -1,32 +1,18 @@
-import tags from './tags'
-import bookmarks from './bookmarks'
-import { KeyMap } from '../types'
+import TagsFruit from './tags'
+import BookmarksFruit from './bookmarks'
 
-type Union = typeof tags | typeof  bookmarks
-const fruitsClasses: KeyMap<Union> = {
-  tags: tags,
-  bookmarks: bookmarks
+class DL {
+  _tags: TagsFruit = null
+  _bookmarks: BookmarksFruit = null
+  get tags() {
+    return this._tags ? this._tags : (this._tags = new TagsFruit)
+  }
+  get bookmarks() {
+    return this._bookmarks ? this._bookmarks : (this._bookmarks = new BookmarksFruit)
+  }
 }
-
-const fruits: KeyMap<InstanceType<Union>> = {}
 
 const initDL = () => {
-  let DL: typeof fruits = Object.create(null)
-  for (let key in fruitsClasses) {
-    Object.defineProperty(DL, key, {
-      get () {
-        if (!fruits[key]) {
-          let theClass = fruitsClasses[key]
-          fruits[key] = new theClass
-        }
-        return fruits[key]
-      },
-      set () {
-        throw('cannot set value')
-      }
-    })
-  }
-  return DL
+  return new DL
 }
-
 export default initDL

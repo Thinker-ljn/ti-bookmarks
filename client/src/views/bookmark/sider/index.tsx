@@ -28,7 +28,7 @@ export default function AppSider () {
     let params = {
       name: name,
       parent_id: currNodeId
-    }
+    };
 
     DL.tags.post(params)
   }
@@ -40,8 +40,8 @@ export default function AppSider () {
     Modal.confirm({
       title: '确定要删除 ' + node.props.title + ' ?',
       onOk: () => {
-        let id = tagsMap[node.props.eventKey].id
-        DL.tags.delete({id: id})
+        let tag: Tag = tagsMap[node.props.eventKey]
+        DL.tags.delete(tag)
       }
     })
   }
@@ -66,7 +66,8 @@ export default function AppSider () {
     let key = selectedKeys.pop()
     let tag = tagsMap[key]
 
-    console.log(tag)
+    DL.bookmarks.filterByTag(tag)
+    // console.log(tag)
   }
 
   const loop = (tags: Tag[]) => tags.map((tag) => {

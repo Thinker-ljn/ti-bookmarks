@@ -17,7 +17,8 @@ export type TruckType = Observable<Packet<PacketData>>
 function generatePacket<T> (response: AxiosResponse): Packet<T> {
   let {data, config, status} = response
   let {url: api, method, params} = config
-  let key = api.replace(/(\/api\/)([^\/\?]+)([\/\?\#\:]?.*)/, '$2')
+  api = api.replace(/^\/?api\//, '')
+  let key = api.replace(/([^\/\?]+)([\/\?\#\:]?.*)/, '$1')
   let packet: Packet<T> = {
     key,
     api,

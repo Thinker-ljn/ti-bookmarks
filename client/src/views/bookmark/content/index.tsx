@@ -25,7 +25,8 @@ function getQuickAddBookmark () {
 
 const {useRef, useState} = React
 export default function BookmarkContent () {
-  let bookmarks = useObservable<Bookmark[]>(() => DL.bookmarks.get(), [])
+  let bk$ = DL.bookmarks.get()
+  let bookmarks = useObservable<Bookmark[]>(() => bk$, [])
   let [visible, setVisible] = useState(false)
   let addBkRef = useRef(null)
   let quickAdd = getQuickAddBookmark()
