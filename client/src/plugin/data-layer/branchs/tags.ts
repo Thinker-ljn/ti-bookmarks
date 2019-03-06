@@ -9,3 +9,5 @@ export interface Tag extends BranchData {
 }
 
 export const tags$ = filterAndScan<Tag>(trunk$, 'tags')
+
+tags$.subscribe(v => console.log('tags', v))

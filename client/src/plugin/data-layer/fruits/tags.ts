@@ -73,6 +73,7 @@ class TagsFruit extends Base<Tag> {
 
   initSource () {
     this.source$ = this.handlePending(tags$)
+    this.source$.subscribe(v => console.log('tagssource', v))
 
     const tagsMap$ = this.source$.pipe(
       map((data: Tags) => keyBy(data, '__key__'))

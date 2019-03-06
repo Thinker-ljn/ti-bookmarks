@@ -10,20 +10,20 @@ function findIndex<T extends BranchData> (prev: T[], curr: T): number {
   return prev.findIndex(item => item.id === curr.id)
 }
 
-const singleUpdate: SingleFn = function (prev, curr) {
+export const singleUpdate: SingleFn = function (prev, curr) {
   let index = findIndex(prev, curr)
   if (index > -1) prev.splice(index, 1, curr)
   else prev.push(curr)
   return prev
 }
 
-const singleRemove: SingleFn = function (prev, curr) {
+export const singleRemove: SingleFn = function (prev, curr) {
   let index = findIndex(prev, curr)
   if (index > -1) prev.splice(index, 1)
   return prev
 }
 
-const getUpdateFn: GetUpdateFn = function (prev, curr) {
+export const getUpdateFn: GetUpdateFn = function (prev, curr) {
   return function (SingleFn) {
     if (!Array.isArray(curr)) {
       prev = SingleFn(prev, curr)

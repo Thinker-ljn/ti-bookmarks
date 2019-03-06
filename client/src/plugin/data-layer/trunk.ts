@@ -4,6 +4,7 @@ import { merge, map, filter } from 'rxjs/operators'
 import { AxiosResponse } from 'axios'
 import { PacketData } from './types'
 
+// type Method = 'get' | 'post' | 'patch' | 'detele'
 export type Packet<T> = {
   key: string,
   api: string,
@@ -12,9 +13,9 @@ export type Packet<T> = {
   __key__?: string,
   data: T
 }
-export type TruckType = Observable<Packet<PacketData>>
+export type DLTruckSource = Observable<Packet<PacketData>>
 
-function generatePacket<T> (response: AxiosResponse): Packet<T> {
+function generatePacket<T> (response: AxiosResponse<T>): Packet<T> {
   let {data, config, status} = response
   let {url: api, method, params} = config
   api = api.replace(/^\/?api\//, '')
@@ -31,7 +32,7 @@ function generatePacket<T> (response: AxiosResponse): Packet<T> {
   return packet
 }
 
-let truck$: TruckType = new ReplaySubject().pipe(
+let truck$: DLTruckSource = new ReplaySubject().pipe(
   merge(root.source$),
   map((response: AxiosResponse) => generatePacket(response)),
   filter((packet: Packet<PacketData>) => packet.status === 200)

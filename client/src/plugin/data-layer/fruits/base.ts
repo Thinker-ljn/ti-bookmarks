@@ -54,8 +54,8 @@ class Base<T extends BranchData> {
       combineLatest(map$, (source: T[], pending: [IndexMap<T>, T[]]) => {
         let [udAndDl, create] = pending
         source = source.map(s => {
-          let __key__ = {s}
-          if (__key__ && udAndDl[s.id] && (udAndDl[s.id].__key__) > s.__key__) {
+          let {__key__} = s
+          if (__key__ && udAndDl[s.id] && (udAndDl[s.id].__key__) > __key__) {
             return {...udAndDl[s.id], __key__}
           }
           return s
