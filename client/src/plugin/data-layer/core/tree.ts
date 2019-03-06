@@ -1,15 +1,15 @@
 import Root from "./root";
-import Trunck from "./trunck";
+import Trunk from "./trunk";
 import { KeyMap } from "./types";
 import { BranchConstructor, BranchInstance } from './branch'
 
 export default class Tree {
   root: Root
-  trunck: Trunck
+  trunck: Trunk
   branchs: KeyMap<BranchInstance>
   constructor () {
     this.root = new Root
-    this.trunck = new Trunck(this.root)
+    this.trunck = new Trunk(this.root)
   }
 
   registerBranch <T extends BranchInstance>(branchClass: BranchConstructor<T>) {

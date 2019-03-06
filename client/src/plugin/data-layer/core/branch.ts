@@ -1,18 +1,18 @@
 import { Observable, of } from 'rxjs';
 import { filter, map, merge, combineLatest } from 'rxjs/operators'
 import { singleRemove, singleUpdate } from './util'
-import { BranchData, PacketData, Packet, DLTrunckSource, KeyMap } from './types'
-import Trunck from './trunck'
+import { BranchData, PacketData, Packet, DLTrunkSource, KeyMap } from './types'
+import Trunk from './trunk'
 import Root from './root'
 import { FruitConstructor, FruitInstance } from './fruit';
 
 type BranchPacket<T> = Packet<Extract<PacketData, T>>
 
 export default class Branch<T extends BranchData> {
-  trunck: Trunck
+  trunk: Trunk
   root: Root
-  trunck_: DLTrunckSource
-  raw_: DLTrunckSource
+  trunk_: DLTrunkSource
+  raw_: DLTrunkSource
   default_: Observable<T[]>
   init_: Observable<T[]>
   create_: Observable<T>
@@ -20,10 +20,10 @@ export default class Branch<T extends BranchData> {
   remove_: Observable<T>
   apiFilter: RegExp
   fruits: KeyMap<FruitInstance>
-  constructor (trunck: Trunck, apiFilter?: RegExp) {
-    this.trunck = trunck
-    this.root = trunck.root
-    this.trunck_ = trunck.source_
+  constructor (trunk: Trunk, apiFilter?: RegExp) {
+    this.trunk = trunk
+    this.root = trunk.root
+    this.trunk_ = trunk.source_
     if (apiFilter) this.apiFilter = apiFilter
     else this.apiFilter = new RegExp(`^${this.namespace}(\\/)?(\\d+)?([\\?#]|$)`)
 
@@ -39,8 +39,8 @@ export default class Branch<T extends BranchData> {
   }
 
   initSources () {
-    this.raw_ = this.trunck_.pipe(
-      filter((packet) => packet.namespace === this.namespace && this.apiFilter.test(packet.api))
+    this.raw_ = this.trunk_.pipe(
+      filter((packet: Packet<PacketData>) => packet.namespace === this.namespace && this.apiFilter.test(packet.api))
     )
 
     this.init_ = this.getSourcePart<T[]>('get')
@@ -59,7 +59,7 @@ export default class Branch<T extends BranchData> {
     )
   }
 
-  initDefault () {
+  initDefault (): Observable<T[]> {
     return this.init_.pipe(
       combineLatest(this.create_, this.update_, this.remove_, (i: T[], c: T, u: T, r: T) => {
         i = singleUpdate(i, c)
@@ -95,5 +95,5 @@ export default class Branch<T extends BranchData> {
 
 export type BranchInstance = InstanceType<typeof Branch>
 export interface BranchConstructor<T> {
-  new (trunck: Trunck, apiFilter?: RegExp): T
+  new (trunk: Trunk, apiFilter?: RegExp): T
 }

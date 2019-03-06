@@ -17,7 +17,7 @@ export type DLTruckSource = Observable<Packet<PacketData>>
 
 function generatePacket<T> (response: AxiosResponse<T>): Packet<T> {
   let {data, config, status} = response
-  let {url: api, method, params} = config
+  let {url: api = '', method = '', params} = config
   api = api.replace(/^\/?api\//, '')
   let key = api.replace(/([^\/\?]+)([\/\?\#\:]?.*)/, '$1')
   let packet: Packet<T> = {

@@ -12,10 +12,10 @@ export type Packet<T> = {
   __key__?: string,
   data: T
 }
-export type TrunckPacket = Packet<PacketData>
+export type TrunkPacket = Packet<PacketData>
 // type Method = 'get' | 'post' | 'patch' | 'detele'
-export type DLTrunckSource = Observable<TrunckPacket>
-export type DLTrunckErrorSource = Observable<Packet<Error>>
+export type DLTrunkSource = Observable<TrunkPacket>
+export type DLTrunkErrorSource = Observable<Packet<Error>>
 
 
 export type PendingStatus = 'creating' | 'updating' | 'deleting'

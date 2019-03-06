@@ -47,7 +47,7 @@ export default class BaseBranch<T extends BranchData> {
 
   initSources () {
     this.raw_ = this.trunck_.pipe(
-      filter((packet) => packet.key === this.namespace && this.apiFilter.test(packet.api))
+      filter((packet: Packet<PacketData>) => packet.key === this.namespace && this.apiFilter.test(packet.api))
     )
 
     this.init_ = this.getSourcePart<T[]>('get')
@@ -62,11 +62,11 @@ export default class BaseBranch<T extends BranchData> {
     return this.raw_.pipe(
       filter((packet: BranchPacket<T0>) => packet.method === method),
       map((packet: BranchPacket<T0>) => packet.data),
-      merge(of(null))
+      merge(of([]))
     )
   }
 
-  initDefault () {
+  initDefault (): Observable<T[]> {
     return this.init_.pipe(
       combineLatest(this.create_, this.update_, this.remove_, (i: T[], c: T, u: T, r: T) => {
         i = singleUpdate(i, c)

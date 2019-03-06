@@ -2,11 +2,11 @@ import { AxiosResponse } from 'axios'
 
 import Root from './root'
 import {  map, filter } from 'rxjs/operators'
-import { Packet, TrunckPacket, DLTrunckSource, DLTrunckErrorSource } from './types'
+import { Packet, TrunkPacket, DLTrunkSource, DLTrunkErrorSource } from './types'
 
 function generatePacket<T> (response: AxiosResponse<T>): Packet<T> {
   let {data, config, status} = response
-  let {url, method, params} = config
+  let {url = '', method = '', params} = config
   let api = url.replace(/^\/?api\//, '')
   let namespace = api.replace(/([^\/\?]+)([\/\?\#\:]?.*)/, '$1')
   let packet: Packet<T> = {
@@ -21,11 +21,11 @@ function generatePacket<T> (response: AxiosResponse<T>): Packet<T> {
   return packet
 }
 
-export default class Trunck {
+export default class Trunk {
   root: Root
-  raw_: DLTrunckSource
-  source_: DLTrunckSource
-  error_: DLTrunckErrorSource
+  raw_: DLTrunkSource
+  source_: DLTrunkSource
+  error_: DLTrunkErrorSource
 
   constructor (root: Root) {
     this.root = root
@@ -37,7 +37,7 @@ export default class Trunck {
       map((response: AxiosResponse) => generatePacket(response))
     )
     this.source_ = this.raw_.pipe(
-      filter((packet: TrunckPacket) => packet.status === 200)
+      filter((packet: TrunkPacket) => packet.status === 200)
     )
 
     this.error_ = this.raw_.pipe(
