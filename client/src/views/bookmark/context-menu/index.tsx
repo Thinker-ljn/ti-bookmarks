@@ -23,7 +23,7 @@ type ContextMenuState = {
   payload: any
 }
 class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
-  private cmEle: HTMLUListElement = null
+  private cmEle: HTMLUListElement | null = null
   constructor(props: ContextMenuProps) {
     super(props)
     this.state = {

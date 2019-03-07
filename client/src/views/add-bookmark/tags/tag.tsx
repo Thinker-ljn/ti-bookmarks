@@ -38,7 +38,7 @@ class Tag extends React.Component<TagProps, TagState> {
       checked: checked
     })
     let tag = this.props.tag
-    this.props.onChange({
+    if (this.props.onChange) this.props.onChange({
       tag: tag,
       checked: checked
     })
@@ -56,7 +56,7 @@ class Tag extends React.Component<TagProps, TagState> {
     this.setState({
       checked: false
     })
-    this.props.onChange(tag)
+    if (this.props.onChange) this.props.onChange(tag)
   }
 
   render () {
@@ -72,7 +72,7 @@ class Tag extends React.Component<TagProps, TagState> {
               </div>
 
     if (hasChild) {
-      let children = tag.children.map(_tag => <Tag tag={_tag} onChange={this.onChildChange} key={_tag.id}></Tag>)
+      let children = (tag.children || []).map(_tag => <Tag tag={_tag} onChange={this.onChildChange} key={_tag.id}></Tag>)
       let childrenRender = expended ? <div styleName="tag-children">{children}<span styleName="collapse" onClick={this.doExpend}></span></div> : ''
       return <div styleName="tag-wrapper" key={tag.id}>
         {tagJsx}

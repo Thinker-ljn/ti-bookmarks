@@ -7,6 +7,7 @@ type TagMap = {[key: string]: DLTag[]}
 const toTree = (tags: DLTag[]) => {
   let result: DLTag = {
     id: 0,
+    __key__: '0-0',
     parent_id: 0,
     name: '标签',
     children: []

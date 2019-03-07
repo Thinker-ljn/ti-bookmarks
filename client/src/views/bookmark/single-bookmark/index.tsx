@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { Bookmark } from '@/plugin/data-layer'
+import { DLBookmark } from '@/plugin/data-layer'
 
 import './index.scss'
 
 type propsType = {
-  bookmark: Bookmark
+  bookmark: DLBookmark
 }
 function SingleBookmark (props: propsType) {
   const bk = props.bookmark

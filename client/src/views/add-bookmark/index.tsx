@@ -20,8 +20,8 @@ class AddBookmark extends React.Component<{}, State> {
     super(props)
 
     let searchParams = new URLSearchParams(location.search.slice(1))
-    let url: string = searchParams.get('u')
-    let name: string = searchParams.get('t')
+    let url: string = searchParams.get('u') || ''
+    let name: string = searchParams.get('t') || ''
 
     this.state = {
       name: name,

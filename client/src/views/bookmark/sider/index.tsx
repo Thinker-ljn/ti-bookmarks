@@ -5,7 +5,7 @@ import AddTagModal from './add-tag-modal'
 import './index.scss'
 
 import { AntTreeNode } from 'antd/lib/tree'
-import DL, {Tag} from '@/plugin/data-layer'
+import DL, {DLTag} from '@/plugin/data-layer'
 import { useObservable } from 'rxjs-hooks'
 import { emit } from '../context-menu/trigger'
 import { Dictionary } from 'lodash';
@@ -20,8 +20,8 @@ function activeContextMenu (e: React.MouseEventHandler<any>, node: AntTreeNode) 
 let currNodeId: number = 0
 export default function AppSider () {
   let { useState } = React
-  let tagsTree: Tag[] = useObservable(() => DL.tags.get('tree'), [])
-  let tagsMap: Dictionary<Tag> = useObservable(() => DL.tags.get('map'), {})
+  let tagsTree: DLTag[] = useObservable(() => DL.tags.tree_, [])
+  let tagsMap: Dictionary<DLTag> = useObservable(() => DL.tags.map_, {})
   let [showAddTagModal, setShowAddTagModal] = useState(false)
 
   const addTag = (name: string) => {
@@ -40,7 +40,9 @@ export default function AppSider () {
     Modal.confirm({
       title: '确定要删除 ' + node.props.title + ' ?',
       onOk: () => {
-        let tag: Tag = tagsMap[node.props.eventKey]
+        let key = node.props.eventKey
+        if (!key) return
+        let tag: DLTag = tagsMap[key]
         DL.tags.delete(tag)
       }
     })
@@ -52,7 +54,9 @@ export default function AppSider () {
       name: '添加',
       callback: (node: AntTreeNode) => {
         setShowAddTagModal(true)
-        currNodeId = tagsMap[node.props.eventKey].id
+        let key = node.props.eventKey
+        if (!key) return
+        currNodeId = tagsMap[key].id
       }
     },
     {
@@ -64,13 +68,14 @@ export default function AppSider () {
 
   const onSelect = (selectedKeys: string[]) => {
     let key = selectedKeys.pop()
+    if (!key) return
     let tag = tagsMap[key]
 
-    DL.bookmarks.filterByTag(tag)
-    // console.log(tag)
+    // DL.bookmarks.filterByTag(tag)
+    console.log(tag)
   }
 
-  const loop = (tags: Tag[]) => tags.map((tag) => {
+  const loop = (tags: DLTag[]) => tags.map((tag) => {
     let key: string = tag.__key__ || '0'
     if (tag.children && tag.children.length) {
       return <TreeNode key={key} title={tag.name}>{loop(tag.children)}</TreeNode>

@@ -52,12 +52,12 @@ class Tags extends React.Component<tagsProps, tagsState> {
 
   onWheel (e: React.WheelEvent) {
     let offset = e.deltaY / 5
-    let target: HTMLDivElement = this.tagContainer.current
-    target.scrollLeft += offset
+    let target = this.tagContainer.current
+    if (target) target.scrollLeft += offset
   }
 
   updateSelectTag = (tag: tagChangeEvent) => {
-    this.props.onTagUpdate(tag)
+    if (this.props.onTagUpdate) this.props.onTagUpdate(tag)
   }
 
   render () {

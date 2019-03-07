@@ -21,9 +21,9 @@ const AddBookmarkModal = forwardRef((props: Props, ref) => {
 
   let [infos, setInfos] = useObjectState<Info>(initState)
   let [checkedTags, setCheckedTags] = useState<Set<number>>(new Set)
-  let tags = useObservable<DLTag[]>(() => DL.tags.get('tree'), [])
+  let tags = useObservable<DLTag[]>(() => DL.tags.tree_, [])
 
-  let tagsRelation = useObservable(() => DL.tags.get('relation'), [])
+  let tagsRelation = useObservable(() => DL.tags.kinship_, [])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
     let value = e.target.value

@@ -4,7 +4,7 @@ import SingleBookmark from '../single-bookmark'
 import AddBookmark from '@/components/add-bookmark'
 import './index.scss'
 
-import DL, { Bookmark } from '@/plugin/data-layer'
+import DL, { DLBookmark } from '@/plugin/data-layer'
 import { useObservable } from 'rxjs-hooks'
 
 function getQuickAddBookmark () {
@@ -25,16 +25,16 @@ function getQuickAddBookmark () {
 
 const {useRef, useState} = React
 export default function BookmarkContent () {
-  let bk$ = DL.bookmarks.get()
-  let bookmarks = useObservable<Bookmark[]>(() => bk$, [])
+  let bk$ = DL.bookmarks.default_
+  let bookmarks = useObservable<DLBookmark[]>(() => bk$, [])
   let [visible, setVisible] = useState(false)
-  let addBkRef = useRef(null)
+  let addBkRef = useRef({})
   let quickAdd = getQuickAddBookmark()
   const submitAddBk = () => {
     addBkRef.current.handleSubmit()
     setVisible(false)
   }
-  const loopBk = bookmarks.map((bookmark: Bookmark) => {
+  const loopBk = bookmarks.map((bookmark: DLBookmark) => {
     return <SingleBookmark bookmark={bookmark} key={bookmark.__key__}></SingleBookmark>
   })
   return (

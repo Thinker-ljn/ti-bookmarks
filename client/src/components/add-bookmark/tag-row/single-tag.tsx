@@ -2,26 +2,26 @@ import * as React from 'react'
 
 import './index.scss'
 
-import {Tag} from '@/plugin/data-layer'
+import {DLTag} from '@/plugin/data-layer'
 import classNames from 'classnames'
 
 export type TagChangeEvent = {
-  tag: Tag,
+  tag: DLTag,
   checked: boolean
 }
 type onChange = (e: TagChangeEvent) => void
 type Props = {
-  tag: Tag,
+  tag: DLTag,
   checkedList: Set<number>,
   onChange?: onChange
 }
 
-interface HasChildTag extends Tag {
-  children: Tag[]
+interface HasChildDLTag extends DLTag {
+  children: DLTag[]
 }
 
 const { useState } = React
-export default function SingleTag (props: Props) {
+export default function SingleDLTag (props: Props) {
   // let [checked, setChecked] = useState(false)
   let [expended, setExpended] = useState(false)
 
@@ -53,7 +53,7 @@ export default function SingleTag (props: Props) {
   let checked = props.checkedList.has(tag.id)
   let styles = (checked ? 'checked' : '') + ' tag'
 
-  const hasChildren = (tag: Tag): tag is HasChildTag => {
+  const hasChildren = (tag: DLTag): tag is HasChildDLTag => {
     return Array.isArray(tag.children) && tag.children.length > 0
   }
 
@@ -64,7 +64,7 @@ export default function SingleTag (props: Props) {
             </div>
 
   if (hasChildren(tag)) {
-    let children = tag.children.map(_tag => <SingleTag tag={_tag} checkedList={props.checkedList} onChange={onChange} key={_tag.id}></SingleTag>)
+    let children = tag.children.map(_tag => <SingleDLTag tag={_tag} checkedList={props.checkedList} onChange={onChange} key={_tag.id}></SingleDLTag>)
     let childrenRender = expended ? <div styleName="tag-children">{children}<span styleName="collapse" onClick={doExpend}></span></div> : ''
     return <div styleName="tag-wrapper" key={tag.id}>
       {tagJsx}
