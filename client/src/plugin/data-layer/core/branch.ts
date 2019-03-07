@@ -1,4 +1,4 @@
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { filter, map, combineLatest, startWith, merge } from 'rxjs/operators'
 import { singleRemove, singleUpdate } from './util'
 import { BranchData, Packet, DLTrunkSource, KeyMap } from './types'
@@ -6,7 +6,7 @@ import Trunk from './trunk'
 import Root from './root'
 import { FruitConstructor, FruitInterface } from './fruit';
 import Axios from 'axios';
-import Pendding from './pendding';
+import Pendding, {MergeFn} from './pendding';
 
 // type BranchPacket<T> = Packet<Extract<PacketData, T>>
 export default class Branch<T extends BranchData> {
@@ -17,9 +17,10 @@ export default class Branch<T extends BranchData> {
 
   default_: Observable<T[]>
   init_: Observable<T[]>
-  create_: Observable<T>
-  update_: Observable<T>
-  remove_: Observable<T>
+  create_: Observable<T[]>
+  update_: Observable<T[]>
+  delete_: Observable<T[]>
+
   pendding: Pendding<T>
 
   readonly exampleData: T
@@ -55,17 +56,15 @@ export default class Branch<T extends BranchData> {
     )
 
     this.init_ = this.getSourcePart<T[]>('get')
-    this.create_ = this.getSourcePart<T>('post').pipe(merge(this.pendding.sources.creating_))
-    this.update_ = this.getSourcePart<T>('patch').pipe(merge(this.pendding.sources.updating_))
-    this.remove_ = this.getSourcePart<T>('delete').pipe(merge(this.pendding.sources.deleteing_))
+    this.create_ = this.mergePendding('post', this.pendding.mergeCreate)
+    this.update_ = this.mergePendding('patch', this.pendding.mergeUpdate)
+    this.delete_ = this.mergePendding('delete', this.pendding.mergeDelete)
 
     this.default_ = this.initDefault()
   }
 
-  mergePendding (source_: Observable<T>, pendding_: Subject<T>) {
-    return source_.pipe(
-      merge(pendding_)
-    )
+  mergePendding (method: string, mergeFn: MergeFn<T>) {
+    return mergeFn(this.getSourcePart<T>(method)).pipe(startWith())
   }
 
   getSourcePart <T0>(method: string): Observable<T0> {
@@ -80,10 +79,10 @@ export default class Branch<T extends BranchData> {
 
   initDefault (): Observable<T[]> {
     return this.init_.pipe(
-      combineLatest(this.create_, this.update_, this.remove_, (i: T[], c: T, u: T, r: T) => {
-        i = singleUpdate(i, c)
-        i = singleUpdate(i, u)
-        i = singleRemove(i, r)
+      combineLatest(this.create_, this.update_, this.delete_, (i: T[], c: T[], u: T[], r: T[]) => {
+        c.forEach(d => singleUpdate(i, d))
+        u.forEach(d => singleUpdate(i, d))
+        r.forEach(d => singleRemove(i, d))
         return i
       }),
       map(data => data.filter(d => d))

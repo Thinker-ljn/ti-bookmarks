@@ -17,4 +17,10 @@ class TagFruit extends Fruit<DLTag> {
 export default class TagsBranch extends Branch<DLTag> {
   readonly default_: Observable<DLTag[]> = this.registerFruit<DLTag[]>(TagFruit)
   readonly tree_ = this.registerFruit<DLTag[]>(TagTreeFruit)
+  readonly exampleData: DLTag = {
+    id: 0, 
+    name: '', 
+    parent_id: 0, 
+    __key__: ''
+  }
 }

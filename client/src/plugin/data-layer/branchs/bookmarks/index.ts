@@ -16,4 +16,10 @@ class BookmarkFruit extends Fruit<DLBookmark> {
 
 export default class BookmarksBranch extends Branch<DLBookmark> {
   readonly default_: Observable<DLBookmark[]> = this.registerFruit(BookmarkFruit)
+  readonly exampleData: DLBookmark = {
+    id: 0, 
+    name: '',
+    url: '',
+    __key__: ''
+  }
 }

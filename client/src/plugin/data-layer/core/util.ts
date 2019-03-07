@@ -18,3 +18,10 @@ export const singleRemove: SingleFn = function (prev, curr) {
   if (index > -1) prev.splice(index, 1)
   return prev
 }
+
+export const combineLatestProject = <T extends BranchData>(i: T[], c: T[], u: T[], r: T[]): T[] => {
+  c.forEach(d => singleUpdate(i, d))
+  u.forEach(d => singleUpdate(i, d))
+  r.forEach(d => singleRemove(i, d))
+  return i
+}
