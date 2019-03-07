@@ -1,12 +1,22 @@
-import {BranchInstance} from './branch'
-export default class Fruit {
-  branch: BranchInstance
-  constructor (branch: BranchInstance) {
+import Branch from './branch'
+import { BranchData } from './types';
+import { Observable } from 'rxjs';
+
+export interface FruitInterface<T extends BranchData, O> {
+  branch: Branch<T>
+  source_: Observable<O>
+}
+
+export interface FruitConstructor<T extends BranchData, O> {
+  new (branch: Branch<T>): FruitInterface<T, O>
+}
+
+export default class Fruit<T extends BranchData, O = T[]> implements FruitInterface<T, O> {
+  branch: Branch<T>
+  source_: Observable<O>
+  constructor (branch: Branch<T>) {
     this.branch = branch
   }
 }
 
-export type FruitInstance = InstanceType<typeof Fruit>
-export interface FruitConstructor<T> {
-  new (branch: BranchInstance): T
-}
+// export type FruitInstance = InstanceType<typeof Fruit>

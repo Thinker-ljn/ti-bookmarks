@@ -7,7 +7,7 @@ module.exports = {
   resolve: {
     extensions: [".ts", ".js", ".json"],
     alias: {
-      src: resolve('src')
+      '@': resolve('src')
     }
   },
   module: {

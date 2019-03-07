@@ -1,7 +1,16 @@
-import initDL from './fruits/index'
+import Tree from "./core/tree";
+import TagBranch, { DLTag } from "./branchs/tags";
+import BookmarkBranch, { DLBookmark } from "./branchs/bookmarks";
 
-const DataLayer = initDL()
+class DataLayer extends Tree {
+  readonly tags: TagBranch = this.registerBranch(TagBranch)
+  readonly bookmarks: BookmarkBranch = this.registerBranch(BookmarkBranch)
+}
 
-export default DataLayer
+let DL = new DataLayer
 
-export * from './types'
+export default DL
+export {
+  DLTag,
+  DLBookmark
+}

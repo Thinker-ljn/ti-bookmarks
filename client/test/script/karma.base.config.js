@@ -4,10 +4,10 @@ var webpackConfig = require('./webpack.config.js')
 module.exports = {
   frameworks: ['mocha', 'power-assert'],
   files: [
-    './index.js'
+    '../index.ts'
   ],
   preprocessors: {
-    './index.js': ['webpack']
+    '../index.ts': ['webpack']
   },
   webpack: webpackConfig,
   webpackMiddleware: {

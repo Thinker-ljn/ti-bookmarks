@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Layout, Input, Row, Col } from 'antd'
 import TagRow from './tag-row'
 import { TagChangeEvent } from './tag-row/single-tag'
-import DL, { Tag } from '@/plugin/data-layer'
+import DL, { DLTag } from '@/plugin/data-layer'
 import { useObservable } from 'rxjs-hooks';
 import { useObjectState } from '@/plugin/hooks'
 
@@ -21,7 +21,7 @@ const AddBookmarkModal = forwardRef((props: Props, ref) => {
 
   let [infos, setInfos] = useObjectState<Info>(initState)
   let [checkedTags, setCheckedTags] = useState<Set<number>>(new Set)
-  let tags = useObservable<Tag[]>(() => DL.tags.get('tree'), [])
+  let tags = useObservable<DLTag[]>(() => DL.tags.get('tree'), [])
 
   let tagsRelation = useObservable(() => DL.tags.get('relation'), [])
 
@@ -73,10 +73,11 @@ const AddBookmarkModal = forwardRef((props: Props, ref) => {
     })
   }
 
+  let topTags = tags[0] ? (tags[0].children || []) : []
   return (
     <Layout>
       {rows()}
-      <TagRow tags={tags[0] ? tags[0].children : []} checkedList={checkedTags} onTagUpdate={onTagUpdate}></TagRow>
+      <TagRow tags={topTags} checkedList={checkedTags} onTagUpdate={onTagUpdate}></TagRow>
     </Layout>
   )
 })

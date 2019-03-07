@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs'
-import { PacketData } from '../types'
+// import { PacketData } from '../types'
 
 export type KeyMap<T> = {[key: string]: T}
 export type IndexMap<T> = {[index: number]: T}
@@ -19,10 +19,15 @@ export type DLTrunkErrorSource = Observable<Packet<Error>>
 
 
 export type PendingStatus = 'creating' | 'updating' | 'deleting'
-export interface BranchData {
+
+export interface BaseData {
   id?: number,
-  __key__?: string,
-  __status__?: PendingStatus,
+  __status__?: PendingStatus
+}
+
+export interface BranchData extends BaseData {
+  id: number,
+  __key__: string,
   updated_at?: any,
   created_at?: any
 }

@@ -20,6 +20,9 @@
   "devDependencies": {
     "@types/classnames": "^2.2.7",
     "@types/lodash": "^4.14.122",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^11.10.5",
+    "@types/power-assert": "^1.5.0",
     "@types/react": "^16.8.6",
     "@types/react-css-modules": "^4.6.2",
     "@types/react-dom": "^16.8.2",

@@ -15,7 +15,8 @@
       "@/*": ["src/*"],
       "@css/*": ["src/assets/css/*"]
     },
-    "target": "es5"
+    "target": "es5",
+    "types": ["@types/mocha", "@types/power-assert", "@types/react-css-modules"]
   },
   "exclude": [
     "node_modules",

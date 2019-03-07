@@ -20,12 +20,12 @@ export default class Tree {
     } else {
       branch = new branchClass(this.trunck)
       this.branchs[name] = branch
-      name = name.replace('Branch', '').toLowerCase()
-      Object.defineProperty(this, name, {
-        get: () => {
-          return branch
-        }
-      })
+      // name = name.replace('Branch', '').toLowerCase()
+      // Object.defineProperty(this, name, {
+      //   get: () => {
+      //     return branch
+      //   }
+      // })
     }
     return branch
   }

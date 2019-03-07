@@ -27,5 +27,5 @@ services:
       - "33061:3306"
 
 volumes:
-  ti_c_modules:
+  s_modules:
   ti_mysql:

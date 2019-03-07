@@ -1,0 +1,15 @@
+version: '3'
+services:
+  react:
+    container_name: ti_react01
+    build:
+      context: .
+      dockerfile: ./Frontend_Dockerfile
+    volumes:
+    - .:/app
+    - ./client/node_modules:/app/client/node_modules
+    - c_modules:/app/client/node_modules
+    command: sh -c "yarn && yarn dev:test"
+
+volumes:
+  c_modules:
