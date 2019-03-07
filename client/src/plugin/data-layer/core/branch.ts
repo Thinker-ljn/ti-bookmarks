@@ -55,25 +55,26 @@ export default class Branch<T extends BranchData> {
     )
 
     this.init_ = this.getSourcePart<T[]>('get')
-    this.create_ = this.getSourcePart<T>('post')
-    this.update_ = this.getSourcePart<T>('patch')
-    this.remove_ = this.getSourcePart<T>('delete')
+    this.create_ = this.getSourcePart<T>('post').pipe(merge(this.pendding.sources.creating_))
+    this.update_ = this.getSourcePart<T>('patch').pipe(merge(this.pendding.sources.updating_))
+    this.remove_ = this.getSourcePart<T>('delete').pipe(merge(this.pendding.sources.deleteing_))
 
     this.default_ = this.initDefault()
   }
 
-  getSourcePart <T0>(method: string, pendding_?: Subject<T>): Observable<T0> {
+  mergePendding (source_: Observable<T>, pendding_: Subject<T>) {
+    return source_.pipe(
+      merge(pendding_)
+    )
+  }
+
+  getSourcePart <T0>(method: string): Observable<T0> {
     let source_ = this.raw_.pipe(
       filter((packet: Packet<T0>) => packet.method === method),
       map((packet: Packet<T0>) => packet.data),
       startWith()
     )
 
-    if (pendding_) {
-      source_ = source_.pipe(
-        merge(pendding_)
-      )
-    }
     return source_
   }
 
