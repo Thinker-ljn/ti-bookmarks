@@ -47,6 +47,17 @@ class Relation {
     return result
   }
 
+  async detach (bid) {
+    let query = this.builder.where(this.$keyA, this.$oA.id)
+    let result = await query.where(this.$keyB, bid).delete()
+
+    return result
+  }
+
+  async sync () {
+
+  }
+
   async getIds () {
     let query = this.builder.where(this.$keyA, this.$oA.id)
     return await query.select(this.$keyB).get()
@@ -55,13 +66,6 @@ class Relation {
   async get () {
     let query = this.builder.where(this.$keyA, this.$oA.id)
     let result = await query.get()
-    return result
-  }
-
-  async detach (id) {
-    let query = this.builder.where(this.$keyA, this.$oA.id)
-    let result = await query.where(this.$keyB, id).delete()
-
     return result
   }
 }

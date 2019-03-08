@@ -31,6 +31,10 @@ class Builder {
     this.columns = []
   }
 
+  whereIn (column, values) {
+
+  }
+
   where () {
     let argvLen = arguments.length
     if (argvLen === 1) {
