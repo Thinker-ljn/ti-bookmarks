@@ -1,10 +1,10 @@
 import Tree from "./core/tree";
-import TagBranch, { DLTag } from "./branchs/tags";
-import BookmarkBranch, { DLBookmark } from "./branchs/bookmarks";
+import TagsBranch, { DLTag } from "./branchs/tags";
+import BookmarksBranch, { DLBookmark } from "./branchs/bookmarks";
 
 class DataLayer extends Tree {
-  readonly tags: TagBranch = this.registerBranch(TagBranch)
-  readonly bookmarks: BookmarkBranch = this.registerBranch(BookmarkBranch)
+  readonly tags = this.registerBranch(TagsBranch) as TagsBranch
+  readonly bookmarks = this.registerBranch(BookmarksBranch) as BookmarksBranch
 }
 
 let DL = new DataLayer

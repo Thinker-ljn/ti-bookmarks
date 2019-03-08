@@ -30,6 +30,8 @@ export default class Trunk {
   constructor (root: Root) {
     this.root = root
     this.initSource()
+
+    this.source_.subscribe(v => console.log('trunk', v))
   }
 
   initSource () {

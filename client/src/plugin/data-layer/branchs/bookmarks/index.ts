@@ -1,8 +1,7 @@
 import Branch from "../../core/branch";
-import Fruit from "../../core/fruit";
 import { Observable } from "rxjs";
 import { BranchData, IndexMap } from "../../core/types";
-import { filter, scan, map } from 'rxjs/operators';
+import { filter, scan, map, startWith } from 'rxjs/operators';
 import BookmarksFilterByTagFruit, { currFilterTag_ } from "./fruits/bookmarks-filter-by-tag";
 import { DLTag } from "../..";
 import Axios from "axios";
@@ -18,12 +17,11 @@ export interface DLBookmark extends BranchData {
 const bookmarkIdsByTagApiReg = /tags\/\d+\/bookmarks/
 export type BookmarkIdsByTag = IndexMap<number[]>
 
-class BookmarkFruit extends Fruit<DLBookmark[], BookmarksBranch> {
-  source_: Observable<DLBookmark[]> = this.branch.default_
-}
+// class BookmarkFruit extends Fruit<DLBookmark[], BookmarksBranch> {
+//   source_: Observable<DLBookmark[]> = this.branch.default_
+// }
 
 export default class BookmarksBranch extends Branch<DLBookmark> {
-  readonly default_: Observable<DLBookmark[]> = this.registerFruit(BookmarkFruit, this)
   readonly exampleData: DLBookmark = {
     id: 0,
     name: '',
@@ -40,7 +38,8 @@ export default class BookmarksBranch extends Branch<DLBookmark> {
       map(packet => packet.data),
       scan((acc: BookmarkIdsByTag, value: BookmarkIdsByTag): BookmarkIdsByTag => {
         return Object.assign(acc, value)
-      }, {})
+      }, {}),
+      startWith({})
     )
   }
 

@@ -71,12 +71,12 @@ export default function AppSider () {
     if (!key) return
     let tag = tagsMap[key]
 
-    // DL.bookmarks.filterByTag(tag)
-    console.log(tag)
+    DL.bookmarks.filterByTag(tag)
+    // console.log(tag)
   }
 
   const loop = (tags: DLTag[]) => tags.map((tag) => {
-    let key: string = tag.__key__ || '0'
+    let key = tag.__key__
     if (tag.children && tag.children.length) {
       return <TreeNode key={key} title={tag.name}>{loop(tag.children)}</TreeNode>
     }
@@ -86,7 +86,7 @@ export default function AppSider () {
   const renderTree = () => {
     if (tagsTree.length) {
       return <Tree
-        defaultExpandedKeys={['0']}
+        defaultExpandedKeys={['0-0']}
         onRightClick={({event, node}) => {activeContextMenu(event, node)}}
         onSelect={onSelect}
       >

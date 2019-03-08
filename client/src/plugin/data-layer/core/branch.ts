@@ -4,7 +4,7 @@ import { singleRemove, singleUpdate } from './util'
 import { BranchData, Packet, DLTrunkSource, KeyMap } from './types'
 import Trunk from './trunk'
 import Root from './root'
-import { FruitConstructor, FruitInterface } from './fruit';
+import { FruitConstructor } from './fruit';
 import Axios from 'axios';
 import Pendding, {MergeFn} from './pendding';
 
@@ -17,14 +17,14 @@ export interface BranchConstructor<T> {
   new (trunk: Trunk, apiFilter?: RegExp): BranchInterface<T>
 }
 
-// type BranchPacket<T> = Packet<Extract<PacketData, T>>
+
 export default abstract class Branch<T extends BranchData> implements BranchInterface<T> {
   trunk: Trunk
   root: Root
   trunk_: DLTrunkSource
   raw_: DLTrunkSource
 
-  abstract default_: Observable<T[]>
+  default_: Observable<T[]>
   init_: Observable<T[]>
   create_: Observable<T[]>
   update_: Observable<T[]>
@@ -35,7 +35,7 @@ export default abstract class Branch<T extends BranchData> implements BranchInte
   readonly abstract exampleData: T
 
   apiFilter: RegExp
-  fruitsRegistered: KeyMap<boolean>
+  fruitsRegistered: KeyMap<boolean> = {}
   constructor (trunk: Trunk, apiFilter?: RegExp) {
     this.trunk = trunk
     this.root = trunk.root
@@ -45,8 +45,11 @@ export default abstract class Branch<T extends BranchData> implements BranchInte
 
     this.pendding = new Pendding
     this.initSources()
-
     this.registerFruits()
+
+    this.get()
+
+    this.default_.subscribe(v => console.log(this.namespace, v))
   }
 
   registerFruits () {}
@@ -64,7 +67,15 @@ export default abstract class Branch<T extends BranchData> implements BranchInte
       filter((packet: Packet<T>) => packet.namespace === this.namespace && this.apiFilter.test(packet.api))
     )
 
-    this.init_ = this.getSourcePart<T[]>('get')
+    this.init_ = this.getSourcePart<T[]>('get').pipe(
+      startWith([]),
+      map((data: T[]) => {
+        return data.map((d: T) => {
+          d.__key__ = d.id + '-0'
+          return d
+        })
+      })
+    )
     this.create_ = this.mergePendding('post', this.pendding.mergeCreate)
     this.update_ = this.mergePendding('patch', this.pendding.mergeUpdate)
     this.delete_ = this.mergePendding('delete', this.pendding.mergeDelete)
@@ -73,14 +84,17 @@ export default abstract class Branch<T extends BranchData> implements BranchInte
   }
 
   mergePendding (method: string, mergeFn: MergeFn<T>) {
-    return mergeFn(this.getSourcePart<T>(method)).pipe(startWith())
+    return mergeFn(this.getSourcePart<T>(method)).pipe(startWith([]))
   }
 
-  getSourcePart <T0>(method: string): Observable<T0> {
+  getSourcePart <T0 extends T | T[]>(method: string): Observable<T0> {
     let source_ = this.raw_.pipe(
       filter((packet: Packet<T0>) => packet.method === method),
-      map((packet: Packet<T0>) => packet.data),
-      startWith()
+      map((packet: Packet<T0>) => {
+        let data = packet.data
+        if (!Array.isArray(data) && packet.__key__) (data as T).__key__ = packet.__key__
+        return data
+      })
     )
 
     return source_
@@ -103,6 +117,10 @@ export default abstract class Branch<T extends BranchData> implements BranchInte
     this.fruitsRegistered[FruitClass.name] = true
     let fruit = new FruitClass(branch)
     return fruit.source_
+  }
+
+  private get () {
+    Axios.get(this.namespace)
   }
 
   post (data: Partial<T>) {

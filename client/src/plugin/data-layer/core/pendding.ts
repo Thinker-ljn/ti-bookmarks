@@ -8,7 +8,7 @@ type PenddingSources<T> = {[key: string]: Subject<T>}
 type Dict<T> = {[key: string]: T}
 interface Accumulator<T>{
   (acc: Dict<T>, curr: T): Dict<T>
-} 
+}
 export interface MergeFn<T> {
   (source_: Observable<T>, pending_?: Subject<T>): Observable<T[]>
 }
@@ -75,7 +75,7 @@ export default class Pendding<T extends BranchData> {
     if (!pending_) pending_ = this.sources.updating_
     return this.merge(source_, pending_, scanFn)
   }
-  
+
   mergeDelete: MergeFn<T> = (source_) => {
     return this.mergeUpdate(source_, this.sources.deleting_)
   }

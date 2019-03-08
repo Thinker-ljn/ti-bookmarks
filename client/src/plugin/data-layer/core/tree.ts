@@ -6,7 +6,7 @@ import { BranchConstructor } from './branch'
 export default class Tree {
   root: Root
   trunk: Trunk
-  branchsRegistered: KeyMap<boolean>
+  branchsRegistered: KeyMap<boolean> = {}
   constructor () {
     this.root = new Root
     this.trunk = new Trunk(this.root)
@@ -20,16 +20,3 @@ export default class Tree {
     return branch
   }
 }
-
-
-// export const register = <T extends BranchInstance> (branchClass: BranchConstructor<T>) => {
-//   let name = branchClass.name
-//   let branch: T
-//   if (this.branchs[name] instanceof branchClass) {
-//     branch = this.branchs[name] as T
-//   } else {
-//     branch = new branchClass(this.trunck)
-//     this.branchs[name] = branch
-//   }
-//   return branch
-// }

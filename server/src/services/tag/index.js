@@ -4,7 +4,7 @@ const Controller = require('@core/controller')
 class TagController extends Controller {
   async index ($get) {
     let tags = await Tag.all()
-    if ($get.list) return tags
+    if (!$get.tree) return tags
     let result = {
       id: 0,
       name: '标签',

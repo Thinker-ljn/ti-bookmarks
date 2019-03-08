@@ -1,6 +1,4 @@
 import Branch from "../../core/branch";
-import Fruit from "../../core/fruit";
-import { Observable } from "rxjs";
 import { BranchData } from "../../core/types";
 import TagTreeFruit from "./fruits/tag-tree";
 import TagMapFruit from "./fruits/tag-map";
@@ -12,12 +10,7 @@ export interface DLTag extends BranchData {
   children?: DLTag[]
 }
 
-class TagFruit extends Fruit<DLTag[], TagsBranch> {
-  source_: Observable<DLTag[]> = this.branch.default_
-}
-
 export default class TagsBranch extends Branch<DLTag> {
-  readonly default_ = this.registerFruit(TagFruit, this)
   readonly tree_ = this.registerFruit(TagTreeFruit, this)
   readonly map_ = this.registerFruit(TagMapFruit, this)
   readonly kinship_ = this.registerFruit(TagKinshipFruit, this)

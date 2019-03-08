@@ -21,6 +21,8 @@ export class Root {
   constructor () {
     this.source_ = new ReplaySubject
     useInterceptor(this.source_)
+
+    this.source_.subscribe(v => console.log('root', v))
   }
 }
 

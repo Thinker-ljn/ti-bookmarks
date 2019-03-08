@@ -18,9 +18,11 @@
     "target": "es5",
     "types": ["@types/mocha", "@types/power-assert", "@types/react-css-modules"]
   },
+  "include": ["src"],
   "exclude": [
     "node_modules",
     "script",
-    "public"
+    "public",
+    "test"
   ]
 }
