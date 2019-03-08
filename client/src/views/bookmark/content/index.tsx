@@ -25,18 +25,25 @@ function getQuickAddBookmark () {
 
 const {useRef, useState} = React
 export default function BookmarkContent () {
-  let bk$ = DL.bookmarks.filterByTag_
-  let bookmarks = useObservable<DLBookmark[]>(() => bk$, [])
+  let [currEdit, setCurrEdit] = useState<DLBookmark|null>(null)
+  let bookmarks = useObservable<DLBookmark[]>(() => DL.bookmarks.filterByTag_, [])
   let [visible, setVisible] = useState(false)
   let addBkRef: AddBookmarkRef = useRef(null)
   let quickAdd = getQuickAddBookmark()
+
   const submitAddBk = () => {
     if (!addBkRef.current) return
     addBkRef.current.handleSubmit()
     setVisible(false)
+    setCurrEdit(null)
   }
+
+  const editFn = (bookmark: DLBookmark) => {
+    setCurrEdit(bookmark)
+  }
+
   const loopBk = bookmarks.map((bookmark: DLBookmark) => {
-    return <SingleBookmark bookmark={bookmark} key={bookmark.__key__}></SingleBookmark>
+    return <SingleBookmark bookmark={bookmark} editFn={editFn} key={bookmark.__key__}></SingleBookmark>
   })
   return (
     <Layout styleName="content">

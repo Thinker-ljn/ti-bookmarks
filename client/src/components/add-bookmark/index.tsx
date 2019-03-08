@@ -2,11 +2,12 @@ import * as React from 'react'
 import { Layout, Input, Row, Col } from 'antd'
 import TagRow from './tag-row'
 import { TagChangeEvent } from './tag-row/single-tag'
-import DL, { DLTag } from '@/plugin/data-layer'
+import DL, { DLTag, DLBookmark } from '@/plugin/data-layer'
 import { useObservable } from 'rxjs-hooks';
 import { useObjectState } from '@/plugin/hooks'
 
 type Props = {
+  currEdit?: DLBookmark,
   url?: string,
   name?: string
 }
@@ -18,9 +19,10 @@ export type AddBookmarkRef = React.MutableRefObject<{
 const { forwardRef, useState, useImperativeHandle } = React
 
 const AddBookmarkModal = forwardRef((props: Props, ref) => {
+  let currEdit = props.currEdit
   let initState = {
-    name: props.name || '',
-    url: props.url || ''
+    name: currEdit ? currEdit.name : props.name || '',
+    url: currEdit ? currEdit.url : props.url || ''
   }
 
   let [infos, setInfos] = useObjectState<Info>(initState)

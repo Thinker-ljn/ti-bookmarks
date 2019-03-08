@@ -14,35 +14,56 @@
 
     background: #fff;
 
+    &::before{
+      content: '';
+      width: 0;
+      height: 100%;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
     .name
     {
-        width: 150px;
-        height: 30px;
-        margin-left: 10px;
-        border-bottom: 1px solid #f2f2f2;
+      width: 140px;
+      height: 30px;
+      border-bottom: 1px solid #f2f2f2;
 
-        font-size: 12px;
-        line-height: 30px;
-        color: #666;
+      font-size: 12px;
+      line-height: 30px;
+      color: #666;
 
-        display: inline-block;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle;
     }
 
     .favicon
     {
-        float: left;
-        margin-top: 10px;
+      margin-right: 5px;
+    }
+    .edit-icon
+    {
+      display: none;
+      cursor: pointer;
+      vertical-align: middle;
+
+      &:hover{
+        color: #69c0ff;
+      }
     }
 
     &:hover
     {
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        .name
-        {
-            color: #ffa04c;
-        }
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      .name
+      {
+        color: #ffa04c;
+      }
+      .edit-icon
+      {
+        display: initial
+      }
     }
 }

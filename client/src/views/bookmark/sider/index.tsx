@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Layout, Tree, Modal, message } from 'antd'
+import { Layout, Tree, Modal, message, Icon } from 'antd'
 import ContextMenu, { menu } from '../context-menu'
 import AddTagModal from './add-tag-modal'
 import './index.scss'
@@ -41,7 +41,7 @@ export default function AppSider () {
       title: '确定要删除 ' + node.props.title + ' ?',
       onOk: () => {
         let key = node.props.eventKey
-        if (!key) return
+        if (!key || !tagsMap[key]) return
         let tag: DLTag = tagsMap[key]
         DL.tags.delete(tag)
       }
@@ -53,10 +53,10 @@ export default function AppSider () {
       id: 1,
       name: '添加',
       callback: (node: AntTreeNode) => {
-        setShowAddTagModal(true)
         let key = node.props.eventKey
         if (!key) return
-        currNodeId = tagsMap[key].id
+        currNodeId = tagsMap[key] ? tagsMap[key].id : 0
+        setShowAddTagModal(true)
       }
     },
     {
@@ -75,13 +75,20 @@ export default function AppSider () {
     // console.log(tag)
   }
 
-  const loop = (tags: DLTag[]) => tags.map((tag) => {
-    let key = tag.__key__
-    if (tag.children && tag.children.length) {
-      return <TreeNode key={key} title={tag.name}>{loop(tag.children)}</TreeNode>
-    }
-    return <TreeNode key={key} title={tag.name}/>
-  })
+  const loop = (tags: DLTag[], addKey?: string) => {
+    let children = tags.map((tag) => {
+      let key = tag.__key__
+      if (tag.children && tag.children.length) {
+        return <TreeNode key={key} title={tag.name}>{loop(tag.children, tag.__key__)}</TreeNode>
+      }
+      return <TreeNode key={key} title={tag.name}/>
+    })
+
+    if (children.length && addKey) children.push(<TreeNode key={addKey} title={
+      <Icon type="plus-circle"></Icon>
+    }></TreeNode>)
+    return children
+  }
 
   const renderTree = () => {
     if (tagsTree.length) {

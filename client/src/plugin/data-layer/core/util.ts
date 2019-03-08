@@ -3,7 +3,7 @@ import { BranchData } from './types'
 type SingleFn = <T extends BranchData> (prev: T[], curr: T) => T[]
 
 function findIndex<T extends BranchData> (prev: T[], curr: T): number {
-  return prev.findIndex(item => item.id === curr.id)
+  return prev.findIndex(item => item.id === curr.id || item.__key__ === curr.__key__)
 }
 
 export const singleUpdate: SingleFn = function (prev, curr) {
