@@ -33,7 +33,12 @@ class TagController extends Controller {
 
   async create ($form) {
     this.validate({
-      name: 'string',
+      name:{
+        type: 'string',
+        convertType: (v) => {
+          return v + ''
+        }
+      },
       parent_id: {
         required: false,
         type: 'int'
@@ -54,7 +59,10 @@ class TagController extends Controller {
       id: 'int',
       name: {
         required: false,
-        type: 'string'
+        type: 'string',
+        convertType: (v) => {
+          return v + ''
+        }
       },
       parent_id: {
         required: false,
