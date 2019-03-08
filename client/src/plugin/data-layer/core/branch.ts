@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { filter, map, combineLatest, startWith, merge } from 'rxjs/operators'
+import { filter, map, combineLatest, startWith } from 'rxjs/operators'
 import { singleRemove, singleUpdate } from './util'
 import { BranchData, Packet, DLTrunkSource, KeyMap } from './types'
 import Trunk from './trunk'
@@ -8,14 +8,23 @@ import { FruitConstructor, FruitInterface } from './fruit';
 import Axios from 'axios';
 import Pendding, {MergeFn} from './pendding';
 
+export interface BranchInterface<T> {
+  default_: Observable<T[]>
+  exampleData: T
+}
+
+export interface BranchConstructor<T> {
+  new (trunk: Trunk, apiFilter?: RegExp): BranchInterface<T>
+}
+
 // type BranchPacket<T> = Packet<Extract<PacketData, T>>
-export default class Branch<T extends BranchData> {
+export default abstract class Branch<T extends BranchData> implements BranchInterface<T> {
   trunk: Trunk
   root: Root
   trunk_: DLTrunkSource
   raw_: DLTrunkSource
 
-  default_: Observable<T[]>
+  abstract default_: Observable<T[]>
   init_: Observable<T[]>
   create_: Observable<T[]>
   update_: Observable<T[]>
@@ -23,7 +32,7 @@ export default class Branch<T extends BranchData> {
 
   pendding: Pendding<T>
 
-  readonly exampleData: T
+  readonly abstract exampleData: T
 
   apiFilter: RegExp
   fruitsRegistered: KeyMap<boolean>
@@ -89,10 +98,10 @@ export default class Branch<T extends BranchData> {
     )
   }
 
-  registerFruit <O>(FruitClass: FruitConstructor<T, O>) {
+  registerFruit <O, B>(FruitClass: FruitConstructor<O, B>, branch: B) {
     // if (this.fruitsRegistered[FruitClass.name])
     this.fruitsRegistered[FruitClass.name] = true
-    let fruit: FruitInterface<T, O> = new FruitClass(this)
+    let fruit = new FruitClass(branch)
     return fruit.source_
   }
 
@@ -116,9 +125,4 @@ export default class Branch<T extends BranchData> {
     Axios.delete(`${this.namespace}/${data.id}`, config)
     return this.default_
   }
-}
-
-export type BranchInstance = InstanceType<typeof Branch>
-export interface BranchConstructor<T> {
-  new (trunk: Trunk, apiFilter?: RegExp): T
 }

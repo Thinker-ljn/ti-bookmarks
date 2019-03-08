@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Layout, Modal, Button } from 'antd'
 import SingleBookmark from '../single-bookmark'
-import AddBookmark from '@/components/add-bookmark'
+import AddBookmark, { AddBookmarkRef } from '@/components/add-bookmark'
 import './index.scss'
 
 import DL, { DLBookmark } from '@/plugin/data-layer'
@@ -25,12 +25,13 @@ function getQuickAddBookmark () {
 
 const {useRef, useState} = React
 export default function BookmarkContent () {
-  let bk$ = DL.bookmarks.default_
+  let bk$ = DL.bookmarks.filterByTag_
   let bookmarks = useObservable<DLBookmark[]>(() => bk$, [])
   let [visible, setVisible] = useState(false)
-  let addBkRef = useRef({})
+  let addBkRef: AddBookmarkRef = useRef(null)
   let quickAdd = getQuickAddBookmark()
   const submitAddBk = () => {
+    if (!addBkRef.current) return
     addBkRef.current.handleSubmit()
     setVisible(false)
   }

@@ -12,19 +12,19 @@ export interface DLTag extends BranchData {
   children?: DLTag[]
 }
 
-class TagFruit extends Fruit<DLTag> {
+class TagFruit extends Fruit<DLTag[], TagsBranch> {
   source_: Observable<DLTag[]> = this.branch.default_
 }
 
 export default class TagsBranch extends Branch<DLTag> {
-  readonly default_ = this.registerFruit(TagFruit)
-  readonly tree_ = this.registerFruit(TagTreeFruit)
-  readonly map_ = this.registerFruit(TagMapFruit)
-  readonly kinship_ = this.registerFruit(TagKinshipFruit)
+  readonly default_ = this.registerFruit(TagFruit, this)
+  readonly tree_ = this.registerFruit(TagTreeFruit, this)
+  readonly map_ = this.registerFruit(TagMapFruit, this)
+  readonly kinship_ = this.registerFruit(TagKinshipFruit, this)
   readonly exampleData: DLTag = {
-    id: 0, 
-    name: '', 
-    parent_id: 0, 
+    id: 0,
+    name: '',
+    parent_id: 0,
     __key__: ''
   }
 }

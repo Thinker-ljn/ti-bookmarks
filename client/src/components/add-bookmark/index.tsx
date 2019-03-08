@@ -11,6 +11,10 @@ type Props = {
   name?: string
 }
 type Info = {[key: string]: string}
+
+export type AddBookmarkRef = React.MutableRefObject<{
+  handleSubmit: () => void
+} | null>
 const { forwardRef, useState, useImperativeHandle } = React
 
 const AddBookmarkModal = forwardRef((props: Props, ref) => {

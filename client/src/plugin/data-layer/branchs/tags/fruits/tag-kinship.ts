@@ -1,6 +1,7 @@
 import Fruit from "@/plugin/data-layer/core/fruit";
 import { DLTag } from "@/plugin/data-layer";
 import { map } from "rxjs/operators";
+import TagsBranch from "..";
 
 type Kinship = {
   p: number[],
@@ -38,7 +39,7 @@ const geneKinship = (tags: DLTag[]) => {
   return kinship
 }
 
-export default class TagKinshipFruit extends Fruit<DLTag, KinshipMap> {
+export default class TagKinshipFruit extends Fruit<KinshipMap, TagsBranch> {
   readonly source_ = this.branch.default_.pipe(
     map(tags => geneKinship(tags))
   )

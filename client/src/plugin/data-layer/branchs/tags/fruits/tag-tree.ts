@@ -1,5 +1,5 @@
 import Fruit from "@/plugin/data-layer/core/fruit";
-import { DLTag } from "..";
+import TagsBranch, { DLTag } from "..";
 import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
 
@@ -32,7 +32,7 @@ const toTree = (tags: DLTag[]) => {
   return [result]
 }
 
-export default class TagTreeFruit extends Fruit<DLTag> {
+export default class TagTreeFruit extends Fruit<DLTag[], TagsBranch> {
   source_: Observable<DLTag[]> = this.branch.default_.pipe(
     map((tags: DLTag[]) => toTree(tags))
   )
