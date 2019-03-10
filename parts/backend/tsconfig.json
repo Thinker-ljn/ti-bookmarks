@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "watch": true,
+    "outDir": "./build",
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "moduleResolution": "node",
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src"],
+  "exclude": [
+    "build",
+    "node_modules",
+    "public",
+    "test"
+  ]
+}

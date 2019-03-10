@@ -1,0 +1,11 @@
+{
+  "name": "ti-frontend",
+  "version": "0.0.0",
+  "main": "src/index.js",
+  "author": "thinker li",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "typescript": "^3.3.3333"
+  }
+}

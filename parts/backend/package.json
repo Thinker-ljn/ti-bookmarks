@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "name": "ti-backend",
+  "version": "0.0.0",
+  "description": "ti-backend",
+  "main": "dist/index.js",
+  "author": "thinker li",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/koa": "^2.0.48",
+    "@types/mysql": "^2.15.5",
+    "@types/node": "^11.11.0",
+    "nodemon": "^1.18.10",
+    "typescript": "^3.3.3333"
+  },
+  "dependencies": {
+    "koa": "^2.7.0",
+    "mysql": "^2.16.0",
+    "parameter": "^3.5.0"
+  },
+  "types": "src/types/*"
+}

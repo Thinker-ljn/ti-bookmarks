@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "workspaces": ["parts/*"],
+  "scripts": {
+    "dc:be": "docker-compose -f scripts/docker/docker-compose.backend.yml --project-directory .",
+    "be:w": "tsc -w --project ./parts/backend",
+    "be:n": "nodemon --legacy-watch --watch parts/backend/dist --inspect=0.0.0.0:9222 --nolazy parts/backend/dist/index.js",
+    "be:dev": "yarn be:w && yarn be:n"
+  }
+}
