@@ -1,10 +1,15 @@
 import Builder from "../builder";
-import { Data } from "../types";
+import { Data, Value } from "../types";
+import WhereGrammar from "./components/where";
+
+export type CompileResult = {
+  prepare: string,
+  bindings: Value[]
+}
 
 interface GrammarInstance<T extends Data> {
   components: GrammarConstructor<T>[]
   builder: Builder<T>
-  compile (): string
 }
 
 export interface GrammarConstructor<T extends Data> {
@@ -14,9 +19,13 @@ export interface GrammarConstructor<T extends Data> {
 export default abstract class BaseGrammar<T extends Data> implements GrammarInstance<T> {
   components: GrammarConstructor<T>[] = []
   builder: Builder<T>
-  abstract compile (): string 
+  abstract compile (data?: T | T[]): CompileResult
 
   constructor (builder: Builder<T>) {
     this.builder = builder
   }
+}
+
+export abstract class BaseMainGrammar<T extends Data> extends BaseGrammar<T> {
+  whereCompiler: WhereGrammar<T> = new WhereGrammar(this.builder)
 }

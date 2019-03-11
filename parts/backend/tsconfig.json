@@ -9,13 +9,17 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "@test/*": ["test/*"]
+    }
   },
-  "include": ["src"],
+  "include": ["src", "test"],
   "exclude": [
     "build",
     "node_modules",
-    "public",
-    "test"
+    "public"
   ]
 }

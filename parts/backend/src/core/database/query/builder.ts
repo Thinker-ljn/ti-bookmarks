@@ -1,52 +1,34 @@
-import Grammar from "./grammar";
-import Mysql from "mysql";
-import { Where, Column, Data } from "./types";
+import grammarCompile from "./grammar";
+import { Connection } from "mysql";
+import { Column, Data, Value } from "./types";
+import { Where, Operator } from "./grammar/components/where";
+import { CompileResult } from "./grammar/base";
 
+type BuilderMode = 'query' | 'format'
 export default class Builder<T extends Data> {
-  grammar: Grammar<T>
-  connection: Mysql.Connection
+  connection: Connection
   tableName: string
   from: string
   wheres: Where<T>[] = []
   columns: Column<T>[] = []
   distinct: boolean = false
   data: T[]
-  constructor (tableName: string, connection: Mysql.Connection) {
-    this.grammar = new Grammar<T>(this)
+  completed: false
+  mode: BuilderMode
+  constructor (tableName: string, connection: Connection, mode: BuilderMode = 'format') {
     this.tableName = tableName
     this.from = tableName
     this.connection = connection
+    this.mode = mode
   }
 
-  where (column: string, operator: string, value: string): Builder<T>
-  where (column: string, value: string): Builder<T> 
-  where (wheres: Where<T>[]): Builder<T> 
-  where (wheres: any): Builder<T> {
-    if (Array.isArray(wheres)) {
-
+  async query ({prepare, bindings}: CompileResult) {
+    console.log(this.connection.state);
+    
+    if (this.mode === 'format') {
+      return await this.connection.format(prepare, bindings)
     }
-    return this
-  }
-
-  // private addWheres (column: string, operator: Operator, value: Value, boolean: BooleanOperator = 'and', handler: GrammarConstructor) {
-  //   this.addBindings(value, 'where')
-  //   this.wheres.push({
-  //     column: column,
-  //     operator: operator,
-  //     value: value,
-  //     boolean: boolean,
-  //     handler: handler
-  //   })
-  //   return this
-  // }
-
-  // private addBindings (value: Value) {
-
-  // }
-
-  select (...columns: Column<T>[]) {
-    this.columns = columns
-    return this
+    return await this.connection.query(prepare, bindings)
   }
 
   async get () {}
@@ -55,16 +37,64 @@ export default class Builder<T extends Data> {
 
   async find (id: number) {}
 
+  async select (...columns: Column<T>[]) {
+    this.columns = columns
+    let compiled: CompileResult = grammarCompile(this, 'select')
+    return await this.query(compiled)
+  }
+
   async insert (data: T | T[]) {
     if (!Array.isArray(data)) {
       data = [data]
     }
-    this.data = data
+    let compiled: CompileResult = grammarCompile(this, 'insert', data)
+    return await this.query(compiled)
   }
 
-  async update () {}
+  async update (data: T) {
+    let compiled: CompileResult = grammarCompile(this, 'update', data)
+    return await this.query(compiled)
+  }
 
-  async delete () {}
+  async delete () {
+    let compiled: CompileResult = grammarCompile(this, 'delete')
+    return await this.query(compiled)
+  }
 
   async truncate () {}
+
+  where (column: Where<T>[]): Builder<T>
+  where (column: Column<T>, operator: Value): Builder<T> 
+  where (column: Column<T>, operator: Operator, value: Value): Builder<T> 
+  where (column: any, operator?: any, value?: any) {
+    if (Array.isArray(column)) {
+      let wheres = column
+      wheres.forEach((where) => {
+          this.addWhere(where)
+      })
+    } else if (typeof column === 'string') {
+      if (!value) {
+        value = operator
+        operator = '='
+      } 
+      this.addWhere({column, operator, value})
+    }
+    return this
+  }
+
+  whereIn (column: Column<T>, value: Value[]) {
+    this.addWhere({column, value, handler: 'compileWhereIn'})
+  }
+
+  whereNotIn (column: Column<T>, value: Value[]) {
+    this.addWhere({column, value, handler: 'compileWhereNotIn'})
+  }
+
+  private addWhere (where: Partial<Where<T>>) {
+    let defaultWhere: Where<T> = {
+      column: '0', operator: '=', value: '1', boolean: 'AND', handler: 'compileWhereBase'
+    }
+    let fullWhere: Where<T> = Object.assign({}, defaultWhere, where)
+    this.wheres.push(fullWhere)
+  }
 }

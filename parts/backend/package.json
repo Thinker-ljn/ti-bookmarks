@@ -8,9 +8,14 @@
   "license": "MIT",
   "devDependencies": {
     "@types/koa": "^2.0.48",
+    "@types/mocha": "^5.2.6",
     "@types/mysql": "^2.15.5",
     "@types/node": "^11.11.0",
+    "@types/power-assert": "^1.5.0",
+    "espower-typescript": "^9.0.1",
+    "mocha": "^6.0.2",
     "nodemon": "^1.18.10",
+    "power-assert": "^1.6.1",
     "typescript": "^3.3.3333"
   },
   "dependencies": {

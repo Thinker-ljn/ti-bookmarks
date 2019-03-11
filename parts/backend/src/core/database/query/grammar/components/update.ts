@@ -1,25 +1,24 @@
-import BaseGrammar from "../base";
-import { Data } from "../../types";
+/**
+ * prepare: UPDATE table SET f1 = ?, f2 = ? ... [WHERE Clause]
+ * bindings:                 [v1,     v2 ... ]
+ * ['join', 'set', 'where condition']
+ */
+import { CompileResult, BaseMainGrammar } from "../base";
+import { Data, Value } from "../../types";
 
-export default class UpdateGrammar<T extends Data> extends BaseGrammar<T> {
-  compile () {
-    let {data, tableName} = this.builder
+export default class UpdateGrammar<T extends Data> extends BaseMainGrammar<T> {
+  compile (data?: T | T[]): CompileResult {
+    if (!data || Array.isArray(data)) throw 'Compile Update Builder Error'
+    let {tableName} = this.builder
     let columns = Object.keys(data).map(column => `\`${column}\` = ?`).join(', ')
 
-    let wheres = ''
-    return `update \`${tableName}\` set ${columns} ${wheres}`
+    let where = this.whereCompiler.compile()
+    let prepare = `UPDATE \`${tableName}\` SET ${columns} ${where.prepare}`
+    let bindings = this.parseBindings(data).concat(where.bindings)
+    return {prepare, bindings}
   }
 
-  getUpdateBindings () {
-    // ['join', 'set', 'where', 'having', 'order', 'union']
-    // let {data} = this.builder
-    // let updateBindings = Object.keys(data).map(key => data[key])
-    // let bindings = query.bindings
-    // return Object.keys(bindings)
-    // .filter(key => key !== 'select' || key !== 'join')
-    // .map(key => bindings[key])
-    // .reduce((prev, curr) => {
-    //   return prev.concat(curr)
-    // }, bindings.join.concat(updateBindings))
+  parseBindings (data: T): Value[] {
+    return Object.keys(data).map(key => data[key])
   }
 }
