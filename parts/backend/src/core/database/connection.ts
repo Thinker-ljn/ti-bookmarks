@@ -1,9 +1,10 @@
-import Mysql, { Connection, QueryFunction, queryCallback } from "mysql";
+import { Connection, QueryFunction, queryCallback } from "mysql";
+import * as mysql from 'mysql'
 import { Value } from "./query/types";
 
 let connection: Connection
 export const createConnection = () => {
-  return Mysql.createConnection({
+  return mysql.createConnection({
     host: process.env.MYSQL_DB_HOST,
     user: process.env.MYSQL_USERNAME,
     password: process.env.MYSQL_PASSWORD,
@@ -12,7 +13,7 @@ export const createConnection = () => {
 }
 
 const init = () => {
-  connection =createConnection()
+  connection = createConnection()
 
   connection.connect(function (err) {
     if (err) {

@@ -4,10 +4,14 @@
   "scripts": {
     "be:dc": "docker-compose -f scripts/docker/docker-compose.backend.yml --project-directory .",
     "be:w": "tsc -w --project ./parts/backend",
-    "be:n": "nodemon --legacy-watch --watch parts/backend/dist --inspect=0.0.0.0:9222 --nolazy parts/backend/dist/index.js",
+    "be:n": "nodemon --legacy-watch --watch parts/backend/build --inspect=0.0.0.0:9222 --nolazy parts/backend/build/index.js",
     "be:dev": "yarn be:w && yarn be:n",
-    "be:test": "cd parts/backend/ && mocha -r espower-typescript/guess test/**/*.spec.ts",
-    "be:i": "yarn --cwd ./parts/backend add",
-    "fe:i": "yarn --cwd ./parts/frontend add"
+    "be:test": "cd parts/backend && mocha -r espower-typescript/guess -r module-alias/register test/**/*.spec.ts",
+    "be": "yarn --cwd ./parts/backend",
+    "fe": "yarn --cwd ./parts/frontend"
+  },
+  "_moduleAliases": {
+    "@": "parts/backend/src",
+    "#": "parts/frontend/src"
   }
 }

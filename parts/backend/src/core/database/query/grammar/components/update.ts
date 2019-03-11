@@ -5,8 +5,10 @@
  */
 import { CompileResult, BaseMainGrammar } from "../base";
 import { Data, Value } from "../../types";
+import WhereGrammar from "./where";
 
 export default class UpdateGrammar<T extends Data> extends BaseMainGrammar<T> {
+  whereCompiler: WhereGrammar<T> = new WhereGrammar(this.builder)
   compile (data?: T | T[]): CompileResult {
     if (!data || Array.isArray(data)) throw 'Compile Update Builder Error'
     let {tableName} = this.builder

@@ -31,7 +31,7 @@ export default class WhereGrammar<T extends Data> extends BaseGrammar<T> {
       let {handler, boolean} = where
       let result = this[handler](where)
       if (!result) throw 'Compile Where Clause Fail'
-      prepare.push((!i ? boolean + ' ' : '') + result.prepare)
+      prepare.push((i ? boolean + ' ' : '') + result.prepare)
       bindings = bindings.concat(result.bindings)
     })
     let finalPrepare = prepare.length ? 'WHERE ' + prepare.join(' ') : ''
@@ -45,7 +45,7 @@ export default class WhereGrammar<T extends Data> extends BaseGrammar<T> {
     let {column, operator, value} = where
     if (Array.isArray(value)) return null
     return {
-      prepare: `\`${column}\` ${operator} ? `,
+      prepare: `\`${column}\` ${operator} ?`,
       bindings: [value]
     }
   }

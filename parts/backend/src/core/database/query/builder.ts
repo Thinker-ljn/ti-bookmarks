@@ -23,9 +23,8 @@ export default class Builder<T extends Data> {
   }
 
   async query ({prepare, bindings}: CompileResult) {
-    console.log(this.connection.state);
-    
-    if (this.mode === 'format') {
+    prepare = prepare.trim()
+    if (this.connection.state === 'disconnected' || this.mode === 'format') {
       return await this.connection.format(prepare, bindings)
     }
     return await this.connection.query(prepare, bindings)
@@ -35,7 +34,7 @@ export default class Builder<T extends Data> {
 
   async all () {}
 
-  async find (id: number) {}
+  async find () {}
 
   async select (...columns: Column<T>[]) {
     this.columns = columns

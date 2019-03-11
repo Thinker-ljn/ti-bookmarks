@@ -6,8 +6,10 @@
 
 import { BaseMainGrammar, CompileResult } from "../base";
 import { Data, Value } from "../../types";
+import WhereGrammar from "./where";
 
 export default class SelectGrammar<T extends Data> extends BaseMainGrammar<T> {
+  whereCompiler: WhereGrammar<T> = new WhereGrammar(this.builder)
   compile (): CompileResult {
     let {columns, tableName} = this.builder
     let columnStr = columns.map(col => `\`${col}\``).join(', ')

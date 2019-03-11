@@ -10,7 +10,7 @@ import { parameterize } from "../utils";
 
 export default class InsertGrammar<T extends Data> extends BaseGrammar<T> {
   compile (data?: T | T[]): CompileResult {
-    if (!data || !Array.isArray(data)) return null
+    if (!data || !Array.isArray(data)) throw 'Inserted Data Is Not A Array!'
     let {tableName} = this.builder
 
     let keys = Object.keys(data[0])
@@ -19,7 +19,7 @@ export default class InsertGrammar<T extends Data> extends BaseGrammar<T> {
       return '(' + parameterize(keys) + ')'
     }).join(', ')
 
-    let prepare = `INSERT INTO \`${tableName}\` (${columns}) values ${parameters}`
+    let prepare = `INSERT INTO \`${tableName}\` (${columns}) VALUES ${parameters}`
     let bindings = this.parseBindings(data)
     return {prepare, bindings}
   }

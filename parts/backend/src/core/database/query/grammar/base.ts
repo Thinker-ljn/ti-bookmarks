@@ -27,5 +27,5 @@ export default abstract class BaseGrammar<T extends Data> implements GrammarInst
 }
 
 export abstract class BaseMainGrammar<T extends Data> extends BaseGrammar<T> {
-  whereCompiler: WhereGrammar<T> = new WhereGrammar(this.builder)
+  abstract whereCompiler: WhereGrammar<T>
 }
