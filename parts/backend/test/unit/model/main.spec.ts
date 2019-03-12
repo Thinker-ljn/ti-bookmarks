@@ -26,12 +26,13 @@ describe('model Test', function () {
       assert(test._tableName === 'test_models')
     })
 
-    it ('test model data', async function () {
+    it ('test model query', async function () {
       test.set({
         a: 1,
         b: '',
         c: true
       })
+      
       
       let actual = await test.save()
       let expected = 'INSERT INTO `test_models` (`a`, `b`, `c`) VALUES (1, \'\', true)'
