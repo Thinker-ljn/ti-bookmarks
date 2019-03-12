@@ -14,12 +14,9 @@
     "paths": {
       "@/*": ["src/*"],
       "@test/*": ["test/*"]
-    }
+    },
+    "target": "es6"
   },
-  "include": ["src", "test"],
-  "exclude": [
-    "build",
-    "node_modules",
-    "public"
-  ]
+  // "include": ["src/*", ", "index.d.ts"test/*", "types/*"],
+  "exclude": ["build",  "node_modules", "public"]
 }

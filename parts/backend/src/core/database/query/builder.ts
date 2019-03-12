@@ -1,12 +1,12 @@
 import grammarCompile from "./grammar";
-import { Connection } from "mysql";
-import { Column, Data, Value } from "./types";
+import { Column, Data, Value } from "./grammar/components/where";
 import { Where, Operator } from "./grammar/components/where";
 import { CompileResult } from "./grammar/base";
+import { PromiseConnection } from "../connection";
 
 type BuilderMode = 'query' | 'format'
 export default class Builder<T extends Data> {
-  connection: Connection
+  connection: PromiseConnection
   tableName: string
   from: string
   wheres: Where<T>[] = []
@@ -15,26 +15,26 @@ export default class Builder<T extends Data> {
   data: T[]
   completed: false
   mode: BuilderMode
-  constructor (tableName: string, connection: Connection, mode: BuilderMode = 'format') {
+  constructor (tableName: string, connection: PromiseConnection, mode: BuilderMode = 'format') {
     this.tableName = tableName
     this.from = tableName
     this.connection = connection
     this.mode = mode
   }
 
-  async query ({prepare, bindings}: CompileResult) {
+  async query ({prepare, bindings}: CompileResult): Promise<any> {
     prepare = prepare.trim()
     if (this.connection.state === 'disconnected' || this.mode === 'format') {
-      return await this.connection.format(prepare, bindings)
+      return await Promise.resolve(this.connection.format(prepare, bindings))
     }
     return await this.connection.query(prepare, bindings)
   }
 
-  async get () {}
-
   async all () {}
 
-  async find () {}
+  async find (id: number) {
+    return await this.where('id', id).select()
+  }
 
   async select (...columns: Column<T>[]) {
     this.columns = columns

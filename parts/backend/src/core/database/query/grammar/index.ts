@@ -1,10 +1,10 @@
 import BaseGrammar, { CompileResult } from "./base";
-import { Data } from "../types";
 import Builder from "../builder";
 import InsertGrammar from "./components/insert";
 import DeleteGrammar from "./components/delete";
 import SelectGrammar from "./components/select";
 import UpdateGrammar from "./components/update";
+import { Data } from "./components/where";
 
 type SqlType = 'insert' | 'delete' | 'select' | 'update'
 export default function grammarCompile <T extends Data>(builder: Builder<T>, type: SqlType, data?: T | T[]): CompileResult {

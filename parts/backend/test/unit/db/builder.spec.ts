@@ -1,8 +1,8 @@
 import DB from '@/core/database/instance'
 import * as assert from 'power-assert'
-import { createConnection } from '@/core/database/connection';
+import { PromiseConnection } from '@/core/database/connection';
 
-DB.setConnection(createConnection)
+DB.setConnection(PromiseConnection.Instance)
 
 describe('Query Build', function () {
   describe('Select Query', function () {

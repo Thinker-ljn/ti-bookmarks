@@ -1,6 +1,9 @@
 import DB from "./instance";
 
-import { getConnection } from "./connection";
-DB.setConnection(getConnection)
+import { PromiseConnection } from "./connection";
+let connection = PromiseConnection.Instance
+connection.connect()
+
+DB.setConnection(connection)
 
 export default DB

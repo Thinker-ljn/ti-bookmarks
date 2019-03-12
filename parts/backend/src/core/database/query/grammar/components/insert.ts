@@ -5,8 +5,8 @@
  */
 
 import BaseGrammar, { CompileResult } from "../base";
-import { Value, Data } from "../../types";
 import { parameterize } from "../utils";
+import { Data, Value } from "./where";
 
 export default class InsertGrammar<T extends Data> extends BaseGrammar<T> {
   compile (data?: T | T[]): CompileResult {

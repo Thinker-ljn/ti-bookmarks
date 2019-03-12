@@ -1,6 +1,5 @@
 import Builder from "../builder";
-import { Data, Value } from "../types";
-import WhereGrammar from "./components/where";
+import WhereGrammar, { Data, Value } from "./components/where";
 
 export type CompileResult = {
   prepare: string,

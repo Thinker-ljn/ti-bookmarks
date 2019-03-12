@@ -4,13 +4,12 @@
  * ['where', 'having', 'order', 'union']
  */
 import BaseGrammar, { CompileResult } from "../base";
-import { Data } from "../../types";
 import { parameterize } from "../utils";
 
 export type CompileWhereFn<T extends Data> = (where: Where<T>, not?: boolean) => CompileResult | null
 export type Operator = string
 export type BooleanOperator = 'AND' | 'OR'
-export type Value = string | number
+export type Value = string | number | boolean | undefined
 export type Column<T> = keyof T
 export type Data = {[key: string]: Value}
 export interface Where<T extends Data> {

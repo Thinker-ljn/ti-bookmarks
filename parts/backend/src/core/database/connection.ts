@@ -1,8 +1,8 @@
-import { Connection, QueryFunction, queryCallback } from "mysql";
+import { Connection, queryCallback } from "mysql";
 import * as mysql from 'mysql'
-import { Value } from "./query/types";
+import { Value } from "./query/grammar/components/where";
 
-let connection: Connection
+// let connection: Connection
 export const createConnection = () => {
   return mysql.createConnection({
     host: process.env.MYSQL_DB_HOST,
@@ -12,21 +12,35 @@ export const createConnection = () => {
   })
 }
 
-const init = () => {
-  connection = createConnection()
+export class PromiseConnection {
+  private readonly connection: Connection
+  private static _instance: PromiseConnection
 
-  connection.connect(function (err) {
-    if (err) {
-      console.error('error connecting: ' + err.stack)
-      return
-    }
+  private constructor () {
+    this.connection = createConnection()
+  }
 
-    console.log('connected as id ' + connection.threadId)
-  })
+  public static get Instance()
+  {
+    return this._instance || (this._instance = new this());
+  }
 
-  const originalQueryMethod: QueryFunction = connection.query.bind(connection)
+  get state () {
+    return this.connection.state
+  }
 
-  const promiseQuery = function (options: string, bindings?: Value[] | queryCallback, callback?: queryCallback) {
+  connect () {
+    this.connection.connect(function (err) {
+      if (err) {
+        console.error('error connecting: ' + err.stack)
+        throw err
+      }
+  
+      console.log('connected as id ' + this.connection.threadId)
+    })
+  }
+
+  query (options: string, bindings?: Value[] | queryCallback, callback?: queryCallback) {
     let promise = new Promise((resolve, reject) => {
       if (typeof bindings === 'function') {
         callback = bindings
@@ -38,17 +52,13 @@ const init = () => {
         return e ? reject(e) : resolve(result)
       }
       
-      originalQueryMethod(options, bindings, finalCallback)
+      this.connection.query(options, bindings, finalCallback)
     })
     return promise
-  };
+  }
 
-  (connection.query as any) = promiseQuery
+  format (prepareSql: string, bindings: Value[]) {
+    return this.connection.format(prepareSql, bindings)
+  }
 }
 
-
-export const getConnection = () => {
-  if (!connection) init()
-
-  return connection
-}

@@ -1,7 +1,7 @@
 import Parameter from 'parameter'
 import Koa from 'koa'
 
-class Controller {
+export default class Controller {
   validator: Parameter
   ctx: Koa.Context
   constructor (ctx: Koa.Context) {
@@ -18,5 +18,3 @@ class Controller {
     }
   }
 }
-
-module.exports = Controller

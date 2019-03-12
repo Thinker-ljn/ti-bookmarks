@@ -4,7 +4,7 @@
  * ['join', 'set', 'where condition']
  */
 import { CompileResult, BaseMainGrammar } from "../base";
-import { Data, Value } from "../../types";
+import { Data, Value } from "./where";
 import WhereGrammar from "./where";
 
 export default class UpdateGrammar<T extends Data> extends BaseMainGrammar<T> {
