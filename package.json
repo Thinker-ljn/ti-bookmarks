@@ -3,9 +3,8 @@
   "workspaces": ["parts/*"],
   "scripts": {
     "be:dc": "docker-compose -f scripts/docker/docker-compose.backend.yml --project-directory .",
-    "be:w": "tsc -w --project ./parts/backend",
-    "be:n": "nodemon --legacy-watch --watch parts/backend/build --inspect=0.0.0.0:9222 --nolazy parts/backend/build/index.js",
-    "be:dev": "yarn be:w && yarn be:n",
+    "be:run": "yarn be:dc run backend bash",
+    "be:exec": "yarn be:dc exec backend bash",
     "be": "yarn --cwd ./parts/backend",
     "fe": "yarn --cwd ./parts/frontend"
   },
