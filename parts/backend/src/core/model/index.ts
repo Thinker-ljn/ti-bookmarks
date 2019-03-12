@@ -23,17 +23,18 @@ export function defEnumerable (target: any, propertyKeys: string[]) {
     Object.defineProperty(target, propertyKey, descriptor)
   }
 }
-export default class Model<T extends IdData> implements ModelInstance {
-  static tableName: string = Model.parseTableName()
-  static connection: PromiseConnection
 
-  readonly _modelName: string = Model.name
-  readonly _tableName: string = Model.parseTableName()
+export default class Model<T extends IdData> implements ModelInstance {
+  protected _static: typeof Model = this.constructor as typeof Model
+  readonly _tableName: string = this._static.parseTableName()
+  readonly _modelName: string = this._static.name
   readonly _primaryKey: string = 'id'
   protected _properties: T
   
+  static tableName: string
+  static connection: PromiseConnection
   constructor () {
-    defEnumerable(this, ['_modelName', '_tableName', '_primaryKey', '_properties'])
+    defEnumerable(this, ['_modelName', '_tableName', '_primaryKey'])
   }
   
   get id () {
@@ -42,9 +43,9 @@ export default class Model<T extends IdData> implements ModelInstance {
 
   static setConnection (connection: PromiseConnection | (() => PromiseConnection)) {
     if (typeof connection === 'function') {
-      Model.connection = connection()
+      this.connection = connection()
     } else {
-      Model.connection = connection
+      this.connection = connection
     }
   }
 
@@ -84,7 +85,7 @@ export default class Model<T extends IdData> implements ModelInstance {
 
   async save (properties?: T) {
     if (properties) this._properties = properties
-    let query = Model.newQuery<T>()
+    let query = this._static.newQuery<T>()
     let result = await query.insert(this._properties)
     this._properties.id = result.insertId
 
@@ -95,7 +96,7 @@ export default class Model<T extends IdData> implements ModelInstance {
   async update (properties?: T) {
     if (properties) this._properties = properties
 
-    let query = Model.newQuery()
+    let query = this._static.newQuery()
     let pkValue = this._properties[this._primaryKey]
     let result = await query.where(this._primaryKey, pkValue).update(this._properties)
 
@@ -106,13 +107,13 @@ export default class Model<T extends IdData> implements ModelInstance {
   async delete (properties?: T) {
     if (properties) this._properties = properties
     let pkValue = this._properties[this._primaryKey]
-    let query = Model.newQuery()
+    let query = this._static.newQuery()
     let result = await query.where(this._primaryKey, pkValue).delete()
 
     return result
   }
 
   belongsToMany (classB: ModelConstructor) {
-    return new BelongsToMany<T>(this, classB, Model.connection)
+    return new BelongsToMany<T>(this, classB, this._static.connection)
   }
 }

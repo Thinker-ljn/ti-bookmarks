@@ -34,7 +34,7 @@ describe('model Test', function () {
       })
       
       let actual = await test.save()
-      let expected = 'INSERT INTO tests (`a`, `b`, `c`) VALUES (1, \'\', \'true\')'
+      let expected = 'INSERT INTO `test_models` (`a`, `b`, `c`) VALUES (1, \'\', true)'
       assert(expected === actual)
     })
   })

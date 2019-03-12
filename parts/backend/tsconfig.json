@@ -10,13 +10,14 @@
     "noUnusedLocals": true,
     "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "./",
+    "target": "es6",
+    "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
       "@test/*": ["test/*"]
     },
-    "target": "es6"
+    "typeRoots" : ["../../node_modules/@types", "./types"]
   },
-  // "include": ["src/*", ", "index.d.ts"test/*", "types/*"],
+  "include": ["src", "test"],
   "exclude": ["build",  "node_modules", "public"]
 }

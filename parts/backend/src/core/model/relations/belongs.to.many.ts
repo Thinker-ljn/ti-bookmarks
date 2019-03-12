@@ -1,7 +1,7 @@
 import { PromiseConnection } from "@/core/database/connection";
 import Model, { ModelConstructor, IdData } from "..";
-import { Data } from "@/core/database/query/types";
 import Builder from "@/core/database/query/builder";
+import { Data } from "@/core/database/query/grammar/components/where";
 
 export default class BelongsToMany<A extends IdData> {
   protected _mA: Model<A>
