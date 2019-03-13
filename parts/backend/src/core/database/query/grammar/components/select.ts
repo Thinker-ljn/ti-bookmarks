@@ -17,7 +17,7 @@ export default class SelectGrammar<T extends Data> extends BaseMainGrammar<T> {
     const where = this.whereCompiler.compile()
     const bindings: Value[] = []
     return {
-      prepare: `SELECT ${columnStr} FROM \`${tableName}\` ${where.prepare}`,
+      prepare: `SELECT ${columnStr || '*'} FROM \`${tableName}\` ${where.prepare}`,
       bindings: bindings.concat(where.bindings),
     }
   }

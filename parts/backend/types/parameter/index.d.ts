@@ -6,7 +6,15 @@ declare interface ValidateResult {
   field: string | undefined
 }
 
-declare type Rule = string | string[] | RegExp
+type Convert = string | ((v: any) => any)
+type ObjectRule = {
+  required: boolean,
+  type: string,
+  format?: RegExp,
+  convertType?: Convert
+}
+
+declare type Rule = string | string[] | RegExp | ObjectRule
 declare type Rules = {
   [key: string]: Rule
 }

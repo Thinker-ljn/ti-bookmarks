@@ -52,9 +52,9 @@ export default class WhereGrammar<T extends Data> extends BaseGrammar<T> {
   public compileWhereIn: CompileWhereFn<T> = (where, not?: boolean) => {
     const {column, value} = where
     if (!Array.isArray(value)) { return null }
-    const operator = not ? 'NOT' : '' + ' IN'
+    const operator = not ? 'NOT ' : '' + 'IN'
     return {
-      prepare: `\`${column}\` ${operator} ${parameterize(value)}`,
+      prepare: `\`${column}\` ${operator} (${parameterize(value)})`,
       bindings: value,
     }
   }

@@ -13,4 +13,3 @@ export default class Core extends Koa {
     Model.setConnection(DB.connection)
   }
 }
-

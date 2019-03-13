@@ -9,7 +9,7 @@ export default class BelongsToMany<A extends IdData> {
   protected kB: string
   protected tableName: string
   public connection: PromiseConnection
-  protected properties: Data
+  protected properties: Data = {}
 
   constructor (mA: Model<A>, clsB: ModelConstructor, connection: PromiseConnection) {
     this.mA = mA
@@ -18,15 +18,15 @@ export default class BelongsToMany<A extends IdData> {
     this.tableName = this.parseTableName(mA, clsB)
 
     this.connection = connection
-    this. properties[this.kA] = this.mA.id
+    this.properties[this.kA] = this.mA.id
   }
 
   public formatKey (key: string) {
-    return (key + 'id').toLowerCase()
+    return (key + '_id').toLowerCase()
   }
 
   public parseTableName (mA: Model<A>, cstcB: ModelConstructor) {
-    return [mA.constructor.name, cstcB.name].sort().join('').toLowerCase()
+    return [mA.constructor.name, cstcB.name].sort().join('_').toLowerCase()
   }
 
   get builder () {
@@ -50,16 +50,17 @@ export default class BelongsToMany<A extends IdData> {
     return result
   }
 
-  public async detach (id: number) {
+  public async detach (id: number | number[]) {
     const query = this.builder.where(this.kA, this.mA.id)
-    const result = await query.where(this.kB, id).delete()
+    const result = await query.whereIn(this.kB, id).delete()
 
     return result
   }
 
-  public async sync () {
-
-  }
+  // public async sync (id: number | number[]) {
+  //   const query = this.builder.where(this.kA, this.mA.id)
+  //   const result = await query.whereIn(this.kB, id).delete()
+  // }
 
   public async getIds () {
     const query = this.builder.where(this.kA, this.mA.id)

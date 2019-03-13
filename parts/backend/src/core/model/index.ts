@@ -1,3 +1,4 @@
+import wordPlural from '@/core/plugins/plural';
 import { PromiseConnection } from '../database/connection'
 import Builder from '../database/query/builder'
 import { Data } from '../database/query/grammar/components/where'
@@ -44,7 +45,7 @@ export default class Model<T extends IdData> implements ModelInstance {
   }
 
   public static parseTableName () {
-    return this.name.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase().plural()
+    return wordPlural.call(this.name.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase())
   }
 
   public static async all () {
@@ -71,16 +72,16 @@ export default class Model<T extends IdData> implements ModelInstance {
     defEnumerable(this, ['modelName', 'tableName', 'primaryKey'])
   }
 
-  public set (properties: T) {
-    this.properties = properties
+  public set (properties: Partial<T>) {
+    this.properties = Object.assign(this.properties, properties)
   }
 
   public get () {
     return this.properties
   }
 
-  public async save (properties?: T) {
-    if (properties) { this.properties = properties }
+  public async save (properties?: Partial<T>) {
+    if (properties) { this.set(properties) }
     const query = this.static.newQuery<T>()
     const result = await query.insert(this.properties)
     this.properties.id = result.insertId
@@ -127,6 +128,7 @@ export default class Model<T extends IdData> implements ModelInstance {
   }
 
   public belongsToMany (classB: ModelConstructor) {
+    this.checkPrimaryKey()
     return new BelongsToMany<T>(this, classB, this.static.connection)
   }
 }

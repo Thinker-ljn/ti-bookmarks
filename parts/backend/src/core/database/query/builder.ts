@@ -78,12 +78,17 @@ export default class Builder<T extends Data> {
     return this
   }
 
-  public whereIn (column: Column<T>, value: Value[]) {
+  public whereIn (column: Column<T>, value: Value | Value[]) {
+    if (!Array.isArray(value)) {
+      return this.where(column, value)
+    }
     this.addWhere({column, value, handler: 'compileWhereIn'})
+    return this
   }
 
   public whereNotIn (column: Column<T>, value: Value[]) {
     this.addWhere({column, value, handler: 'compileWhereNotIn'})
+    return this
   }
 
   private addWhere (where: Partial<Where<T>>) {
