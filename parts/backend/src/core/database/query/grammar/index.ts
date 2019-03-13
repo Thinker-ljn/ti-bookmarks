@@ -5,8 +5,9 @@ import InsertGrammar from './components/insert'
 import SelectGrammar from './components/select'
 import UpdateGrammar from './components/update'
 import { Data } from './components/where'
+import TruncateGrammar from './components/truncate';
 
-type SqlType = 'insert' | 'delete' | 'select' | 'update'
+type SqlType = 'insert' | 'delete' | 'select' | 'update' | 'truncate'
 export default function grammarCompile <T extends Data> (
   builder: Builder<T>,
   type: SqlType,
@@ -25,6 +26,9 @@ export default function grammarCompile <T extends Data> (
       break
     case 'update':
       compiler = new UpdateGrammar<T>(builder)
+      break
+    case 'truncate':
+      compiler = new TruncateGrammar<T>(builder)
       break
     default: throw new Error('Grammar Compiler Type Error')
   }

@@ -58,7 +58,10 @@ export default class Builder<T extends Data> {
     return await this.query(compiled)
   }
 
-  public async truncate () {}
+  public async truncate () {
+    const compiled: CompileResult = grammarCompile(this, 'truncate')
+    return await this.query(compiled)
+  }
 
   public where (column: Array<Where<T>>): Builder<T>
   public where (column: Column<T>, operator: Value): Builder<T>
