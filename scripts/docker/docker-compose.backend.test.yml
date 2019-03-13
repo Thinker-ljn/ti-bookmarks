@@ -2,3 +2,19 @@ version: '3'
 services:
   backend: 
     command: "yarn be test"
+  
+  mysql:
+    restart: always
+    image: mysql:5.7.13
+    container_name: ti_mysql01
+    env_file:
+      - ./server/.env
+    volumes:
+      - ti_mysql:/var/lib/mysql
+    expose:
+      - "3306"
+    ports:
+      - "33061:3306"
+
+volumes: 
+  mysql:
