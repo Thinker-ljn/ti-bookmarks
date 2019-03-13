@@ -122,7 +122,7 @@ export default class Model {
 
   public belongsToMany (classB: ModelConstructor) {
     this.checkPrimaryKey()
-    return new BelongsToMany<InstanceData>(this, classB, this.static.connection)
+    return new BelongsToMany(this, classB, this.static.connection)
   }
 
   public getModelName () {

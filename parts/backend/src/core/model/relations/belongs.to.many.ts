@@ -1,17 +1,17 @@
 import { PromiseConnection } from '@/core/database/connection'
 import Builder from '@/core/database/query/builder'
 import { Data } from '@/core/database/query/grammar/components/where'
-import Model, { IdData, ModelConstructor } from '..'
+import Model, { ModelConstructor } from '..'
 
-export default class BelongsToMany<A extends IdData> {
-  protected mA: Model<A>
+export default class BelongsToMany{
+  protected mA: Model
   protected kA: string
   protected kB: string
   protected tableName: string
   public connection: PromiseConnection
   protected properties: Data = {}
 
-  constructor (mA: Model<A>, clsB: ModelConstructor, connection: PromiseConnection) {
+  constructor (mA: Model, clsB: ModelConstructor, connection: PromiseConnection) {
     this.mA = mA
     this.kA = this.formatKey(mA.constructor.name)
     this.kB = this.formatKey(clsB.name)
@@ -25,7 +25,7 @@ export default class BelongsToMany<A extends IdData> {
     return (key + '_id').toLowerCase()
   }
 
-  public parseTableName (mA: Model<A>, cstcB: ModelConstructor) {
+  public parseTableName (mA: Model, cstcB: ModelConstructor) {
     return [mA.constructor.name, cstcB.name].sort().join('_').toLowerCase()
   }
 
