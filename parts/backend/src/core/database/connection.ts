@@ -29,12 +29,16 @@ export class PromiseConnection {
   }
 
   public connect () {
-    this.connection.connect(function (err) {
+    this.connection.connect((err) => {
       if (err) {
         throw err
       }
-      console.info('connected as id ' + this.connection.threadId)
+      console.info('connected as id ') //  + this.connection.threadId
     })
+  }
+
+  public end () {
+    this.connection.end()
   }
 
   public query (options: string, bindings?: Value[] | queryCallback, callback?: queryCallback) {

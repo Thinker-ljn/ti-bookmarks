@@ -38,7 +38,7 @@
     "nodemon": "nodemon --legacy-watch --watch build --inspect=0.0.0.0:9222 --nolazy build/index.js",
     "tsc": "tsc -w",
     "dev": "yarn tsc && yarn nodemon",
-    "test": "mocha -r espower-typescript/guess -r module-alias/register -w --extension ts test/**/*.spec.ts"
+    "test": "mocha -r dotenv/config -r espower-typescript/guess -r module-alias/register -w --extension ts test/**/*.spec.ts"
   },
   "_moduleAliases": {
     "@": "/src"

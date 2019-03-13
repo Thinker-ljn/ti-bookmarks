@@ -10,7 +10,7 @@
     "noUnusedLocals": true,
     "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es6",
+    "target": "es5",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
