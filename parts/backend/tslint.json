@@ -1,0 +1,22 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+        "quotemark": [
+            true,
+            "single",
+            "avoid-escape",
+            "avoid-template"
+        ],
+        "semicolon": false,
+        "space-before-function-paren": true,
+        "interface-name": false,
+        "no-console": [
+            true,
+            "log",
+            "error"
+        ],
+        "forin": false,
+        "object-literal-sort-keys": false,
+        "member-ordering": false
+    }
+}

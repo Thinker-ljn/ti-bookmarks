@@ -4,31 +4,31 @@
  * ['values']
  */
 
-import BaseGrammar, { CompileResult } from "../base";
-import { parameterize } from "../utils";
-import { Data, Value } from "./where";
+import BaseGrammar, { CompileResult } from '../base'
+import { parameterize } from '../utils'
+import { Data, Value } from './where'
 
 export default class InsertGrammar<T extends Data> extends BaseGrammar<T> {
-  compile (data?: T | T[]): CompileResult {
-    if (!data || !Array.isArray(data)) throw 'Inserted Data Is Not A Array!'
-    let {tableName} = this.builder
+  public compile (data?: T | T[]): CompileResult {
+    if (!data || !Array.isArray(data)) { throw new Error('Inserted Data Is Not A Array!') }
+    const {tableName} = this.builder
 
-    let keys = Object.keys(data[0])
-    let columns = keys.map(k => `\`${k}\``).join(', ')
-    let parameters = data.map(() => {
+    const keys = Object.keys(data[0])
+    const columns = keys.map((k) => `\`${k}\``).join(', ')
+    const parameters = data.map(() => {
       return '(' + parameterize(keys) + ')'
     }).join(', ')
 
-    let prepare = `INSERT INTO \`${tableName}\` (${columns}) VALUES ${parameters}`
-    let bindings = this.parseBindings(data)
+    const prepare = `INSERT INTO \`${tableName}\` (${columns}) VALUES ${parameters}`
+    const bindings = this.parseBindings(data)
     return {prepare, bindings}
   }
 
-  parseBindings (data: T[]): Value[] {
-    if (!data.length) return []
-    let keys = Object.keys(data[0])
+  public parseBindings (data: T[]): Value[] {
+    if (!data.length) { return [] }
+    const keys = Object.keys(data[0])
     return data.reduce((bindings: Value[], d) => {
-      return bindings.concat(keys.map(k => d[k]))
+      return bindings.concat(keys.map((k) => d[k]))
     }, [])
   }
 }

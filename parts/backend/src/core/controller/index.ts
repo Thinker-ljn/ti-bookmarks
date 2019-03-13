@@ -1,18 +1,18 @@
-import Parameter from 'parameter'
 import Koa from 'koa'
+import Parameter from 'parameter'
 
 export default class Controller {
-  validator: Parameter
-  ctx: Koa.Context
+  public validator: Parameter
+  public ctx: Koa.Context
   constructor (ctx: Koa.Context) {
     this.validator = new Parameter({
-      validateRoot: true
+      validateRoot: true,
     })
     this.ctx = ctx
   }
 
-  validate (rules: Rules, data: ToBeCheckObj) {
-    let error = this.validator.validate(rules, data)
+  public validate (rules: Rules, data: ToBeCheckObj) {
+    const error = this.validator.validate(rules, data)
     if (error) {
       this.ctx.throw(422, JSON.stringify(error))
     }

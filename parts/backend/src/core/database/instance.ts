@@ -1,15 +1,15 @@
-import Builder from "./query/builder";
-import { Data } from "./query/grammar/components/where";
-import { PromiseConnection } from "./connection";
+import { PromiseConnection } from './connection'
+import Builder from './query/builder'
+import { Data } from './query/grammar/components/where'
 
 export default class DB {
-  static connection: PromiseConnection
+  public static connection: PromiseConnection
 
-  static table <T extends Data>(tableName: string) {
+  public static table <T extends Data> (tableName: string) {
     return new Builder<T>(tableName, DB.connection)
   }
-  
-  static setConnection (connection: PromiseConnection | (() => PromiseConnection)) {
+
+  public static setConnection (connection: PromiseConnection | (() => PromiseConnection)) {
     if (typeof connection === 'function') {
       DB.connection = connection()
     } else {

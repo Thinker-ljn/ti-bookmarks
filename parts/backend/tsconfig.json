@@ -16,7 +16,13 @@
       "@/*": ["src/*"],
       "@test/*": ["test/*"]
     },
-    "typeRoots" : ["../../node_modules/@types", "./types"]
+    "typeRoots" : ["../../node_modules/@types", "./types"],
+    "plugins": [
+      { 
+        "name": "typescript-tslint-plugin", 
+        "configFile": "./tslint.json"
+      }
+    ]
   },
   "include": ["src", "test"],
   "exclude": ["build",  "node_modules", "public"]

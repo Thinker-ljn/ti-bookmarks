@@ -1,74 +1,74 @@
-import { PromiseConnection } from "@/core/database/connection";
-import Model, { ModelConstructor, IdData } from "..";
-import Builder from "@/core/database/query/builder";
-import { Data } from "@/core/database/query/grammar/components/where";
+import { PromiseConnection } from '@/core/database/connection'
+import Builder from '@/core/database/query/builder'
+import { Data } from '@/core/database/query/grammar/components/where'
+import Model, { IdData, ModelConstructor } from '..'
 
 export default class BelongsToMany<A extends IdData> {
-  protected _mA: Model<A>
-  protected _kA: string
-  protected _kB: string
-  protected _tableName: string
-  connection: PromiseConnection
-  protected _properties: Data
+  protected mA: Model<A>
+  protected kA: string
+  protected kB: string
+  protected tableName: string
+  public connection: PromiseConnection
+  protected properties: Data
 
   constructor (mA: Model<A>, clsB: ModelConstructor, connection: PromiseConnection) {
-    this._mA = mA
-    this._kA = this.formatKey(mA.constructor.name)
-    this._kB = this.formatKey(clsB.name)
-    this._tableName = this.parseTableName(mA, clsB)
+    this.mA = mA
+    this.kA = this.formatKey(mA.constructor.name)
+    this.kB = this.formatKey(clsB.name)
+    this.tableName = this.parseTableName(mA, clsB)
 
     this.connection = connection
-    this. _properties[this._kA] = this._mA.id
+    this. properties[this.kA] = this.mA.id
   }
 
-  formatKey (key: string) {
-    return (key + '_id').toLowerCase()
+  public formatKey (key: string) {
+    return (key + 'id').toLowerCase()
   }
 
-  parseTableName (mA: Model<A>, cstcB: ModelConstructor) {
-    return [mA.constructor.name, cstcB.name].sort().join('_').toLowerCase()
+  public parseTableName (mA: Model<A>, cstcB: ModelConstructor) {
+    return [mA.constructor.name, cstcB.name].sort().join('').toLowerCase()
   }
 
   get builder () {
-    return new Builder(this._tableName, this.connection)
+    return new Builder(this.tableName, this.connection)
   }
 
-  async attach (ids: number | number[]) {
-    let datas: Data[] = []
+  public async attach (ids: number | number[]) {
+    const datas: Data[] = []
     if (!Array.isArray(ids)) {
       ids = [ids]
     }
-    ids.forEach(id => {
-      let data: Data = {}
-      data[this._kA] = this._mA.id
-      data[this._kB] = id
+    ids.forEach((id) => {
+      const data: Data = {}
+      data[this.kA] = this.mA.id
+      data[this.kB] = id
       datas.push(data)
     })
 
-    let result = await this.builder.insert(datas)
+    const result = await this.builder.insert(datas)
 
     return result
   }
 
-  async detach (id: number) {
-    let query = this.builder.where(this._kA, this._mA.id)
-    let result = await query.where(this._kB, id).delete()
+  public async detach (id: number) {
+    const query = this.builder.where(this.kA, this.mA.id)
+    const result = await query.where(this.kB, id).delete()
 
     return result
   }
-  
-  async sync () {
+
+  public async sync () {
 
   }
 
-  async getIds () {
-    let query = this.builder.where(this._kA, this._mA.id)
-    return await query.select(this._kB)
+  public async getIds () {
+    const query = this.builder.where(this.kA, this.mA.id)
+    return await query.select(this.kB)
   }
 
-  async get () {
-    let query = this.builder.where(this._kA, this._mA.id)
-    let result = await query.select()
+  public async get () {
+    const query = this.builder.where(this.kA, this.mA.id)
+    const result = await query.select()
     return result
   }
 }

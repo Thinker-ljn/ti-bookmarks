@@ -1,12 +1,12 @@
 import * as Koa from 'koa'
-import DB from './database';
 import Controller from './controller'
+import DB from './database';
 import Model from './model';
 
 export default class Core extends Koa {
-  DB = DB
-  static Controller = Controller
-  static Model = Model
+  public static Controller = Controller
+  public static Model = Model
+  public DB = DB
   constructor () {
     super()
 

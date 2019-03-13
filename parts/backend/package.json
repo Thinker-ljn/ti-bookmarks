@@ -19,6 +19,7 @@
     "mocha": "^6.0.2",
     "nodemon": "^1.18.10",
     "power-assert": "^1.6.1",
+    "tslint": "^5.13.1",
     "typescript": "^3.3.3333"
   },
   "dependencies": {

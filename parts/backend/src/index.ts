@@ -1,5 +1,5 @@
 import App from './app'
 
-App.listen(80, function () {
-  console.log('app listening on port 80!')
+App.listen(80, () => {
+  console.info('app listening on port 80!')
 })

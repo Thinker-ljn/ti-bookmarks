@@ -1,7 +1,7 @@
-import DB from "./instance";
+import DB from './instance'
 
-import { PromiseConnection } from "./connection";
-let connection = PromiseConnection.Instance
+import { PromiseConnection } from './connection'
+const connection = PromiseConnection.Instance
 connection.connect()
 
 DB.setConnection(connection)

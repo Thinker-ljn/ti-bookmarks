@@ -1,30 +1,29 @@
-import Builder from "../builder";
-import WhereGrammar, { Data, Value } from "./components/where";
+import Builder from '../builder'
+import WhereGrammar, { Data, Value } from './components/where'
 
-export type CompileResult = {
+export interface CompileResult {
   prepare: string,
-  bindings: Value[]
+  bindings: Value[],
 }
 
 interface GrammarInstance<T extends Data> {
-  components: GrammarConstructor<T>[]
+  components: Array<GrammarConstructor<T>>
   builder: Builder<T>
 }
 
-export interface GrammarConstructor<T extends Data> {
-  new (builder: Builder<T>): GrammarInstance<T>
-}
+export type GrammarConstructor<T extends Data> = new (builder: Builder<T>) => GrammarInstance<T>
 
 export default abstract class BaseGrammar<T extends Data> implements GrammarInstance<T> {
-  components: GrammarConstructor<T>[] = []
-  builder: Builder<T>
-  abstract compile (data?: T | T[]): CompileResult
+  public components: Array<GrammarConstructor<T>> = []
+  public builder: Builder<T>
+  public abstract compile (data?: T | T[]): CompileResult
 
   constructor (builder: Builder<T>) {
     this.builder = builder
   }
 }
 
+// tslint:disable-next-line: max-classes-per-file
 export abstract class BaseMainGrammar<T extends Data> extends BaseGrammar<T> {
-  abstract whereCompiler: WhereGrammar<T>
+  public abstract whereCompiler: WhereGrammar<T>
 }

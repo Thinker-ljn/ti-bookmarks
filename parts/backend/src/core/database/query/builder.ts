@@ -1,20 +1,20 @@
-import grammarCompile from "./grammar";
-import { Column, Data, Value } from "./grammar/components/where";
-import { Where, Operator } from "./grammar/components/where";
-import { CompileResult } from "./grammar/base";
-import { PromiseConnection } from "../connection";
+import { PromiseConnection } from '../connection'
+import grammarCompile from './grammar'
+import { CompileResult } from './grammar/base'
+import { Column, Data, Value } from './grammar/components/where'
+import { Operator, Where } from './grammar/components/where'
 
 type BuilderMode = 'query' | 'format'
 export default class Builder<T extends Data> {
-  connection: PromiseConnection
-  tableName: string
-  from: string
-  wheres: Where<T>[] = []
-  columns: Column<T>[] = []
-  distinct: boolean = false
-  data: T[]
-  completed: false
-  mode: BuilderMode
+  public connection: PromiseConnection
+  public tableName: string
+  public from: string
+  public wheres: Array<Where<T>> = []
+  public columns: Array<Column<T>> = []
+  public distinct: boolean = false
+  public data: T[]
+  public completed: false
+  public mode: BuilderMode
   constructor (tableName: string, connection: PromiseConnection, mode: BuilderMode = 'format') {
     this.tableName = tableName
     this.from = tableName
@@ -22,7 +22,7 @@ export default class Builder<T extends Data> {
     this.mode = mode
   }
 
-  async query ({prepare, bindings}: CompileResult): Promise<any> {
+  public async query ({prepare, bindings}: CompileResult): Promise<any> {
     prepare = prepare.trim()
     if (this.connection.state === 'disconnected' || this.mode === 'format') {
       return await Promise.resolve(this.connection.format(prepare, bindings))
@@ -30,44 +30,44 @@ export default class Builder<T extends Data> {
     return await this.connection.query(prepare, bindings)
   }
 
-  async all () {}
+  public async all () {}
 
-  async find (id: number) {
+  public async find (id: number) {
     return await this.where('id', id).select()
   }
 
-  async select (...columns: Column<T>[]) {
+  public async select (...columns: Array<Column<T>>) {
     this.columns = columns
-    let compiled: CompileResult = grammarCompile(this, 'select')
+    const compiled: CompileResult = grammarCompile(this, 'select')
     return await this.query(compiled)
   }
 
-  async insert (data: T | T[]) {
+  public async insert (data: T | T[]) {
     if (!Array.isArray(data)) {
       data = [data]
     }
-    let compiled: CompileResult = grammarCompile(this, 'insert', data)
+    const compiled: CompileResult = grammarCompile(this, 'insert', data)
     return await this.query(compiled)
   }
 
-  async update (data: T) {
-    let compiled: CompileResult = grammarCompile(this, 'update', data)
+  public async update (data: T) {
+    const compiled: CompileResult = grammarCompile(this, 'update', data)
     return await this.query(compiled)
   }
 
-  async delete () {
-    let compiled: CompileResult = grammarCompile(this, 'delete')
+  public async delete () {
+    const compiled: CompileResult = grammarCompile(this, 'delete')
     return await this.query(compiled)
   }
 
-  async truncate () {}
+  public async truncate () {}
 
-  where (column: Where<T>[]): Builder<T>
-  where (column: Column<T>, operator: Value): Builder<T> 
-  where (column: Column<T>, operator: Operator, value: Value): Builder<T> 
-  where (column: any, operator?: any, value?: any) {
+  public where (column: Array<Where<T>>): Builder<T>
+  public where (column: Column<T>, operator: Value): Builder<T>
+  public where (column: Column<T>, operator: Operator, value: Value): Builder<T>
+  public where (column: any, operator?: any, value?: any) {
     if (Array.isArray(column)) {
-      let wheres = column
+      const wheres = column
       wheres.forEach((where) => {
           this.addWhere(where)
       })
@@ -75,25 +75,25 @@ export default class Builder<T extends Data> {
       if (!value) {
         value = operator
         operator = '='
-      } 
+      }
       this.addWhere({column, operator, value})
     }
     return this
   }
 
-  whereIn (column: Column<T>, value: Value[]) {
+  public whereIn (column: Column<T>, value: Value[]) {
     this.addWhere({column, value, handler: 'compileWhereIn'})
   }
 
-  whereNotIn (column: Column<T>, value: Value[]) {
+  public whereNotIn (column: Column<T>, value: Value[]) {
     this.addWhere({column, value, handler: 'compileWhereNotIn'})
   }
 
   private addWhere (where: Partial<Where<T>>) {
-    let defaultWhere: Where<T> = {
-      column: '0', operator: '=', value: '1', boolean: 'AND', handler: 'compileWhereBase'
+    const defaultWhere: Where<T> = {
+      column: '0', operator: '=', value: '1', booleanOperator: 'AND', handler: 'compileWhereBase',
     }
-    let fullWhere: Where<T> = Object.assign({}, defaultWhere, where)
+    const fullWhere: Where<T> = Object.assign({}, defaultWhere, where)
     this.wheres.push(fullWhere)
   }
 }
