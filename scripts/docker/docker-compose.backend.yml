@@ -10,10 +10,13 @@ services:
       context: .
       dockerfile: ./scripts/docker/base.dockerfile
     ports:
-    - "8100:80"
+    - "8200:80"
     - "9222:9222"
     expose:
     - "80"
     volumes:
     - ./:/app
-    command: "yarn be:dev"
+    command: "yarn be dev"
+    tty: true
+    environment: 
+    - TERM=xterm-256color`

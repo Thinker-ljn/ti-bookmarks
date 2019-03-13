@@ -4,7 +4,6 @@ import { CompileResult } from './grammar/base'
 import { Column, Data, Value } from './grammar/components/where'
 import { Operator, Where } from './grammar/components/where'
 
-type BuilderMode = 'query' | 'format'
 export default class Builder<T extends Data> {
   public connection: PromiseConnection
   public tableName: string
@@ -14,17 +13,15 @@ export default class Builder<T extends Data> {
   public distinct: boolean = false
   public data: T[]
   public completed: false
-  public mode: BuilderMode
-  constructor (tableName: string, connection: PromiseConnection, mode: BuilderMode = 'format') {
+  constructor (tableName: string, connection: PromiseConnection) {
     this.tableName = tableName
     this.from = tableName
     this.connection = connection
-    this.mode = mode
   }
 
   public async query ({prepare, bindings}: CompileResult): Promise<any> {
     prepare = prepare.trim()
-    if (this.connection.state === 'disconnected' || this.mode === 'format') {
+    if (this.connection.state === 'disconnected') {
       return await Promise.resolve(this.connection.format(prepare, bindings))
     }
     return await this.connection.query(prepare, bindings)

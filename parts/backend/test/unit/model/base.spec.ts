@@ -23,20 +23,45 @@ describe('model Test', () => {
       assert(test.modelName === 'TestModel')
     })
 
-    it ('test model table name is testmodels', () => {
-      assert(test.tableName === 'testmodels')
+    it ('test model table name is test_models', () => {
+      assert(test.tableName === 'test_models')
     })
 
-    it ('test model query', async () => {
+    it ('test model save query', async () => {
       test.set({
         a: 1,
         b: '',
         c: true,
       })
 
-
       const actual = await test.save()
-      const expected = 'INSERT INTO `testmodels` (`a`, `b`, `c`) VALUES (1, \'\', true)'
+      const expected = 'INSERT INTO `test_models` (`a`, `b`, `c`) VALUES (1, \'\', true)'
+      assert(expected === actual)
+    })
+
+    it ('test model update query', async () => {
+      test.set({
+        id: 1,
+        a: 1,
+        b: '',
+        c: true,
+      })
+
+      const actual = await test.update()
+      const expected = 'UPDATE `test_models` SET `a` = 1, `b` = \'\', `c` = true WHERE `id` = 1'
+      assert(expected === actual)
+    })
+
+    it ('test model delete query', async () => {
+      test.set({
+        id: 1,
+        a: 1,
+        b: '',
+        c: true,
+      })
+
+      const actual = await test.delete()
+      const expected = 'DELETE FROM `test_models` WHERE `id` = 1'
       assert(expected === actual)
     })
   })

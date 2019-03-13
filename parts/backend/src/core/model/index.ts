@@ -44,7 +44,7 @@ export default class Model<T extends IdData> implements ModelInstance {
   }
 
   public static parseTableName () {
-    return this.name.replace(/([a-z])([A-Z])/g, '$1$2').toLowerCase().plural()
+    return this.name.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase().plural()
   }
 
   public static async all () {
@@ -58,7 +58,6 @@ export default class Model<T extends IdData> implements ModelInstance {
     }
 
     const model = new this()
-
     model.properties = result[0]
     return model
   }
@@ -90,22 +89,41 @@ export default class Model<T extends IdData> implements ModelInstance {
   }
 
   public async update (properties?: T) {
-    if (properties) { this.properties = properties }
+    if (properties) {
+      this.properties = properties
+    }
+
+    this.checkPrimaryKey()
 
     const query = this.static.newQuery()
     const pkValue = this.properties[this.primaryKey]
-    const result = await query.where(this.primaryKey, pkValue).update(this.properties)
+    const data = Object.keys(this.properties)
+    .filter(k => k !== this.primaryKey)
+    .reduce((prev: T, k) => {
+      prev[k] = this.properties[k]
+      return prev
+    }, {})
+    const result = await query.where(this.primaryKey, pkValue).update(data)
 
     return result
   }
 
   public async delete (properties?: T) {
     if (properties) { this.properties = properties }
+
+    this.checkPrimaryKey()
+
     const pkValue = this.properties[this.primaryKey]
     const query = this.static.newQuery()
     const result = await query.where(this.primaryKey, pkValue).delete()
 
     return result
+  }
+
+  private checkPrimaryKey () {
+    if (!this.properties[this.primaryKey]) {
+      throw Error('Update Method Nedd A PrimaryKey')
+    }
   }
 
   public belongsToMany (classB: ModelConstructor) {
