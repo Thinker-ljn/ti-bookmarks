@@ -1,4 +1,4 @@
-declare module 'parameter';
+declare module 'parameter'
 
 declare interface ValidateResult {
   message: string,
