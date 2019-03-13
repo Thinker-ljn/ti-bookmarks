@@ -4,13 +4,11 @@ import serve from 'koa-static'
 import 'module-alias/register'
 import path from 'path'
 import Core from './core';
-import plural from './core/plugins/plural';
 dotenv.config()
-String.prototype.plural = plural
 
-const App = new Core()
+const app = new Core()
 
-App.use(serve(path.join(__dirname, '..', 'public')))
-App.use(bodyParser())
+app.use(serve(path.join(__dirname, '..', 'public')))
+app.use(bodyParser())
 
-export default App
+export default app
