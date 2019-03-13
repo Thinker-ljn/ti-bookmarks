@@ -2,16 +2,13 @@ import Core from '@/core';
 import SpacedRepetition from '../spaced-repetition';
 import Bookmark, { BookmarkData } from './model';
 
-// type BookmarkForm = Partial<BookmarkData> & {tag_id: string}
-interface CreateParams {
-  name: string
-  url: string
-  tag_id: string
-  repeat?: 1 | 0
-}
-
 interface UpdateParams extends Partial<BookmarkData> {
   id: number
+}
+
+type CreateParams = Pick<BookmarkData, ('name' | 'url')> & {
+  tag_id: string,
+  repeat?: 1 | 0,
 }
 
 export default class BookmarkController extends Core.Controller {
@@ -58,11 +55,11 @@ export default class BookmarkController extends Core.Controller {
   }
 
   public async update ($form: UpdateParams) {
-    const bk = await Bookmark.find($form.id)
-    // if ($form.name) { bk.name = $form.name }
-    // if ($form.url) { bk.url = $form.url }
+    const bk = await Bookmark.find<Bookmark>($form.id)
+    if ($form.name) { bk.name = $form.name }
+    if ($form.url) { bk.url = $form.url }
 
-    await bk.save($form)
+    await bk.save()
 
     return bk
   }

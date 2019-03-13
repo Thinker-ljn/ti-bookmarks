@@ -11,7 +11,6 @@ export default class Builder<T extends Data> {
   public wheres: Array<Where<T>> = []
   public columns: Array<Column<T>> = []
   public distinct: boolean = false
-  public data: T[]
   public completed: false
   constructor (tableName: string, connection: PromiseConnection) {
     this.tableName = tableName
@@ -27,7 +26,9 @@ export default class Builder<T extends Data> {
     return await this.connection.query(prepare, bindings)
   }
 
-  public async all () {}
+  public async all () {
+    return this.select()
+  }
 
   public async find (id: number) {
     return await this.where('id', id).select()

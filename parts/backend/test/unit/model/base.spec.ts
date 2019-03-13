@@ -1,18 +1,17 @@
 import * as assert from 'power-assert'
 
 import { PromiseConnection } from '@/core/database/connection';
-import Model, { IdData } from '@/core/model';
+import Model from '@/core/model';
 Model.setConnection(PromiseConnection.Instance)
 
-interface TestData extends IdData {
-  a: number,
-  b: string,
-  c: boolean
-}
 describe('model Test', () => {
-  class TestModel<T extends TestData> extends Model<T> {}
-  class Tag<T extends IdData> extends Model<T> {}
-  class Bookmark<T extends IdData> extends Model<T> {
+  class TestModel extends Model {
+    a: number
+    b: string
+    c: boolean
+  }
+  class Tag extends Model {}
+  class Bookmark extends Model {
     public tags () {
       return this.belongsToMany(Tag)
     }
@@ -22,11 +21,11 @@ describe('model Test', () => {
 
   describe('model instance', () => {
     it ('test model name is TestModel', () => {
-      assert(test.modelName === 'TestModel')
+      assert(test.getModelName() === 'TestModel')
     })
 
     it ('test model table name is test_models', () => {
-      assert(test.tableName === 'test_models')
+      assert(test.getTableName() === 'test_models')
     })
 
     it ('test model find', async () => {

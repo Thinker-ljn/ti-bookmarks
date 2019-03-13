@@ -1,37 +1,49 @@
 import Core from '@/core';
-import Tag from './model';
+import Tag, { TagData } from './model';
 
+interface UpdateParams extends Partial<TagData> {
+  id: number
+}
+
+type CreateParams = Pick<TagData, ('name' | 'parent_id')>
+interface GetParams {
+  tree: 1 | 0
+}
+type TagTreeNode = TagData & {children: TagTreeNode[]}
+type TagTree = TagTreeNode[]
+interface MapTree {[key: string]: TagTreeNode[]}
 export default class TagController extends Core.Controller {
-  public async index ($get) {
-    const tags = await Tag.all()
+  public async index ($get: GetParams) {
+    const tags: TagData[] = await Tag.all()
     if (!$get.tree) { return tags }
-    const result = {
+    const result: TagTreeNode = {
       id: 0,
+      parent_id: 0,
       name: '标签',
       children: [],
     }
 
-    const map = tags.reduce((prev, curr) => {
+    const map: MapTree = tags.reduce((prev: MapTree, curr: TagTreeNode) => {
       if (!prev[curr.parent_id]) { prev[curr.parent_id] = [] }
       prev[curr.parent_id].push(curr)
       return prev
     }, {})
 
-    function getTagChildren (node) {
-      const children = map[node.id] ? map[node.id] : []
-      let _children = []
-      for (const child of children) {
+    function getTagChildren (node: TagTreeNode) {
+      const beforeChildren = map[node.id] ? map[node.id] : []
+      const afterChildren: TagTree = []
+      for (const child of beforeChildren) {
         child.children = getTagChildren(child)
-        _children.push(child)
+        afterChildren.push(child)
       }
-      return _children
+      return afterChildren
     }
     result.children = getTagChildren(result)
 
     return [result]
   }
 
-  public async create ($form) {
+  public async create ($form: CreateParams) {
     this.validate({
       name: {
         type: 'string',
@@ -54,7 +66,7 @@ export default class TagController extends Core.Controller {
     return tag
   }
 
-  public async update ($form) {
+  public async update ($form: UpdateParams) {
     this.validate({
       id: 'int',
       name: {
@@ -69,7 +81,7 @@ export default class TagController extends Core.Controller {
         type: 'int',
       },
     }, $form)
-    const tag = Tag.find($form.id)
+    const tag = await Tag.find<Tag>($form.id)
     if ($form.name) { tag.name = $form.name }
     if ($form.parent_id) { tag.parent_id = $form.parent_id }
 
@@ -78,16 +90,17 @@ export default class TagController extends Core.Controller {
     return tag
   }
 
-  public async delete (id) {
+  public async delete (id: number) {
     const tag = await Tag.find(id)
 
     await tag.delete()
     return tag
   }
 
-  public async bookmarks (id) {
-    const tag = await Tag.find(id)
-    const tagBkIds = await tag.bookmarks().getIds()
+  public async bookmarks (id: number) {
+    const tag = await Tag.find<Tag>(id)
+    interface T { bookmark_id: number }
+    const tagBkIds: T[] = await tag.bookmarks().getIds()
     return {[id]: tagBkIds.map(bk => bk.bookmark_id)}
   }
 }

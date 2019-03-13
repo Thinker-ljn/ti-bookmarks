@@ -19,6 +19,7 @@
         "forin": false,
         "object-literal-sort-keys": false,
         "member-ordering": false,
-        "max-classes-per-file": false
+        "max-classes-per-file": false,
+        "variable-name": [true, "any", "allow-snake-case"]
     }
 }

@@ -3,12 +3,12 @@ import { Data } from '@/core/database/query/grammar/components/where';
 import Cs133 from '@/core/plugins/Cs133';
 import Bookmark from './bookmark/model';
 
-interface SpacedRepetitionData extends Data {
+export interface SpacedRepetitionData extends Data {
   name: string
 }
 
 const repetition = [2, 7, 14, 30, 90]
-export default class SpacedRepetition extends Core.Model<SpacedRepetitionData> {
+export default class SpacedRepetition extends Core.Model {
   public static async add (model: Bookmark) {
     const currTime = Cs133.formatted()
     for (const days of repetition) {
@@ -18,7 +18,7 @@ export default class SpacedRepetition extends Core.Model<SpacedRepetitionData> {
       const sr = new this()
       sr.set({
         name: model.name || '',
-        model_type: model.modelName,
+        model_type: model.getModelName(),
         model_id: model.id,
         execute_time: formatTime,
         created_at: currTime,

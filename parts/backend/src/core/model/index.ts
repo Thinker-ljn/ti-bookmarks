@@ -4,15 +4,13 @@ import Builder from '../database/query/builder'
 import { Data } from '../database/query/grammar/components/where'
 import BelongsToMany from './relations/belongs.to.many'
 
-export interface IdData extends Data {
-  id?: number
-}
+// tslint:disable-next-line: ban-types
+type NonFunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? never : K }[keyof T]
+export type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>
 
-export interface ModelInstance {
-  id?: number
-}
-
-export type ModelConstructor = new () => ModelInstance
+export type InstanceData = NonFunctionProperties<Model>
+type PropertiesData = InstanceData & Data
+export type ModelConstructor = new () => InstanceData
 
 export function defEnumerable (target: any, propertyKeys: string[]) {
   for (const propertyKey of propertyKeys) {
@@ -22,11 +20,7 @@ export function defEnumerable (target: any, propertyKeys: string[]) {
   }
 }
 
-export default class Model<T extends IdData> implements ModelInstance {
-  get id () {
-    return this.properties.id
-  }
-
+export default class Model {
   public static tableName: string
   public static connection: PromiseConnection
 
@@ -38,41 +32,40 @@ export default class Model<T extends IdData> implements ModelInstance {
     }
   }
 
-  public static newQuery <T extends IdData> () {
+  public static newQuery () {
     if (!this.connection) { throw Error('Model Query Need A IdDatabase Connection!')}
-    if (!this.tableName) { this.tableName = this.parseTableName() }
-    return new Builder<T>(this.tableName, this.connection)
+    return new Builder<PropertiesData>(this.parseTableName(), this.connection)
   }
 
-  public static parseTableName () {
-    return wordPlural.call(this.name.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase())
+  public static parseTableName (): string {
+    return this.tableName ||
+      (this.tableName = wordPlural.call(this.name.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()))
   }
 
   public static async all () {
     return await this.newQuery().all()
   }
 
-  public static async find (id: number) {
+  public static async find <T extends Model>(id: number) {
     const result = await this.newQuery().find(id)
     if (!result.length) {
       throw new Error('Cannot find the model')
     }
-
-    const model = new this()
+    const model = (new this()) as T
     model.properties = result[0]
     return model
   }
 
   protected static: typeof Model = this.constructor as typeof Model
-  public readonly tableName: string = this.static.parseTableName()
-  public readonly modelName: string = this.static.name
   protected readonly primaryKey: string = 'id'
-  protected properties: T
+  protected properties: PropertiesData
+  // ---- instance properties ----
+  public id?: number
   constructor () {
-    defEnumerable(this, ['modelName', 'tableName', 'primaryKey'])
+    defEnumerable(this, ['primaryKey'])
   }
 
-  public set (properties: Partial<T>) {
+  public set (properties: Partial<PropertiesData>) {
     this.properties = Object.assign(this.properties, properties)
   }
 
@@ -80,16 +73,16 @@ export default class Model<T extends IdData> implements ModelInstance {
     return this.properties
   }
 
-  public async save (properties?: Partial<T>) {
+  public async save (properties?: Partial<PropertiesData>) {
     if (properties) { this.set(properties) }
-    const query = this.static.newQuery<T>()
+    const query = this.static.newQuery()
     const result = await query.insert(this.properties)
     this.properties.id = result.insertId
 
     return result
   }
 
-  public async update (properties?: T) {
+  public async update (properties?: PropertiesData) {
     if (properties) {
       this.properties = properties
     }
@@ -100,7 +93,7 @@ export default class Model<T extends IdData> implements ModelInstance {
     const pkValue = this.properties[this.primaryKey]
     const data = Object.keys(this.properties)
     .filter(k => k !== this.primaryKey)
-    .reduce((prev: T, k) => {
+    .reduce((prev: PropertiesData, k) => {
       prev[k] = this.properties[k]
       return prev
     }, {})
@@ -109,7 +102,7 @@ export default class Model<T extends IdData> implements ModelInstance {
     return result
   }
 
-  public async delete (properties?: T) {
+  public async delete (properties?: PropertiesData) {
     if (properties) { this.properties = properties }
 
     this.checkPrimaryKey()
@@ -129,6 +122,14 @@ export default class Model<T extends IdData> implements ModelInstance {
 
   public belongsToMany (classB: ModelConstructor) {
     this.checkPrimaryKey()
-    return new BelongsToMany<T>(this, classB, this.static.connection)
+    return new BelongsToMany<InstanceData>(this, classB, this.static.connection)
+  }
+
+  public getModelName () {
+    return this.static.name
+  }
+
+  public getTableName () {
+    return this.static.parseTableName()
   }
 }

@@ -8,7 +8,7 @@ declare interface ValidateResult {
 
 type Convert = string | ((v: any) => any)
 type ObjectRule = {
-  required: boolean,
+  required?: boolean,
   type: string,
   format?: RegExp,
   convertType?: Convert
