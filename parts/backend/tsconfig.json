@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "watch": true,
     "outDir": "./build",
     "sourceMap": true,
     "strictNullChecks": true,
@@ -9,8 +8,8 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es5",
+    "module": "CommonJs",
+    "target": "es6",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],

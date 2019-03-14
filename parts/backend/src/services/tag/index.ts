@@ -58,11 +58,9 @@ export default class TagController extends Core.Controller {
     }, $form)
 
     const tag = new Tag()
-    await tag.save({
-      name: $form.name,
-      parent_id: $form.parent_id || 0,
-    })
-
+    tag.name = $form.name
+    tag.parent_id = $form.parent_id || 0
+    await tag.save()
     return tag
   }
 

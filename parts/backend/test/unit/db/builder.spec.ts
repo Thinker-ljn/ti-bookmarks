@@ -5,6 +5,9 @@ import * as assert from 'power-assert'
 DB.setConnection(PromiseConnection.Instance)
 
 describe('Query Build', () => {
+  before(() => {
+    PromiseConnection.Instance.end()
+  })
   describe('Select Query', () => {
     it('Test 1', async () => {
       const builder = DB.table('table')

@@ -10,7 +10,7 @@ type Path = string
 interface ObjectRoute {m: Method, p: Path, h: Handler}
 type SimpleRoute = [Method, Path, Handler]
 type Route = ObjectRoute | SimpleRoute
-type Routes = Route[]
+export type Routes = Route[]
 type Next = () => Promise<any>
 
 function des (route: Route): SimpleRoute {
@@ -22,15 +22,15 @@ function des (route: Route): SimpleRoute {
 }
 
 const dispatch = async (execFnOrCtrl: Handler, ctx: Context, next: Next) => {
-  let result: any = ''
+  let result: any = ' '
   if (typeof execFnOrCtrl === 'function') {
     result = await execFnOrCtrl(ctx)
   } else if (typeof execFnOrCtrl === 'string') {
     const [ctrl, fn] = execFnOrCtrl.split('@')
     try {
-      const Controller = require('../services/' + ctrl + '/index.js')
+      const classController = require('@/services/' + ctrl + '/index.js').default
 
-      const controller = new Controller(ctx)
+      const controller = new classController(ctx)
       const method = controller[fn]
       const params = parseParams(method, ctx)
       result = await method.apply(controller, params)
@@ -46,12 +46,11 @@ const dispatch = async (execFnOrCtrl: Handler, ctx: Context, next: Next) => {
   if (typeof result === 'object') {
     result = JSON.stringify(result)
   }
-
   ctx.body = result
   next()
 }
 
-export const init = (routes: Routes) => {
+export const initRouter = (routes: Routes) => {
   const router = new Router()
 
   routes.forEach(route => {
@@ -61,4 +60,6 @@ export const init = (routes: Routes) => {
       await dispatch(h, ctx, next)
     })
   })
+
+  return router
 }

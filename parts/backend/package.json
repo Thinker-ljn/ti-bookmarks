@@ -18,10 +18,11 @@
     "@types/power-assert": "^1.5.0",
     "@types/supertest": "^2.0.7",
     "espower-typescript": "^9.0.1",
+    "intelli-espower-loader": "^1.0.1",
     "mocha": "^6.0.2",
     "nodemon": "^1.18.10",
     "power-assert": "^1.6.1",
-    "supertest": "^4.0.0",
+    "supertest": "3.3.0",
     "tslint": "^5.13.1",
     "typescript": "^3.3.3333"
   },
@@ -37,12 +38,17 @@
   },
   "types": "types/*",
   "scripts": {
-    "nodemon": "nodemon --legacy-watch --watch build --inspect=0.0.0.0:9222 --nolazy build/index.js",
+    "nodemon": "nodemon -r module-alias/register -r dotenv/config --legacy-watch --watch build --inspect=0.0.0.0:9222 --nolazy --delay 1500ms build/src/index.js",
     "tsc": "tsc -w",
     "dev": "yarn tsc && yarn nodemon",
-    "test": "mocha -r dotenv/config -r espower-typescript/guess -r module-alias/register -w --extension ts test/**/*.spec.ts"
+    "test2": "mocha -r dotenv/config -r module-alias/register --inspect=0.0.0.0:9222 --nolazy -w  build/test/**/*.spec.js",
+    "testJs": "mocha -r dotenv/config -r module-alias/register -r intelli-espower-loader --inspect=0.0.0.0:9222 --nolazy -w  build/test/**/*.spec.js",
+    "testTs": "mocha -r dotenv/config -r espower-typescript/guess -r module-alias/register --inspect=0.0.0.0:9222 --nolazy -w --extension ts test/**/*.spec.ts"
+  },
+  "directories": {
+    "test": "build/test/"
   },
   "_moduleAliases": {
-    "@": "/src"
+    "______": "/defined/in/-/outside/package.json"
   }
 }

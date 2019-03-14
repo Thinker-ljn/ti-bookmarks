@@ -2,13 +2,17 @@ import * as assert from 'power-assert'
 
 import { PromiseConnection } from '@/core/database/connection';
 import Model from '@/core/model';
+
 Model.setConnection(PromiseConnection.Instance)
 
 describe('model Test', () => {
+  before(() => {
+    PromiseConnection.Instance.end()
+  })
   class TestModel extends Model {
-    a: number
-    b: string
-    c: boolean
+    public a: number | undefined = undefined
+    public b: string | undefined = undefined
+    public c: boolean | undefined = undefined
   }
   class Tag extends Model {}
   class Bookmark extends Model {
@@ -35,7 +39,7 @@ describe('model Test', () => {
     })
 
     it ('test model save query', async () => {
-      test.set({
+      test.sync({
         a: 1,
         b: '',
         c: true,
@@ -47,7 +51,7 @@ describe('model Test', () => {
     })
 
     it ('test model update query', async () => {
-      test.set({
+      test.sync({
         id: 1,
         a: 1,
         b: '',
@@ -60,7 +64,7 @@ describe('model Test', () => {
     })
 
     it ('test model delete query', async () => {
-      test.set({
+      test.sync({
         id: 1,
         a: 1,
         b: '',
@@ -76,7 +80,7 @@ describe('model Test', () => {
   describe('model relationship', () => {
     it ('belongs to many Attach test', async () => {
       const bk = new Bookmark()
-      bk.set({id: 2})
+      bk.sync({id: 2})
       const actual = [
         await bk.tags().attach(1),
         await bk.tags().attach([1, 2, 3]),
@@ -90,10 +94,10 @@ describe('model Test', () => {
     })
     it ('belongs to many Detach test', async () => {
       const bk = new Bookmark()
-      bk.set({id: 2})
+      bk.sync({id: 2})
       const actual = [
         await bk.tags().detach(1),
-        await bk.tags().detach([1, 2, 3])
+        await bk.tags().detach([1, 2, 3]),
       ]
       const expected = [
         'DELETE FROM `bookmark_tag` WHERE `bookmark_id` = 2 AND `tag_id` = 1',

@@ -1,5 +1,5 @@
-import Koa from 'koa'
-import Parameter from 'parameter'
+import * as Koa from 'koa'
+import * as Parameter from 'parameter'
 
 export default class Controller {
   public validator: Parameter

@@ -2,7 +2,7 @@ import { Connection, queryCallback } from 'mysql'
 import * as mysql from 'mysql'
 import { Value } from './query/grammar/components/where'
 
-// let connection: Connection
+// env params has injected by dotenv/config.
 export const createConnection = () => {
   return mysql.createConnection({
     host: process.env.MYSQL_DB_HOST,
@@ -33,12 +33,14 @@ export class PromiseConnection {
       if (err) {
         throw err
       }
-      console.info('connected as id ') //  + this.connection.threadId
+      console.info('connected id:' + this.connection.threadId)
     })
   }
 
   public end () {
-    this.connection.end()
+    if (this.state === 'connected' || this.state === 'authenticated') {
+      this.connection.end()
+    }
   }
 
   public query (options: string, bindings?: Value[] | queryCallback, callback?: queryCallback) {
@@ -62,4 +64,3 @@ export class PromiseConnection {
     return this.connection.format(prepareSql, bindings)
   }
 }
-

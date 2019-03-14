@@ -4,6 +4,7 @@ import Builder from '../database/query/builder'
 import { Data } from '../database/query/grammar/components/where'
 import BelongsToMany from './relations/belongs.to.many'
 
+export type Property<T> = T | undefined
 // tslint:disable-next-line: ban-types
 type NonFunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? never : K }[keyof T]
 export type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>
@@ -58,34 +59,58 @@ export default class Model {
 
   protected static: typeof Model = this.constructor as typeof Model
   protected readonly primaryKey: string = 'id'
-  protected properties: PropertiesData
+  protected properties: PropertiesData = {}
   // ---- instance properties ----
-  public id?: number
+  public id?: number = undefined
   constructor () {
-    defEnumerable(this, ['primaryKey'])
+    defEnumerable(this, ['primaryKey', 'properties', 'static'])
   }
 
-  public set (properties: Partial<PropertiesData>) {
-    this.properties = Object.assign(this.properties, properties)
+  public sync (properties?: Partial<PropertiesData>) {
+    // this.properties = Object.assign(this.properties, properties)
+    if (properties) {
+      for (const k in properties) {
+        const descriptor = Reflect.getOwnPropertyDescriptor(this, k)
+        if (descriptor && descriptor.enumerable) {
+          Reflect.set(this, k, properties[k])
+        }
+      }
+    }
+    const keys = Reflect.ownKeys(this)
+    for (const k of keys) {
+      const descriptor = Reflect.getOwnPropertyDescriptor(this, k)
+      if (descriptor && descriptor.enumerable && descriptor.value !== undefined) {
+        Reflect.set(this.properties, k, Reflect.get(this, k))
+      }
+    }
   }
 
-  public get () {
+  public get (properties?: Partial<PropertiesData>) {
+    if (properties) {
+      this.sync(properties)
+    }
+    const keys = Reflect.ownKeys(this)
+    for (const k of keys) {
+      const descriptor = Reflect.getOwnPropertyDescriptor(this, k)
+      if (descriptor && descriptor.enumerable) {
+        Reflect.set(this.properties, k, Reflect.get(this, k))
+      }
+    }
     return this.properties
   }
 
   public async save (properties?: Partial<PropertiesData>) {
-    if (properties) { this.set(properties) }
+    this.sync(properties)
     const query = this.static.newQuery()
     const result = await query.insert(this.properties)
-    this.properties.id = result.insertId
-
+    this.sync({id: result.insertId})
+    // this.properties.id = result.insertId
+    // this.id = result.insertId
     return result
   }
 
   public async update (properties?: PropertiesData) {
-    if (properties) {
-      this.properties = properties
-    }
+    this.sync(properties)
 
     this.checkPrimaryKey()
 
@@ -103,7 +128,7 @@ export default class Model {
   }
 
   public async delete (properties?: PropertiesData) {
-    if (properties) { this.properties = properties }
+    this.sync(properties)
 
     this.checkPrimaryKey()
 

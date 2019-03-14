@@ -1,0 +1,20 @@
+version: '3'
+services:
+  backend: 
+    command: "yarn be testJs"
+    
+  watch: 
+    container_name: ti_watch01
+    restart: always
+    build:
+      context: .
+      dockerfile: ./scripts/docker/base.dockerfile
+    volumes:
+    - ./:/app
+    links:
+    - mysql
+    command: "yarn be tsc"
+    tty: true
+    environment: 
+    - TERM=xterm-256color`
+

@@ -1,5 +1,5 @@
 import Tag from '@/services/tag/model';
-import assert from 'power-assert'
+import * as assert from 'power-assert'
 import * as request from 'supertest'
 import createServer from './server.helper';
 const server = createServer()
@@ -10,7 +10,7 @@ describe('API: tag', () => {
 
   describe('tag:create', () => {
     it('get:', async () => {
-      const res = await request(server).get('/api/tags')
+      const res = await request(server).get('/api/tags?tree=1')
       assert(res.status === 200)
       const data = JSON.parse(res.text)
       assert(Array.isArray(data) === true)

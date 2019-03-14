@@ -2,16 +2,19 @@
   "private": true,
   "workspaces": ["parts/*"],
   "scripts": {
-    "dc": "docker-compose --project-directory .",
-    "dc:be": "yarn dc -f scripts/docker/docker-compose.backend.yml",
-    "dc:be:test": "yarn dc:be -f scripts/docker/docker-compose.backend.test.yml",
+    "dc:be": "docker-compose --project-directory . -f scripts/docker/dc.be.base.yml",
+    "dc:be:dev": "yarn dc:be -f scripts/docker/dc.be.dev.yml",
+    "dc:be:test": "yarn dc:be -f scripts/docker/dc.be.test.yml",
     "dc:be:run": "yarn dc:be run backend bash",
     "dc:be:exec": "yarn dc:be exec backend bash",
     "be": "yarn --cwd ./parts/backend",
     "fe": "yarn --cwd ./parts/frontend"
   },
+  "directories": {
+    "test": "build/test/"
+  },
   "_moduleAliases": {
-    "@": "parts/backend/src",
+    "@": "parts/backend/build/src",
     "#": "parts/frontend/src"
   }
 }

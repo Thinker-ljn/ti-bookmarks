@@ -1,6 +1,6 @@
 import Bookmark from '@/services/bookmark/model';
 import SpacedRepetition from '@/services/spaced-repetition';
-import assert from 'power-assert'
+import * as assert from 'power-assert'
 import * as request from 'supertest'
 import createServer, { app } from './server.helper';
 const server = createServer()

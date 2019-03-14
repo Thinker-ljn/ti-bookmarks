@@ -1,0 +1,40 @@
+# Need relative to app Root directory. use '--project-directory .' in command
+# Example: docker-compose -f scripts/docker/docker-compose.backend.yml --project-directory .
+
+version: '3'
+services:
+  backend: 
+    container_name: ti_backend01
+    restart: always
+    build:
+      context: .
+      dockerfile: ./scripts/docker/base.dockerfile
+    ports:
+    - "8200:80"
+    - "9222:9222"
+    expose:
+    - "80"
+    volumes:
+    - ./:/app
+    links:
+    - mysql
+    command: "yarn be nodemon"
+    tty: true
+    environment: 
+    - TERM=xterm-256color`
+
+  mysql:
+    restart: always
+    image: mysql:5.7.13
+    container_name: ti_mysql01
+    env_file:
+      - ./parts/backend/.env
+    volumes:
+      - mysql:/var/lib/mysql
+    expose:
+      - "3306"
+    ports:
+      - "33601:3306"
+
+volumes: 
+  mysql:

@@ -1,14 +1,15 @@
 import Core from '@/core';
-import { Data } from '@/core/database/query/grammar/components/where';
+import { NonFunctionProperties } from '@/core/model';
 import Cs133 from '@/core/plugins/Cs133';
 import Bookmark from './bookmark/model';
 
-export interface SpacedRepetitionData extends Data {
-  name: string
-}
-
 const repetition = [2, 7, 14, 30, 90]
 export default class SpacedRepetition extends Core.Model {
+  public name?: string = undefined
+  public model_type?: string = undefined
+  public model_id?: number = undefined
+  public reviewed?: 1 | 0 = undefined
+  public execute_time?: string = undefined
   public static async add (model: Bookmark) {
     const currTime = Cs133.formatted()
     for (const days of repetition) {
@@ -16,7 +17,7 @@ export default class SpacedRepetition extends Core.Model {
       const formatTime = time.formatted
 
       const sr = new this()
-      sr.set({
+      sr.sync({
         name: model.name || '',
         model_type: model.getModelName(),
         model_id: model.id,
@@ -27,3 +28,7 @@ export default class SpacedRepetition extends Core.Model {
     }
   }
 }
+
+export type OptionalSpacedRepetitionData = NonFunctionProperties<SpacedRepetition>
+
+export type SpacedRepetitionData = Required<OptionalSpacedRepetitionData>

@@ -10,6 +10,6 @@ export default class Core extends Koa {
   constructor () {
     super()
 
-    Model.setConnection(DB.connection)
+    Core.Model.setConnection(DB.connection)
   }
 }
