@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Launch in Docker",
+        "preLaunchTask": "down-docker",
+        "runtimeExecutable": "yarn",
+        "runtimeArgs": [ "run", "dc:be:test", "up" ],
+        "port": 9222,
+        "restart": true,
+        "timeout": 60000,
+        "localRoot": "${workspaceFolder}",
+        "remoteRoot": "/app",
+        "outFiles": [
+          "${workspaceFolder}/parts/backend/dist/**/*.js"
+        ],
+        "skipFiles": [
+          "<node_internals>/**/*.js",
+        ],
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen"
+      }
+    ]
+  }
