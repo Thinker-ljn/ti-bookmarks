@@ -63,4 +63,8 @@ export class PromiseConnection {
   public format (prepareSql: string, bindings: Value[]) {
     return this.connection.format(prepareSql, bindings)
   }
+
+  public get (property: keyof Connection) {
+    return Reflect.get(this.connection, property)
+  }
 }
