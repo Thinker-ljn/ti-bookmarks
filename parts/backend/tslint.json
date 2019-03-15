@@ -1,5 +1,10 @@
 {
     "extends": "tslint:recommended",
+    "linterOptions": {
+        "exclude": [
+            "artisan"
+        ]
+    },
     "rules": {
         "arrow-parens": false,
         "quotemark": [

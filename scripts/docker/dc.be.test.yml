@@ -1,7 +1,7 @@
 version: '3'
 services:
   backend: 
-    command: "yarn be testJs"
+    command: "yarn be testUnit"
     
   watch: 
     container_name: ti_watch01

@@ -5,7 +5,7 @@ import * as request from 'supertest'
 import createServer, { app } from './server.helper';
 const server = createServer()
 
-describe('API: bookmark', () => {
+describe('API: bookmarks', () => {
   const db = app.DB
   before(async () => {
     await Bookmark.newQuery().truncate()
@@ -13,21 +13,21 @@ describe('API: bookmark', () => {
     await db.table('bookmark_tag').truncate()
   })
 
-  describe('bookmark:create', () => {
+  describe('/api/bookmarks', () => {
     it('get:', async () => {
       const res = await request(server).get('/api/bookmarks')
       assert(res.status === 200)
       assert(res.text === '[]')
     })
 
-    it('create: 422', async () => {
+    it('post: 422', async () => {
       const res = await request(server)
         .post('/api/bookmarks')
         .send('name=test&url=test')
       assert(res.status === 422)
     })
 
-    it('create: 200', async () => {
+    it('post: 200', async () => {
       const res = await request(server)
         .post('/api/bookmarks')
         .send({
@@ -37,7 +37,7 @@ describe('API: bookmark', () => {
       assert(res.status === 200)
     })
 
-    it('create: with repeat and tag_id', async () => {
+    it('post: with repeat and tag_id', async () => {
       const res = await request(server)
         .post('/api/bookmarks')
         .send({
