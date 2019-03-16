@@ -2,14 +2,14 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { PromiseConnection } from '../connection';
 
-type ExecType = 'reset' | 'clean' | 'normal'
+type ExecAction = 'reset' | 'refresh' | 'normal'
 export interface Options {
-  type?: ExecType
+  action?: ExecAction
   path?: string
   extension?: string
 }
 export default class Migration {
-  private path: string = './build/src/database/migrations'
+  private path: string = './src/database/migrations'
   private extension: string = '.js'
   private connection: PromiseConnection
 
@@ -17,17 +17,18 @@ export default class Migration {
     this.connection = connection
   }
 
-  public exec (options: Options) {
-    const type = options.type || 'normal'
+  public exec (options: Options): Promise<any> {
+    const action = options.action || 'normal'
     if (process.env.MODE !== 'cli') {
-      throw Error('Migration Exec Need A Cli Mode!')
+      Promise.reject(Error('Migration Exec Need A Cli Mode!'))
     }
-    if (type === 'clean') {
+    console.info('====== Migration Start ======')
+    if (action === 'reset') {
       return this.dropAllTable()
-    } else if (type === 'reset') {
-      this.dropAllTable().then(() => {
+    } else if (action === 'refresh') {
+      return this.dropAllTable().then(() => {
         return this.migrationFn(options)
-      }, (e: Error) => { throw e })
+      }, (e: Error) => { Promise.reject(e) })
     } else {
       return this.migrationFn(options)
     }
@@ -37,7 +38,9 @@ export default class Migration {
     const dir = options.path || path.resolve(process.cwd(), this.path)
     const extension = options.extension || this.extension
     const migrations = fs.readdirSync(dir).filter(f => f.endsWith(extension))
-    await migrations.forEach (async (filename) => {
+
+    const migrationQuery: Array<Promise<any>> = []
+    migrations.forEach (async (filename) => {
       const fullname = path.join(dir, filename)
       const stats = fs.statSync(fullname)
 
@@ -46,9 +49,13 @@ export default class Migration {
         if (typeof migration !== 'string') {
           migration = migration.default
         }
-        await this.connection.query(migration)
+        console.info(`====== Start Create Table: ${fullname} =====`)
+        migrationQuery.push(this.connection.query(migration))
       }
     })
+    await Promise.all(migrationQuery)
+    console.info('====== Created =====')
+    await this.connection.end()
   }
 
   private async dropAllTable () {
@@ -61,13 +68,17 @@ export default class Migration {
                           information_schema.tables
                         WHERE
                           table_schema = '${databaseName}';`
-
+    console.info('====== Start Drop Table =====')
     await this.connection.query(DISABLE_FOREIGN_KEY)
     const tables: any = await this.connection.query(GET_TABLES)
+    if (!tables.length) {
+      console.info('====== Database Tables Is Empty ======')
+    }
     for (const table of tables) {
       const tableName = table.table_name
       const dropTableSql = `DROP TABLE IF EXISTS ${tableName};`
       await this.connection.query(dropTableSql)
+      console.info(`====== Dropped Table: ${tableName} ======`)
     }
     await this.connection.query(ENABLE_FOREIGN_KEY)
   }

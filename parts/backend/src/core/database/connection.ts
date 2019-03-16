@@ -28,12 +28,15 @@ export class PromiseConnection {
     return this.connection.state
   }
 
-  public connect () {
-    this.connection.connect((err) => {
-      if (err) {
-        throw err
-      }
-      console.info('connected id:' + this.connection.threadId)
+  public connect (): Promise<PromiseConnection> {
+    return new Promise((resolve, reject) => {
+      this.connection.connect((err) => {
+        if (err) {
+          reject(err)
+        }
+        console.info('connected id:' + this.connection.threadId)
+        resolve(PromiseConnection.instance)
+      })
     })
   }
 

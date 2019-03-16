@@ -6,9 +6,6 @@
   "main": "dist/index.js",
   "author": "thinker li",
   "license": "MIT",
-  "bin": {
-    "artisan": "./bin/artisan"
-  },
   "devDependencies": {
     "@types/dotenv": "^6.1.0",
     "@types/koa": "^2.0.48",
@@ -48,7 +45,8 @@
     "test": "mocha -r dotenv/config -r module-alias/register -r intelli-espower-loader --inspect=0.0.0.0:9222 --nolazy -w",
     "testApi": "yarn test build/test/api/**/*.spec.js",
     "testUnit": "yarn test build/test/unit/**/*.spec.js",
-    "testTs": "yarn test --extension ts test/**/*.spec.ts"
+    "testTs": "yarn test --extension ts test/**/*.spec.ts",
+    "artisan": "node ./artisan"
   },
   "directories": {
     "test": "build/test/"
