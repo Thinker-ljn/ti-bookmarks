@@ -1,7 +1,8 @@
 import { PromiseConnection } from '@/core/database/connection'
-import Builder from '@/core/database/query/builder'
+import Builder from '@/core/database/query/Builder'
 import { Data } from '@/core/database/query/grammar/components/where'
 import Model, { ModelConstructor } from '..'
+import { difference, intersection } from 'lodash';
 
 export default class BelongsToMany{
   protected mA: Model
@@ -29,7 +30,7 @@ export default class BelongsToMany{
     return [mA.constructor.name, cstcB.name].sort().join('_').toLowerCase()
   }
 
-  get builder () {
+  private newQuery () {
     return new Builder(this.tableName, this.connection)
   }
 
@@ -45,30 +46,53 @@ export default class BelongsToMany{
       datas.push(data)
     })
 
-    const result = await this.builder.insert(datas)
+    const result = await this.newQuery().insert(datas)
 
     return result
   }
 
   public async detach (id: number | number[]) {
-    const query = this.builder.where(this.kA, this.mA.id)
+    const query = this.newQuery().where(this.kA, this.mA.id)
     const result = await query.whereIn(this.kB, id).delete()
 
     return result
   }
 
-  // public async sync (id: number | number[]) {
-  //   const query = this.builder.where(this.kA, this.mA.id)
-  //   const result = await query.whereIn(this.kB, id).delete()
-  // }
+  public async update (updated:  number | number[]) {
+    return updated
+  }
+
+  public async sync (id: number | number[]) {
+    const ids: number[] = Array.isArray(id) ? id : [id]
+    const current = await this.getIds()
+    const attach = difference(ids, current)
+    const detach = difference(current, ids)
+    const updated = intersection(ids, current)
+
+    if (detach.length) {
+      await this.detach(detach)
+    }
+    if (attach.length) {
+      await this.attach(attach)
+    }
+    if (updated.length) {
+      await this.update(updated)
+    }
+
+    return {
+      attach,
+      detach,
+      updated,
+    }
+  }
 
   public async getIds () {
-    const query = this.builder.where(this.kA, this.mA.id)
+    const query = this.newQuery().where(this.kA, this.mA.id)
     return await query.select(this.kB)
   }
 
   public async get () {
-    const query = this.builder.where(this.kA, this.mA.id)
+    const query = this.newQuery().where(this.kA, this.mA.id)
     const result = await query.select()
     return result
   }
