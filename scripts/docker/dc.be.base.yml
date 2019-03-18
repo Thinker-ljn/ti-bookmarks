@@ -10,7 +10,7 @@ services:
       context: .
       dockerfile: ./scripts/docker/base.dockerfile
     ports:
-    - "8200:80"
+    - "8100:80"
     - "9222:9222"
     expose:
     - "80"

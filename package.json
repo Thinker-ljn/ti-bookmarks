@@ -5,8 +5,7 @@
     "dc:be": "docker-compose --project-directory . -f scripts/docker/dc.be.base.yml",
     "dc:be:dev": "yarn dc:be -f scripts/docker/dc.be.dev.yml",
     "dc:be:test": "yarn dc:be -f scripts/docker/dc.be.test.yml",
-    "dc:be:run": "yarn dc:be run backend bash",
-    "dc:be:exec": "yarn dc:be exec backend bash",
+    "dc:fe:union": "yarn dc:be -f scripts/docker/dc.fe.base.yml -f scripts/docker/dc.fe.union.yml",
     "be": "yarn --cwd ./parts/backend",
     "fe": "yarn --cwd ./parts/frontend"
   },

@@ -1,28 +1,17 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./build",
-    "sourceMap": true,
-    "strictNullChecks": true,
-    "alwaysStrict": true,
-    "moduleResolution": "node",
-    "noUnusedParameters": true,
-    "noUnusedLocals": true,
-    "noImplicitAny": true,
     "module": "CommonJs",
     "target": "es6",
-    "baseUrl": ".",
+    "outDir": "./build",
+    "sourceMap": true,
+    "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
       "@test/*": ["test/*"]
     },
-    "typeRoots" : ["../../node_modules/@types", "./types"],
-    "plugins": [
-      { 
-        "name": "typescript-tslint-plugin", 
-        "configFile": "./tslint.json"
-      }
-    ]
+    "typeRoots" : ["../../node_modules/@types", "./types"]
   },
-  "include": ["src", "test"],
-  "exclude": ["build",  "node_modules", "public"]
+  "include": [ "src", "test" ],
+  "exclude": [ "node_modules", "public",  "build", "test" ]
 }

@@ -1,0 +1,17 @@
+{
+  "exclude": [ "node_modules" ],
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "moduleResolution": "node",
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "plugins": [
+      { 
+        "name": "typescript-tslint-plugin", 
+        "configFile": "./tslint.json"
+      }
+    ]
+  }
+}

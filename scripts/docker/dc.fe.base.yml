@@ -1,0 +1,14 @@
+version: '3'
+services:
+  frontend:
+    container_name: ti_frontend01
+    build:
+      context: .
+      dockerfile: ./scripts/docker/base.dockerfile
+    ports:
+    - "8101:8101"
+    expose:
+      - "8101"
+    volumes:
+    - .:/app
+    command: sh -c "yarn fe && yarn fe start"

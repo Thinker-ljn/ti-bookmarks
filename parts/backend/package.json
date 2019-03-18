@@ -2,9 +2,9 @@
   "private": true,
   "name": "ti-backend",
   "version": "0.0.0",
+  "author": "thinker_ljn",
   "description": "ti-backend",
   "main": "dist/index.js",
-  "author": "thinker li",
   "license": "MIT",
   "devDependencies": {
     "@types/dotenv": "^6.1.0",

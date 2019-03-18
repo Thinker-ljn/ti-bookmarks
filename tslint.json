@@ -1,10 +1,5 @@
 {
     "extends": "tslint:recommended",
-    "linterOptions": {
-        "exclude": [
-            "artisan"
-        ]
-    },
     "rules": {
         "arrow-parens": false,
         "quotemark": [
@@ -25,6 +20,7 @@
         "object-literal-sort-keys": false,
         "member-ordering": false,
         "max-classes-per-file": false,
-        "variable-name": [true, "any", "allow-snake-case"]
+        "max-line-length": { "options": 140 },
+        "variable-name": [true, "ban-keywords", "check-format",  "allow-leading-underscore", "allow-trailing-underscore", "allow-pascal-case", "allow-snake-case"]
     }
 }
