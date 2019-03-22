@@ -16,6 +16,7 @@
             "log",
             "error"
         ],
+        "ordered-imports": false,
         "forin": false,
         "object-literal-sort-keys": false,
         "member-ordering": false,

@@ -1,13 +1,9 @@
-import BookmarksBranch, { DLBookmark } from './branchs/bookmarks';
-import TagsBranch, { DLTag } from './branchs/tags';
-import Tree from './core/tree';
+import { DLBookmark } from './branchs/bookmarks';
+import { DLTag } from './branchs/tags';
 
-class DataLayer extends Tree {
-  public readonly tags = this.registerBranch(TagsBranch) as TagsBranch
-  public readonly bookmarks = this.registerBranch(BookmarksBranch) as BookmarksBranch
-}
+import DataLayerTree from './data-layer-tree';
 
-const DL = new DataLayer()
+const DL = new DataLayerTree()
 
 export default DL
 export {

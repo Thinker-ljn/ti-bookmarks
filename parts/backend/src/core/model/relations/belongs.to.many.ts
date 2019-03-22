@@ -1,10 +1,10 @@
 import { PromiseConnection } from '@/core/database/connection'
-import Builder from '@/core/database/query/Builder'
+import Builder from '@/core/database/query/builder'
 import { Data } from '@/core/database/query/grammar/components/where'
-import Model, { ModelConstructor } from '..'
 import { difference, intersection } from 'lodash';
+import Model, { ModelConstructor } from '..'
 
-export default class BelongsToMany{
+export default class BelongsToMany {
   protected mA: Model
   protected kA: string
   protected kB: string
@@ -58,7 +58,7 @@ export default class BelongsToMany{
     return result
   }
 
-  public async update (updated:  number | number[]) {
+  public async update (updated: number | number[]) {
     return updated
   }
 

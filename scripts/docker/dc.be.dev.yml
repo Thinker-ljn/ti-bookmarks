@@ -11,8 +11,6 @@ services:
       dockerfile: ./scripts/docker/base.dockerfile
     volumes:
     - ./:/app
-    links:
-    - mysql
     command: "yarn be tsc"
     tty: true
     environment: 

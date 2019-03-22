@@ -22,6 +22,7 @@ export type PendingStatus = 'creating' | 'updating' | 'deleting'
 export interface BaseData {
   id?: number,
   __status__?: PendingStatus
+  __uk__?: string[]
 }
 
 export interface BranchData extends BaseData {

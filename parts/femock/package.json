@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "ti-femock",
+  "version": "0.1.0",
+  "author": "thinker_ljn",
+  "description": "ti-femock",
+  "main": "/src/index.js",
+  "license": "ISC",
+  "scripts": {
+    "tsc": "tsc",
+    "gulp": "gulp",
+    "test": "mocha -r espower-typescript/guess test/index.spec.ts"
+  }
+}

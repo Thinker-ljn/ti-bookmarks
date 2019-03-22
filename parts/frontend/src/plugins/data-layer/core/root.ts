@@ -1,8 +1,10 @@
 import axios, { AxiosResponse } from 'axios'
 import { ReplaySubject } from 'rxjs'
+import Tree from './tree';
 const ROUTE_PREFIX = '/api/'
 
-function useInterceptor (subject: RootSource) {
+function useInterceptor (root: Root) {
+  const subject = root.source_
   axios.defaults.baseURL = ROUTE_PREFIX
   axios.interceptors.response.use((response) => {
     subject.next(response)
@@ -16,13 +18,13 @@ function useInterceptor (subject: RootSource) {
 export type RootSource = ReplaySubject<AxiosResponse>
 
 export class Root {
+  public tree: Tree
   public source_: RootSource
 
-  constructor () {
+  constructor (tree: Tree) {
+    this.tree = tree
     this.source_ = new ReplaySubject()
-    useInterceptor(this.source_)
-
-    // this.source_.subscribe(v => console.log('root', v))
+    useInterceptor(this)
   }
 }
 

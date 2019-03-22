@@ -28,20 +28,20 @@ export default class Pendding<T extends BranchData> {
   }
 
   public push (data: T, status: PendingStatus = 'creating'): any {
-    const penddingData = {...data}
-    const __key__  = this.getUniqueKey(penddingData)
-    penddingData.__status__ = status
+    const pendingData = {...data}
+    const __key__  = this.getUniqueKey(pendingData)
+    pendingData.__status__ = status
 
     const config = {params: {__key__}}
 
-    this.sources[status + '_'].next(penddingData)
+    this.sources[status + '_'].next(pendingData)
 
     return config
   }
 
   private merge (source_: Observable<T>, pending_: Subject<T>, scanFn: Accumulator<T>) {
-    return source_.pipe(
-      merge(pending_),
+    return pending_.pipe(
+      merge(source_),
       scan((acc: Dict<T>, curr: T): Dict<T> => {
         return scanFn(acc, curr)
       }, {}),
@@ -52,7 +52,7 @@ export default class Pendding<T extends BranchData> {
   public mergeCreate: MergeFn<T> = (source_) => {
     const scanFn: Accumulator<T> = (acc, curr) => {
       const exist = acc[curr.__key__]
-      if (!exist || curr.id > exist.id) {
+      if (!exist || !curr.__status__ || curr.id > exist.id) {
         acc[curr.__key__] = curr
       }
       return acc
@@ -63,9 +63,9 @@ export default class Pendding<T extends BranchData> {
   public mergeUpdate: MergeFn<T> = (source_, pending_) => {
     const scanFn: Accumulator<T> = (acc, curr) => {
       const exist = acc[curr.id]
-      if (!exist) {
-          acc[curr.__key__] = curr
-        }
+      if (!exist || !curr.__status__) {
+        acc[curr.__key__] = curr
+      }
       return acc
     }
     if (!pending_) { pending_ = this.sources.updating_ }

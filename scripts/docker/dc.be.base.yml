@@ -20,8 +20,6 @@ services:
     - mysql
     command: "yarn be nodemon"
     tty: true
-    environment: 
-    - TERM=xterm-256color`
 
   mysql:
     restart: always

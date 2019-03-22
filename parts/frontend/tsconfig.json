@@ -7,11 +7,12 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
+      "@mock/*": ["../femock/*"],
       "@css/*": ["src/assets/css/*"]
     },
     "target": "es5",
     "types": ["@types/mocha", "@types/power-assert", "@types/react-css-modules"]
   },
-  "include": [ "src" ],
-  "exclude": [ "node_modules", "script", "public", "test" ],
+  "include": [ "src", "test"],
+  "exclude": [ "node_modules", "script", "public" ],
 }

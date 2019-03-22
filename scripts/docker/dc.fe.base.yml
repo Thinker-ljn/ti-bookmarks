@@ -11,4 +11,4 @@ services:
       - "8101"
     volumes:
     - .:/app
-    command: sh -c "yarn fe && yarn fe start"
+    command: sh -c "yarn fe start"

@@ -8,7 +8,7 @@ import BookmarksBranch from '..';
 export const currFilterTag_ = new BehaviorSubject<DLTag>({id: 0, __key__: '', parent_id: 0, name: ''})
 
 type IdMap = IndexMap<boolean>
-
+type Pairwise = [boolean, DLBookmark[]]
 export default class BookmarksFilterByTagFruit extends Fruit<DLBookmark[], BookmarksBranch> {
   public source_ = this.filter()
   constructor (branch: BookmarksBranch) {
@@ -18,9 +18,10 @@ export default class BookmarksFilterByTagFruit extends Fruit<DLBookmark[], Bookm
 
   public filter () {
     const idKeybyTag_ = this.branch.idKeybyTag_
+    const defaultStart: Pairwise = [true, []]
     return this.branch.default_.pipe(
-      startWith([true, []]),
-      combineLatest(idKeybyTag_, currFilterTag_, (bks: DLBookmark[], bkids, tag: DLTag): [boolean, DLBookmark[]] => {
+      combineLatest(idKeybyTag_, currFilterTag_, (bks: DLBookmark[], bkids, tag: DLTag): Pairwise => {
+        console.info(bks)
         if (!tag || !tag.id) { return [true, bks] }
         if (!bkids[tag.id]) { return [false, bks] }
         const ids = bkids[tag.id]
@@ -30,6 +31,8 @@ export default class BookmarksFilterByTagFruit extends Fruit<DLBookmark[], Bookm
         }, {})
         return [true, bks.filter(bk => idMap[bk.id])]
       }),
+      startWith(defaultStart)
+    ).pipe(
       pairwise(),
       map(packet => {
         const [prev, curr] = packet
