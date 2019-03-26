@@ -1,4 +1,4 @@
-import Tag from '@/services/tag/model';
+import Tag from '@be/src/services/tag/model';
 import * as assert from 'power-assert'
 import * as request from 'supertest'
 import createServer from './server.helper';

@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import './index.scss'
 
-import {DLTag} from '@/plugins/data-layer'
+import {DLTag} from '@fe/src/plugins/data-layer'
 import classNames from 'classnames'
 
 export interface TagChangeEvent {

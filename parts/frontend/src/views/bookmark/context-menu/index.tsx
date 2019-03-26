@@ -2,7 +2,7 @@ import * as React from 'react'
 import './index.scss'
 import {off, on} from './trigger'
 
-// import { tuple } from '@/util/type';
+// import { tuple } from '@fe/src/util/type';
 
 export interface MenuItem {
   id: number,

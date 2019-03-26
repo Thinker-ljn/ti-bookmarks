@@ -1,6 +1,6 @@
-import { DLBookmark, DLTag } from '@/plugins/data-layer';
-import Fruit from '@/plugins/data-layer/core/fruit';
-import { IndexMap } from '@/plugins/data-layer/core/types';
+import { DLBookmark, DLTag } from '@fe/src/plugins/data-layer';
+import Fruit from '@fe/src/plugins/data-layer/core/fruit';
+import { IndexMap } from '@fe/src/plugins/data-layer/core/types';
 import { BehaviorSubject } from 'rxjs';
 import { combineLatest, map, pairwise, startWith } from 'rxjs/operators';
 import BookmarksBranch from '..';

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import AppHeader from '@/components/header'
-import Bookmark from '@/views/bookmark'
+import AppHeader from '@fe/src/components/header'
+import Bookmark from '@fe/src/views/bookmark'
 
 import './App.css'
 

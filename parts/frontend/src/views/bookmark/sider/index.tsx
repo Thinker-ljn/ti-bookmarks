@@ -4,7 +4,7 @@ import ContextMenu, { Menu } from '../context-menu'
 import AddTagModal from './add-tag-modal'
 import './index.scss'
 
-import DL, {DLTag} from '@/plugins/data-layer'
+import DL, {DLTag} from '@fe/src/plugins/data-layer'
 import { AntTreeNode } from 'antd/lib/tree'
 import { Dictionary } from 'lodash';
 import { useObservable } from 'rxjs-hooks'

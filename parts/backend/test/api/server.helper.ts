@@ -1,4 +1,4 @@
-import App from '@/app'
+import App from '@be/src/app'
 import { Server } from 'http';
 let server: Server | null = null
 let status = 'close'

@@ -2,8 +2,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import React from 'react'
 import { hot } from 'react-hot-loader'
 
-import App from '@/App'
-import AddBookmark from '@/views/add-bookmark'
+import App from '@fe/src/App'
+import AddBookmark from '@fe/src/views/add-bookmark'
 
 const router = () => (
   <Router>

@@ -1,5 +1,5 @@
-import Bookmark from '@/services/bookmark/model';
-import SpacedRepetition from '@/services/spaced-repetition';
+import Bookmark from '@be/src/services/bookmark/model';
+import SpacedRepetition from '@be/src/services/spaced-repetition';
 import * as assert from 'power-assert'
 import * as request from 'supertest'
 import createServer, { app } from './server.helper';

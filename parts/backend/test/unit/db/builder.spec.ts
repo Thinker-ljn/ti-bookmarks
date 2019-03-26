@@ -1,5 +1,5 @@
-import { PromiseConnection } from '@/core/database/connection';
-import DB from '@/core/database/instance'
+import { PromiseConnection } from '@be/src/core/database/connection';
+import DB from '@be/src/core/database/instance'
 import * as assert from 'power-assert'
 
 DB.setConnection(PromiseConnection.Instance)

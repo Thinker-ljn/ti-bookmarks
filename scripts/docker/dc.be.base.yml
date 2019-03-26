@@ -6,9 +6,7 @@ services:
   backend: 
     container_name: ti_backend01
     restart: always
-    build:
-      context: .
-      dockerfile: ./scripts/docker/base.dockerfile
+    image: ti-base-node
     ports:
     - "8100:80"
     - "9222:9222"

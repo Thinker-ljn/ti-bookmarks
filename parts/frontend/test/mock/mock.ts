@@ -1,5 +1,5 @@
-import TestBaseData from '../../../femock/base-data'
-export * from '../../../femock'
+import TestBaseData from '@mk/base-data'
+export * from '@mk/index'
 
 export {
   TestBaseData,

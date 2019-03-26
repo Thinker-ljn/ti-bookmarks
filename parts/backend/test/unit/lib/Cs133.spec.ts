@@ -1,5 +1,5 @@
 
-import Cs133 from '@/core/plugins/Cs133'
+import Cs133 from '@be/src/core/plugins/Cs133'
 import * as assert from 'power-assert'
 
 describe('Cs133 Test', () => {

@@ -1,4 +1,4 @@
-import Core from '@/core';
+import Core from '@be/src/core';
 import Tag, { TagData } from './model';
 
 interface UpdateParams extends Partial<TagData> {

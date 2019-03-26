@@ -5,11 +5,6 @@
     "target": "es6",
     "outDir": "./build",
     "sourceMap": true,
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/*"],
-      "@test/*": ["test/*"]
-    },
     "typeRoots" : ["../../node_modules/@types", "./types"]
   },
   "include": [ "src", "test" ],

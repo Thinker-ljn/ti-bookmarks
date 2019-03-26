@@ -1,4 +1,4 @@
-import wordPlural from '@/core/plugins/plural';
+import wordPlural from '@be/src/core/plugins/plural';
 import { PromiseConnection } from '../database/connection'
 import Builder from '../database/query/builder'
 import { Data } from '../database/query/grammar/components/where'

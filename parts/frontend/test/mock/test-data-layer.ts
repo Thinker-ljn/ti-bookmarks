@@ -1,9 +1,9 @@
 import { mockHandler, MockAdapter, getStringify } from './mock'
 import Axios, { AxiosStatic } from 'axios';
 
-import Tree from '@/plugins/data-layer/core/tree';
-// import TagsBranch from '@/plugins/data-layer/branchs/tags';
-import BookmarksBranch from '@/plugins/data-layer/branchs/bookmarks';
+import Tree from '@fe/src/plugins/data-layer/core/tree';
+// import TagsBranch from '@fe/src/plugins/data-layer/branchs/tags';
+import BookmarksBranch from '@fe/src/plugins/data-layer/branchs/bookmarks';
 Axios.defaults.adapter = MockAdapter
 
 class MockTree extends Tree {

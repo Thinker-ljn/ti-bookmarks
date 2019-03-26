@@ -1,4 +1,4 @@
-import { DLBookmark } from '@/plugins/data-layer'
+import { DLBookmark } from '@fe/src/plugins/data-layer'
 import { Icon } from 'antd';
 import * as React from 'react'
 import './index.scss'

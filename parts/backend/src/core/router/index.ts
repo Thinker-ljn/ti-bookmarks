@@ -28,7 +28,7 @@ const dispatch = async (execFnOrCtrl: Handler, ctx: Context, next: Next) => {
   } else if (typeof execFnOrCtrl === 'string') {
     const [ctrl, fn] = execFnOrCtrl.split('@')
     try {
-      const classController = require('@/services/' + ctrl + '/index.js').default
+      const classController = require('@be/src/services/' + ctrl + '/index.js').default
 
       const controller = new classController(ctx)
       const method = controller[fn]

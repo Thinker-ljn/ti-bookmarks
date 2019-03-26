@@ -7,6 +7,13 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
+    "baseUrl": "./",
+    "paths": {
+      "@be/*": ["parts/backend/*"],
+      "@fe/*": ["parts/frontend/*"],
+      "@feSrc/*": ["@fe/src/*"],
+      "@mk/*": ["parts/femock/*"]
+    },
     "plugins": [
       { 
         "name": "typescript-tslint-plugin", 

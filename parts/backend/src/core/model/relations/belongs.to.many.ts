@@ -1,6 +1,6 @@
-import { PromiseConnection } from '@/core/database/connection'
-import Builder from '@/core/database/query/builder'
-import { Data } from '@/core/database/query/grammar/components/where'
+import { PromiseConnection } from '@be/src/core/database/connection'
+import Builder from '@be/src/core/database/query/builder'
+import { Data } from '@be/src/core/database/query/grammar/components/where'
 import { difference, intersection } from 'lodash';
 import Model, { ModelConstructor } from '..'
 

@@ -1,5 +1,5 @@
-import Core from '@/core';
-import { NonFunctionProperties } from '@/core/model';
+import Core from '@be/src/core';
+import { NonFunctionProperties } from '@be/src/core/model';
 import Bookmark from '../bookmark/model';
 
 export default class Tag extends Core.Model {

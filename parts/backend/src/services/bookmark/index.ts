@@ -1,4 +1,4 @@
-import Core from '@/core';
+import Core from '@be/src/core';
 import SpacedRepetition from '../spaced-repetition';
 import Bookmark, { BookmarkData } from './model';
 

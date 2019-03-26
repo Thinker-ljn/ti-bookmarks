@@ -1,6 +1,6 @@
-import Core from '@/core';
-import { NonFunctionProperties } from '@/core/model';
-import Cs133 from '@/core/plugins/Cs133';
+import Core from '@be/src/core';
+import { NonFunctionProperties } from '@be/src/core/model';
+import Cs133 from '@be/src/core/plugins/Cs133';
 import Bookmark from './bookmark/model';
 
 const repetition = [2, 7, 14, 30, 90]

@@ -1,5 +1,5 @@
-import { DLTag } from '@/plugins/data-layer';
-import Fruit from '@/plugins/data-layer/core/fruit';
+import { DLTag } from '@fe/src/plugins/data-layer';
+import Fruit from '@fe/src/plugins/data-layer/core/fruit';
 import { keyBy } from 'lodash'
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';

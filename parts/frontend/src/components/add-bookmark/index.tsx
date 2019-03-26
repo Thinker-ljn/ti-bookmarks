@@ -1,5 +1,5 @@
-import DL, { DLBookmark, DLTag } from '@/plugins/data-layer'
-import { useObjectState } from '@/plugins/hooks'
+import DL, { DLBookmark, DLTag } from '@fe/src/plugins/data-layer'
+import { useObjectState } from '@fe/src/plugins/hooks'
 import { Col, Input, Layout, Row } from 'antd'
 import * as React from 'react'
 import { useObservable } from 'rxjs-hooks';

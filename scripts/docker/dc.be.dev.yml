@@ -6,9 +6,7 @@ services:
   watch: 
     container_name: ti_watch01
     restart: always
-    build:
-      context: .
-      dockerfile: ./scripts/docker/base.dockerfile
+    image: ti-base-node
     volumes:
     - ./:/app
     command: "yarn be tsc"

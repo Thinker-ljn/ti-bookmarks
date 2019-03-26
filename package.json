@@ -19,8 +19,7 @@
     "test": "build/test/"
   },
   "_moduleAliases": {
-    "@": "parts/backend/build/src",
-    "#": "parts/frontend/src"
+    "@be": "parts/backend/build"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.7",

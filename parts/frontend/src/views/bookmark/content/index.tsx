@@ -1,10 +1,10 @@
-import AddBookmark, { AddBookmarkRef } from '@/components/add-bookmark'
+import AddBookmark, { AddBookmarkRef } from '@fe/src/components/add-bookmark'
 import { Icon, Layout, Modal } from 'antd'
 import * as React from 'react'
 import SingleBookmark from '../single-bookmark'
 import './index.scss'
 
-import DL, { DLBookmark } from '@/plugins/data-layer'
+import DL, { DLBookmark } from '@fe/src/plugins/data-layer'
 import { useObservable } from 'rxjs-hooks'
 
 function getQuickAddBookmark () {

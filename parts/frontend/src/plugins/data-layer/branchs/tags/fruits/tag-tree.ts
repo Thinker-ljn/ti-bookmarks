@@ -1,4 +1,4 @@
-import Fruit from '@/plugins/data-layer/core/fruit';
+import Fruit from '@fe/src/plugins/data-layer/core/fruit';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import TagsBranch, { DLTag } from '..';

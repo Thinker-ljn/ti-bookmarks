@@ -1,7 +1,7 @@
 import { Button, Layout } from 'antd'
 import * as React from 'react'
 
-import AddBookmark, { AddBookmarkRef } from '@/components/add-bookmark'
+import AddBookmark, { AddBookmarkRef } from '@fe/src/components/add-bookmark'
 const { useRef } = React
 export default function AddBookmarkView () {
   const submitAddBk = () => {
