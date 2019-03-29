@@ -53,7 +53,8 @@ export default class Model {
       throw new Error('Cannot find the model')
     }
     const model = (new this()) as T
-    model.properties = result[0]
+    // model.properties = result[0]
+    model.sync(result[0])
     return model
   }
 

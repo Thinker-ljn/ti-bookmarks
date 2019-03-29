@@ -1,17 +1,18 @@
 import Core from '@be/src/core';
 import Tag, { TagData } from './model';
 
-interface UpdateParams extends Partial<TagData> {
+export interface UpdateTag extends Partial<TagData> {
   id: number
 }
+export type CreateTag = Pick<TagData, ('name' | 'parent_id')>
 
-type CreateParams = Pick<TagData, ('name' | 'parent_id')>
 interface GetParams {
   tree: 1 | 0
 }
 type TagTreeNode = TagData & {children: TagTreeNode[]}
 type TagTree = TagTreeNode[]
 interface MapTree {[key: string]: TagTreeNode[]}
+
 export default class TagController extends Core.Controller {
   public async index ($get: GetParams) {
     const tags: TagData[] = await Tag.all()
@@ -43,7 +44,7 @@ export default class TagController extends Core.Controller {
     return [result]
   }
 
-  public async create ($form: CreateParams) {
+  public async create ($form: CreateTag) {
     this.validate({
       name: {
         type: 'string',
@@ -64,7 +65,7 @@ export default class TagController extends Core.Controller {
     return tag
   }
 
-  public async update ($form: UpdateParams) {
+  public async update ($form: UpdateTag) {
     this.validate({
       id: 'int',
       name: {
