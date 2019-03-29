@@ -18,3 +18,4 @@ chrome-user-data
 *.iml
 *.swp
 *.swo
+stats.json

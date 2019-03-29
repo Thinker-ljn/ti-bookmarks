@@ -21,6 +21,7 @@
     "start": "node ./script/dev-server.js",
     "test": "karma start test/script/karma.dev.config.js",
     "build": "node ./script/build.js",
+    "stats": "npx webpack --config ./script/webpack.prod.conf.js --mode production --profile --json > stats.json",
     "tslint": "tslint"
   }
 }

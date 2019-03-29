@@ -8,5 +8,5 @@ services:
     expose:
       - "8101"
     volumes:
-    - .:/app
+    - .:/app:delegated
     command: sh -c "yarn fe start"
