@@ -24,3 +24,25 @@ export function useObjectState<S extends KeyMap> (object: S) {
   }
   return  [newObject, mapSetObjectFn] as [S, SetObjectStateAction]
 }
+
+interface BooleanState {
+  value: boolean
+  reverse: () => void
+  set: (nV: boolean) => void,
+  toFalse: () => void
+  toTrue: () => void
+}
+
+export function useBooleanState (value: boolean): BooleanState {
+  const [v, setV] = useState(value)
+  return {
+    value: v,
+    reverse: () => {
+      const nV = !v
+      setV(nV)
+    },
+    set: setV,
+    toFalse: () => {setV(false)},
+    toTrue: () => {setV(true)},
+  }
+}

@@ -1,11 +1,14 @@
 import * as React from 'react'
 
+import { DLTag } from '@fe/src/plugins/data-layer'
 import * as PropTypes from 'prop-types'
 import './index.scss'
 
 import { Input, Modal } from 'antd'
 
 interface Props {
+  parent?: DLTag,
+  editTarget?: DLTag,
   visible: boolean,
   onHide: () => void,
   onOk: (name: string) => void,
@@ -46,13 +49,16 @@ class AddTagModal extends React.Component<Props, State> {
 
   public render () {
     const { tagName } = this.state
-    const { visible } = this.props
+    const { visible, parent, editTarget } = this.props
+    const title = editTarget ? `编辑书签 - ${editTarget.name}` : '添加书签' + (parent ? ` - ${parent.name}` : '')
+    const name = tagName || (editTarget && editTarget.name) || ''
     return (
       <Modal visible={visible}
+        title={title}
         onOk={this.handleOk}
         onCancel={this.handleCancel}
       >
-        <Input value={tagName} onChange={this.handleTagNameChange}></Input>
+        <Input value={name} onChange={this.handleTagNameChange}></Input>
       </Modal>
     )
   }

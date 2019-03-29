@@ -4,3 +4,16 @@
     background-color: transparent;
     border-right: 1px solid #f2f2f2;
 }
+
+.ti-tag-title 
+{
+    i {
+        display: none;
+    }
+
+    &:hover {
+        i {
+            display: initial;
+        }
+    }
+}

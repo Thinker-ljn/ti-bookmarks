@@ -1,70 +1,34 @@
-import { Icon, Layout, message, Modal, Tree } from 'antd'
+import { Layout, Tree } from 'antd'
 import * as React from 'react'
-import ContextMenu, { Menu } from '../context-menu'
-import AddTagModal from './add-tag-modal'
 import './index.scss'
-
+import { CreateTag, UpdateTag } from '@interfaces'
 import DL, {DLTag} from '@fe/src/plugins/data-layer'
-import { AntTreeNode } from 'antd/lib/tree'
 import { Dictionary } from 'lodash';
 import { useObservable } from 'rxjs-hooks'
-import { emit } from '../context-menu/trigger'
+import EditableTitle, { Payload } from '@fe/src/components/editable-title';
 
 const { Sider } = Layout
 const { TreeNode } = Tree
 
-function activeContextMenu (e: React.MouseEventHandler<any>, node: AntTreeNode) {
-  emit(e, node)
-}
-
-let currNodeId: number = 0
 export default function AppSider () {
-  const { useState } = React
   const tagsTree: DLTag[] = useObservable(() => DL.tags.tree_, [])
   const tagsMap: Dictionary<DLTag> = useObservable(() => DL.tags.map_, {})
-  const [showAddTagModal, setShowAddTagModal] = useState(false)
 
-  const addTag = (name: string) => {
-    const params = {
-      name,
-      parent_id: currNodeId,
-    };
-
+  const addTag = (payload: Payload) => {
+    const params: CreateTag = {
+      name: payload.name,
+      parent_id: payload.id,
+    }
     DL.tags.post(params)
   }
 
-  const handleDelTag = (node: AntTreeNode) => {
-    if (Number(node.props.eventKey) === 0) {
-      return message.error('不能删除根标签！')
-    }
-    Modal.confirm({
-      title: '确定要删除 ' + node.props.title + ' ?',
-      onOk: () => {
-        const key = node.props.eventKey
-        if (!key || !tagsMap[key]) { return }
-        const tag: DLTag = tagsMap[key]
-        DL.tags.delete(tag)
-      },
-    })
+  const updateTag = (payload: UpdateTag) => {
+    DL.tags.patch(payload)
   }
 
-  const menu: Menu = [
-    {
-      id: 1,
-      name: '添加',
-      callback: (node: AntTreeNode) => {
-        const key = node.props.eventKey
-        if (!key) { return }
-        currNodeId = tagsMap[key] ? tagsMap[key].id : 0
-        setShowAddTagModal(true)
-      },
-    },
-    {
-      id: 2,
-      name: '移除',
-      callback: handleDelTag,
-    },
-  ]
+  const delTag = (id: number) => {
+    DL.tags.delete({id})
+  }
 
   const onSelect = (selectedKeys: string[]) => {
     const key = selectedKeys.pop()
@@ -75,18 +39,25 @@ export default function AppSider () {
     // console.log(tag)
   }
 
-  const loop = (tags: DLTag[], addKey?: string) => {
+  // ---- render ----
+  const renderTitle = (tag?: DLTag) => {
+    const onUpdate = tag ? updateTag :  addTag
+    return <EditableTitle payload={tag} onDelete={delTag} onUpdate={onUpdate}></EditableTitle>
+  }
+
+  const loop = (tags: DLTag[], parent?: DLTag) => {
     const children = tags.map((tag) => {
       const key = tag.__key__
       if (tag.children && tag.children.length) {
-        return <TreeNode key={key} title={tag.name}>{loop(tag.children, tag.__key__)}</TreeNode>
+        return <TreeNode key={key} title={renderTitle(tag)}>{loop(tag.children, tag)}</TreeNode>
       }
-      return <TreeNode key={key} title={tag.name}/>
+      return <TreeNode key={key} title={renderTitle(tag)}/>
     })
 
-    if (children.length && addKey) { children.push(<TreeNode key={addKey} title={
-      <Icon type='plus-circle'></Icon>
-    }></TreeNode>)
+    if (children.length && parent) { 
+      children.push(
+        <TreeNode key={'add-' + parent.__key__} title={renderTitle()}></TreeNode>
+      )
     }
     return children
   }
@@ -95,7 +66,6 @@ export default function AppSider () {
     if (tagsTree.length) {
       return <Tree
         defaultExpandedKeys={['0-0']}
-        onRightClick={({event, node}) => {activeContextMenu(event, node)}}
         onSelect={onSelect}
       >
         {loop(tagsTree)}
@@ -105,8 +75,6 @@ export default function AppSider () {
 
   return (
     <Sider styleName='app-sider' width='300'>
-      <AddTagModal visible={showAddTagModal} onHide={() => setShowAddTagModal(false)} onOk={addTag}></AddTagModal>
-      <ContextMenu data={menu}></ContextMenu>
       {renderTree()}
     </Sider>
   )

@@ -1,0 +1,18 @@
+.title
+{
+    .hover
+    {
+        margin-left: 5px;
+        display: none;
+    }
+    
+    &:hover .hover
+    {
+        display: initial
+    }
+    
+    .hover.is-root
+    {
+        display: none;
+    }
+}

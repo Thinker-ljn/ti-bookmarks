@@ -17,7 +17,8 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
     alias: {
-      '@fe': resolve('./')
+      '@fe': resolve('./'),
+      '@interfaces': resolve('../interfaces')
     },
     modules: [process.env.NODE_PATH || 'node_modules', 'node_modules']
   },

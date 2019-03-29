@@ -142,6 +142,8 @@ export default abstract class Branch<T extends BranchData> implements BranchInte
       }, () => {
         this.initailDataFlag = 'error'
       })
+    } else {
+      this.initailDataFlag = 'finished'
     }
 
     this.from = from

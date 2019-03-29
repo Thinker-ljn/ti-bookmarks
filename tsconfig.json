@@ -11,7 +11,7 @@
     "paths": {
       "@be/*": ["parts/backend/*"],
       "@fe/*": ["parts/frontend/*"],
-      "@feSrc/*": ["@fe/src/*"],
+      "@interfaces": ["parts/interfaces"],
       "@mk/*": ["parts/femock/*"]
     },
     "plugins": [
@@ -19,6 +19,7 @@
         "name": "typescript-tslint-plugin", 
         "configFile": "./tslint.json"
       }
-    ]
+    ],
+    "typeRoots" : ["./node_modules/@types", "./types"]
   }
 }
