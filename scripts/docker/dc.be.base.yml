@@ -9,11 +9,11 @@ services:
     image: ti-base-node
     ports:
     - "8100:80"
-    - "9222:9222"
     expose:
     - "80"
     volumes:
     - ./:/app
+    - node_modules:/app/node_modules
     links:
     - mysql
     command: "yarn be nodemon"
@@ -34,3 +34,4 @@ services:
 
 volumes: 
   mysql:
+  node_modules:

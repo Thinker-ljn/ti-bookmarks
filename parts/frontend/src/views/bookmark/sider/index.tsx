@@ -48,13 +48,13 @@ export default function AppSider () {
   const loop = (tags: DLTag[], parent?: DLTag) => {
     const children = tags.map((tag) => {
       const key = tag.__key__
-      if (tag.children && tag.children.length) {
-        return <TreeNode key={key} title={renderTitle(tag)}>{loop(tag.children, tag)}</TreeNode>
-      }
-      return <TreeNode key={key} title={renderTitle(tag)}/>
+      return <TreeNode key={key} title={renderTitle(tag)}>{loop(tag.children || [], tag)}</TreeNode>
+      // if (tag.children && tag.children.length) {
+      // }
+      // return <TreeNode key={key} title={renderTitle(tag)}/>
     })
 
-    if (children.length && parent) { 
+    if (parent) {
       children.push(
         <TreeNode key={'add-' + parent.__key__} title={renderTitle()}></TreeNode>
       )
