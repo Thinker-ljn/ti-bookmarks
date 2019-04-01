@@ -1,10 +1,10 @@
 import { Icon, Input } from 'antd'
 import * as React from 'react';
 import { f, stop } from '@fe/src/utils';
-import { useBooleanState } from '@fe/src/plugins/hooks';
 import classnames from 'classnames'
 import './index.scss'
 import { PendingStatus } from '@fe/src/plugins/data-layer/core/types';
+import DeleteIcon from '../delete-icon';
 
 export interface Payload {
   id: number
@@ -24,6 +24,7 @@ interface NormalProps {
   isRoot: boolean
   toEdit: Noop
   toDelete: Noop
+  addChild?: Noop
 }
 
 interface EditingProps {
@@ -32,27 +33,11 @@ interface EditingProps {
   toSubmit: (name: string) => void
 }
 
-const DeleteIcon = (props: {onClick?: React.MouseEventHandler<HTMLElement>}) => {
-  const doubleChecked = useBooleanState(false)
-  const doDelete = (e: React.MouseEvent<HTMLElement>) => {
-    if (!doubleChecked.value) {
-      doubleChecked.toTrue()
-      return
-    }
-    if (props.onClick) {
-      props.onClick(e)
-    }
-  }
-  const style = {
-    color: doubleChecked.value ? '#ff6600' : '#999'
-  }
-  return <Icon type='delete' style={style} onClick={doDelete}></Icon>
-}
-
 const NormalTitle = (props: NormalProps) => {
   return <span styleName='title'>
     {props.title}
     <span styleName={classnames(['hover', {'is-root': props.isRoot}])} onClick={stop()}>
+      {props.addChild ? <Icon type='plus' onClick={props.addChild}></Icon> : ''}
       <Icon type='edit' onClick={props.toEdit}></Icon>
       <DeleteIcon onClick={props.toDelete}></DeleteIcon>
     </span>
@@ -74,7 +59,7 @@ const EditingTitle = (props: EditingProps) => {
   </span>
 }
 
-export default function EditableTitle (props: Props) {
+function EditableTitle (props: Props) {
   const {onDelete, onUpdate, payload} = props
   const {id, name: initialName} = payload || {id: 0, name: ''}
   const isNormalMode = !!payload
@@ -99,4 +84,9 @@ export default function EditableTitle (props: Props) {
     case 'editing': return <EditingTitle title={initialName} toSubmit={toSubmit} toClose={toClose}></EditingTitle>
     default: return <NormalTitle title={initialName} toEdit={toEdit} toDelete={toDelete} isRoot={isRoot}></NormalTitle>
   }
+}
+
+export default EditableTitle
+export {
+  NormalTitle,
 }

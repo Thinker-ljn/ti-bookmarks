@@ -6,11 +6,6 @@
   position: relative;
   z-index: 10;
   max-width: 100%;
-  .icon
-  {
-    width: 40px;
-    margin-right: 10px;
-  }
 }
 
 .header-content
@@ -19,4 +14,10 @@
   margin: auto;
   display: flex;
   align-items: center;
+}
+
+.icon
+{
+  width: 40px;
+  margin-right: 10px;
 }

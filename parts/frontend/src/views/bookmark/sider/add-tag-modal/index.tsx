@@ -1,17 +1,15 @@
 import * as React from 'react'
 
-import { DLTag } from '@fe/src/plugins/data-layer'
 import * as PropTypes from 'prop-types'
 import './index.scss'
 
 import { Input, Modal } from 'antd'
 
 interface Props {
-  parent?: DLTag,
-  editTarget?: DLTag,
+  text?: string
   visible: boolean,
   onHide: () => void,
-  onOk: (name: string) => void,
+  onOk?: (name: string) => void,
 }
 
 interface State {
@@ -40,25 +38,38 @@ class AddTagModal extends React.Component<Props, State> {
   }
 
   public handleOk = () => {
-    if (this.props.onOk) { this.props.onOk(this.state.tagName) }
+    if (this.props.onOk) { 
+      this.resetInput()
+      this.props.onOk(this.state.tagName) 
+    }
   }
 
   public handleCancel = () => {
-    if (this.props.onHide) { this.props.onHide() }
+    if (this.props.onHide) {
+      this.resetInput()
+      this.props.onHide()
+    }
+  }
+
+  public resetInput () {
+    this.setState({
+      tagName: '',
+    })
   }
 
   public render () {
     const { tagName } = this.state
-    const { visible, parent, editTarget } = this.props
-    const title = editTarget ? `编辑书签 - ${editTarget.name}` : '添加书签' + (parent ? ` - ${parent.name}` : '')
-    const name = tagName || (editTarget && editTarget.name) || ''
+    const { visible, text } = this.props
+    const title = text ? '编辑书签' : '添加子书签'
+
+    const value = tagName || text
     return (
       <Modal visible={visible}
         title={title}
         onOk={this.handleOk}
         onCancel={this.handleCancel}
       >
-        <Input value={name} onChange={this.handleTagNameChange}></Input>
+        <Input value={value} onChange={this.handleTagNameChange}></Input>
       </Modal>
     )
   }
