@@ -84,7 +84,7 @@ export default class TagController extends Core.Controller {
     if ($form.name) { tag.name = $form.name }
     if ($form.parent_id) { tag.parent_id = $form.parent_id }
 
-    await tag.save()
+    await tag.update()
 
     return tag
   }

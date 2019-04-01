@@ -30,10 +30,10 @@
   &::-webkit-scrollbar:horizontal {
     height: 8px;
   }
-  &::-webkit-scrollbar:not(:hover)
+  /*  &::-webkit-scrollbar:not(:hover)
   {
-    // opacity: 0 !important;
-  }
+    opacity: 0 !important;
+  } */
   /* 左端的按钮 */
   &::-webkit-scrollbar-button:horizontal:decrement:start {
     width: 0.8rem;

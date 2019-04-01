@@ -73,6 +73,8 @@
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "phantomjs-prebuilt": "^2.1.16",
     "portfinder": "^1.0.13",
+    "postcss-loader": "^3.0.0",
+    "postcss-nested": "^4.1.2",
     "postcss-scss": "^1.0.4",
     "power-assert": "^1.6.1",
     "react-hot-loader": "^4.0.0",
