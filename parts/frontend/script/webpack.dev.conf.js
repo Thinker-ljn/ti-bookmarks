@@ -41,15 +41,13 @@ module.exports = merge(baseConfig, {
       use: [{
         loader: "style-loader"
       }, {
-        loader: "css-loader", // translates CSS into CommonJS
+        loader: "css-loader",
         options: {
           importLoaders: 1,
           sourceMap: true,
           modules: true,
           localIdentName: "[path]___[name]__[local]___[hash:base64:5]"
         }
-      }, {
-        loader: "sass-loader" // compiles Sass to CSS
       }]
     }]
   },
