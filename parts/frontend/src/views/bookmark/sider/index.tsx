@@ -19,6 +19,7 @@ export default function AppSider () {
   const tagsTree: DLTag[] = useObservable(() => DL.tags.tree_, [])
   const tagsMap: Dictionary<DLTag> = useObservable(() => DL.tags.map_, {})
   const [modalOk, setModalOk] = React.useState<ModalOk>(undefined)
+  const [selectedKeys, setSelectedKeys] = React.useState<string[]>([])
   const modalVisible = useBooleanState(false)
   const createTag = (id: number, name: string) => {
     const params: CreateTag = {
@@ -37,11 +38,11 @@ export default function AppSider () {
     DL.tags.delete({id})
   }
 
-  const onSelect = (selectedKeys: string[]) => {
-    const key = selectedKeys.pop()
+  const onSelect = (currSelectedKeys: string[]) => {
+    setSelectedKeys(currSelectedKeys)
+    const key = currSelectedKeys[0]
     if (!key) { return }
     const tag = tagsMap[key]
-
     DL.bookmarks.filterByTag(tag)
   }
 
@@ -80,6 +81,7 @@ export default function AppSider () {
     if (tagsTree.length) {
       return <Tree
         defaultExpandedKeys={['0-0']}
+        selectedKeys={selectedKeys}
         onSelect={onSelect}
       >
         {loop(tagsTree)}
