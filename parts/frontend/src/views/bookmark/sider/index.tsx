@@ -19,7 +19,7 @@ export default function AppSider () {
   const tagsTree: DLTag[] = useObservable(() => DL.tags.tree_, [])
   const tagsMap: Dictionary<DLTag> = useObservable(() => DL.tags.map_, {})
   const [modalOk, setModalOk] = React.useState<ModalOk>(undefined)
-  const [selectedKeys, setSelectedKeys] = React.useState<string[]>([])
+  const [selectedKeys, setSelectedKeys] = React.useState<string[]>(['0-0'])
   const modalVisible = useBooleanState(false)
   const createTag = (id: number, name: string) => {
     const params: CreateTag = {
@@ -39,9 +39,9 @@ export default function AppSider () {
   }
 
   const onSelect = (currSelectedKeys: string[]) => {
+    if (!currSelectedKeys.length) { return }
     setSelectedKeys(currSelectedKeys)
     const key = currSelectedKeys[0]
-    if (!key) { return }
     const tag = tagsMap[key]
     DL.bookmarks.filterByTag(tag)
   }

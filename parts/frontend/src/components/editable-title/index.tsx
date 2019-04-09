@@ -1,7 +1,6 @@
 import { Icon, Input } from 'antd'
 import * as React from 'react';
-import { f, stop } from '@fe/src/utils';
-import classnames from 'classnames'
+import { f, stop } from '@fe/src/utils'
 import './index.scss'
 import { PendingStatus } from '@fe/src/plugins/data-layer/core/types';
 import DeleteIcon from '../delete-icon';
@@ -36,10 +35,10 @@ interface EditingProps {
 const NormalTitle = (props: NormalProps) => {
   return <span styleName='title'>
     {props.title}
-    <span styleName={classnames(['hover', {'is-root': props.isRoot}])} onClick={stop()}>
+    <span styleName='hover' onClick={stop()}>
       {props.addChild ? <Icon type='plus' onClick={props.addChild}></Icon> : ''}
-      <Icon type='edit' onClick={props.toEdit}></Icon>
-      <DeleteIcon onClick={props.toDelete}></DeleteIcon>
+      {!props.isRoot && <Icon type='edit' onClick={props.toEdit}></Icon>}
+      {!props.isRoot && <DeleteIcon onClick={props.toDelete}></DeleteIcon>}
     </span>
   </span>
 }
