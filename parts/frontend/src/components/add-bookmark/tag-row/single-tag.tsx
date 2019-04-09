@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import './index.scss'
+import './index.css'
 
 import {DLTag} from '@fe/src/plugins/data-layer'
 import classNames from 'classnames'
@@ -53,7 +53,7 @@ export default function SingleDLTag (props: Props) {
   const expendedStyle = classNames({'has-children': hasChildren(tag), 'expended': expended})
   const tagJsx = <div styleName={styles} title={tag.name} onClick={onClick}>
               <span styleName={expendedStyle} onClick={doExpend}></span>
-              <span>{tag.name}</span>
+              <span styleName='name'>{tag.name}</span>
             </div>
 
   if (hasChildren(tag)) {

@@ -10,7 +10,7 @@ module.exports = merge(baseConfig, {
   ],
   module: {
     rules: [{
-      test: /\.css$/,
+      test: /\.s?css$/,
       exclude: /node_modules/,
       use: [{
         loader: "style-loader"
@@ -22,6 +22,8 @@ module.exports = merge(baseConfig, {
           modules: true,
           localIdentName: "[path]___[name]__[local]___[hash:base64:5]"
         }
+      }, {
+        loader: "postcss-loader"
       }]
     },
     {
@@ -34,22 +36,6 @@ module.exports = merge(baseConfig, {
         options: {
           importLoaders: 1
         }
-      }]
-    },
-    {
-      test: /\.scss$/,
-      use: [{
-        loader: "style-loader"
-      }, {
-        loader: "css-loader",
-        options: {
-          importLoaders: 1,
-          sourceMap: true,
-          modules: true,
-          localIdentName: "[path]___[name]__[local]___[hash:base64:5]"
-        }
-      }, {
-        loader: "postcss-loader"
       }]
     }]
   },

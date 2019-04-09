@@ -1,4 +1,13 @@
-@mixin textOverflow ($width)
+:root {
+  --disableUserSelect {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}
+@define-mixin textOverflow $width
 {
   display: inline-block;
   width: $width;
@@ -7,7 +16,7 @@
   overflow: hidden;
 }
 
-@mixin disableUserSelect () {
+@define-mixin disableUserSelect {
   -webkit-user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
@@ -15,7 +24,7 @@
   user-select: none;
 }
 
-@mixin scrollbar($colorReverse: false) {
+@define-mixin scrollbar($colorReverse: false) {
   $outerColor: if($colorReverse, rgba(85, 85, 85, 0.3), rgba(68, 68, 68, 0.3));
   $innerColor: if($colorReverse, #444, #555);
   &::-webkit-scrollbar[orient="vertical"]:not(:hover),

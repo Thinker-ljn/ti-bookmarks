@@ -1,6 +1,6 @@
 import { DLTag } from '@fe/src/plugins/data-layer';
 import * as React from 'react'
-import './index.scss'
+import './index.css'
 import SingleTag, { TagChangeEvent } from './single-tag'
 
 type onTagUpdate = (tag: TagChangeEvent) => void
