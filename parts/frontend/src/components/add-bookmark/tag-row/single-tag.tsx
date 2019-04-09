@@ -44,16 +44,16 @@ export default function SingleDLTag (props: Props) {
   }
 
   const checked = props.checkedList.has(tag.id)
-  const styles = (checked ? 'checked' : '') + ' tag'
+  const checkedStyles = (checked ? 'checked' : '') + ' name'
 
   const hasChildren = (theCheckingTag: DLTag): theCheckingTag is HasChildDLTag => {
     return Array.isArray(theCheckingTag.children) && theCheckingTag.children.length > 0
   }
 
   const expendedStyle = classNames({'has-children': hasChildren(tag), 'expended': expended})
-  const tagJsx = <div styleName={styles} title={tag.name} onClick={onClick}>
+  const tagJsx = <div styleName='tag' title={tag.name}>
               <span styleName={expendedStyle} onClick={doExpend}></span>
-              <span styleName='name'>{tag.name}</span>
+              <span styleName={checkedStyles} onClick={onClick}>{tag.name}</span>
             </div>
 
   if (hasChildren(tag)) {

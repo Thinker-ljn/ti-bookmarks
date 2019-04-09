@@ -1,4 +1,8 @@
 /* @import "~@fe/src/assets/css/mixins.css"; */
+:root
+{
+  --circle-size: 5px;
+}
 .tags-container
 {
   width: 100%;
@@ -19,22 +23,22 @@
   }
   .tag
   {
-    text-align: center;
-    margin-left: 5px;
+    /* text-align: center; */
     .name {
+      margin: 0 5px;
       display: inline-block;
-      width: 60px;
+      max-width: 60px;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
       border-bottom: 2px solid transparent;
-    }
-    &:hover {
-      opacity: 0.7;
-    }
+      &:hover {
+        opacity: 0.7;
+      }
 
-    &.checked .name, &:hover .name {
-      border-bottom: 2px solid #40a9ff;
+      &.checked, &:hover {
+        border-bottom: 2px solid #40a9ff;
+      }
     }
   }
 
@@ -42,17 +46,16 @@
   {
     /* position: absolute; */
     display: inline-block;
-    width: 5px;
-    height: 5px;
+    width: var(--circle-size);
+    height: var(--circle-size);
+    border-radius: var(--circle-size);
     background-color: #40a9ff;
-    left: 4px;
-    top: 8px;
-    border-radius: 5px;
   }
   .expended, .collapse
   {
     background-color: transparent;
     border-color: #40a9ff;
+    border-radius: 0;
     border-style: solid;
     border-width: 1px;
     border-bottom-width: 0;
@@ -62,8 +65,5 @@
   .collapse
   {
     transform: rotate(-135deg);
-    left: initial;
-    top: 12px;
-    right: 4px;
   }
 }
