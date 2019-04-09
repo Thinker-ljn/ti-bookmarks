@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const baseConfig = require('./webpack.base.conf.js')
-
+const cssLoader = require('./css-loader')
 module.exports = merge(baseConfig, {
   mode: 'development',
   entry: [
@@ -12,31 +12,12 @@ module.exports = merge(baseConfig, {
     rules: [{
       test: /\.s?css$/,
       exclude: /node_modules/,
-      use: [{
-        loader: "style-loader"
-      }, {
-        loader: "css-loader", // translates CSS into CommonJS
-        options: {
-          importLoaders: 1,
-          sourceMap: true,
-          modules: true,
-          localIdentName: "[path]___[name]__[local]___[hash:base64:5]"
-        }
-      }, {
-        loader: "postcss-loader"
-      }]
+      use: [{ loader: "style-loader" }, cssLoader, { loader: "postcss-loader" }]
     },
     {
       test: /\.css$/,
       exclude: /src/,
-      use: [{
-        loader: "style-loader"
-      }, {
-        loader: "css-loader", // translates CSS into CommonJS
-        options: {
-          importLoaders: 1
-        }
-      }]
+      use: [{ loader: "style-loader" }, { loader: "css-loader" }]
     }]
   },
   devtool: "#cheap-module-eval-source-map",

@@ -5,7 +5,7 @@ const baseConfig = require('./webpack.base.conf.js')
 const path = require('path')
 const TerserJSPlugin = require("terser-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-
+const cssLoader = require('./css-loader')
 module.exports = merge(baseConfig, {
   mode: 'production',
   output: {
@@ -14,43 +14,14 @@ module.exports = merge(baseConfig, {
   },
   module: {
     rules: [{
-      test: /\.css$/,
+      test: /\.s?css$/,
       exclude: /node_modules/,
-      use: [ExtractTextPlugin.loader, {
-        loader: "css-loader", // translates CSS into CommonJS
-        options: {
-          importLoaders: 1,
-          sourceMap: true,
-          modules: true,
-          localIdentName: "[path]___[name]__[local]___[hash:base64:5]"
-        }
-      }, {
-        loader: "postcss-loader"
-      }]
+      use: [ExtractTextPlugin.loader, cssLoader, { loader: "postcss-loader" }]
     },
     {
       test: /\.css$/,
       exclude: /src/,
-      use: [ExtractTextPlugin.loader,{
-        loader: "css-loader",
-        options: {
-          importLoaders: 1
-        }
-      }]
-    },
-    {
-      test: /\.scss$/,
-      use: [ExtractTextPlugin.loader,{
-        loader: "css-loader",
-        options: {
-          importLoaders: 1,
-          sourceMap: true,
-          modules: true,
-          localIdentName: "[path]___[name]__[local]___[hash:base64:5]"
-        }
-      }, {
-        loader: "postcss-loader"
-      }]
+      use: [ExtractTextPlugin.loader, { loader: "css-loader" }]
     }]
   },
   devtool: '#source-map',

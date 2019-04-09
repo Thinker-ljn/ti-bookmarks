@@ -1,6 +1,6 @@
 const path = require('path')
 const HtmlWebPackPlugin = require("html-webpack-plugin")
-
+const babelLoader = require('./babel-loader')
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -30,19 +30,18 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: [{
-          loader: 'babel-loader'
-        }]
+        use: [babelLoader]
       },
       {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         include: /src/,
-        use: [{
-          loader: 'babel-loader'
-        }, {
-          loader: 'awesome-typescript-loader'
-        }]
+        use: [
+          babelLoader, 
+          {
+            loader: 'awesome-typescript-loader'
+          }
+        ]
       }
     ]
   },
