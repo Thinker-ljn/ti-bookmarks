@@ -21,7 +21,6 @@ export default class BookmarksFilterByTagFruit extends Fruit<DLBookmark[], Bookm
     const defaultStart: Pairwise = [true, []]
     return this.branch.default_.pipe(
       combineLatest(idKeybyTag_, currFilterTag_, (bks: DLBookmark[], bkids, tag: DLTag): Pairwise => {
-        console.info(bks)
         if (!tag || !tag.id) { return [true, bks] }
         if (!bkids[tag.id]) { return [false, bks] }
         const ids = bkids[tag.id]

@@ -1,4 +1,3 @@
-import Axios from 'axios';
 import { Observable } from 'rxjs';
 import { filter, map, scan, startWith } from 'rxjs/operators';
 import { DLTag } from '../..';
@@ -16,10 +15,6 @@ export interface DLBookmark extends BranchData {
 
 const bookmarkIdsByTagApiReg = /tags\/\d+\/bookmarks/
 export type BookmarkIdsByTag = IndexMap<number[]>
-
-// class BookmarkFruit extends Fruit<DLBookmark[], BookmarksBranch> {
-//   source_: Observable<DLBookmark[]> = this.branch.default_
-// }
 
 export default class BookmarksBranch extends Branch<DLBookmark> {
   public readonly exampleData: DLBookmark = {
@@ -48,6 +43,6 @@ export default class BookmarksBranch extends Branch<DLBookmark> {
     if (!tag || queryedTag[tag.id]) { return }
 
     queryedTag[tag.id] = true
-    Axios.get(`tags/${tag.id}/${this.namespace}`)
+    this.axios.get(`tags/${tag.id}/${this.namespace}`)
   }
 }
