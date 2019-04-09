@@ -1,10 +1,11 @@
-import axios, { AxiosResponse } from 'axios'
+import { AxiosResponse } from 'axios'
 import { ReplaySubject } from 'rxjs'
 import Tree from './tree';
 const ROUTE_PREFIX = '/api/'
 
 function useInterceptor (root: Root) {
   const subject = root.source_
+  const axios = root.tree.axios
   axios.defaults.baseURL = ROUTE_PREFIX
   axios.interceptors.response.use((response) => {
     subject.next(response)

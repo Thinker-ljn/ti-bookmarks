@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs'
+import { AxiosError } from 'axios';
 // import { PacketData } from '../types'
 
 export interface KeyMap<T> {[key: string]: T}
@@ -15,7 +16,7 @@ export interface Packet<T> {
 export type TrunkPacket = Packet<PacketData>
 // type Method = 'get' | 'post' | 'patch' | 'detele'
 export type DLTrunkSource = Observable<TrunkPacket>
-export type DLTrunkErrorSource = Observable<Packet<Error>>
+export type DLTrunkErrorSource = Observable<Packet<AxiosError>>
 
 export type PendingStatus = 'creating' | 'updating' | 'deleting'
 
