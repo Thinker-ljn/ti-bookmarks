@@ -1,6 +1,6 @@
 import DL, { DLBookmark, DLTag } from '@fe/src/plugins/data-layer'
 import { useObjectState } from '@fe/src/plugins/hooks'
-import { Col, Input, Layout, Row } from 'antd'
+import { Col, Input, Row, Form } from 'antd'
 import * as React from 'react'
 import { useObservable } from 'rxjs-hooks';
 import TagRow from './tag-row'
@@ -81,10 +81,10 @@ const addBookmarkModal = forwardRef((props: Props, ref) => {
 
   const topTags = tags[0] ? (tags[0].children || []) : []
   return (
-    <Layout>
+    <Form>
       {rows()}
       <TagRow tags={topTags} checkedList={checkedTags} onTagUpdate={onTagUpdate}></TagRow>
-    </Layout>
+    </Form>
   )
 })
 
