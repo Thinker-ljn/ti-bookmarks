@@ -4,14 +4,13 @@ const babelLoader = require('./babel-loader')
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
-
 module.exports = {
   entry: [
     './src/index.js'
   ],
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, '../public/asset'),
+    path: resolve('./public/asset'),
     publicPath: '/'
   },
   resolve: {
@@ -20,10 +19,10 @@ module.exports = {
       '@fe': resolve('./'),
       '@interfaces': resolve('../interfaces')
     },
-    modules: [process.env.NODE_PATH || 'node_modules', 'node_modules']
+    modules: ['node_modules']
   },
   resolveLoader: {
-    modules: [process.env.NODE_PATH || 'node_modules', 'node_modules']
+    modules: ['node_modules']
   },
   module: {
     rules: [
