@@ -1,0 +1,11 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "down-docker",
+            "command": "yarn",
+            "args": [ "run", "dc:be:test", "down" ],
+            "type": "shell"
+        }
+    ]
+ }

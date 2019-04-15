@@ -1,0 +1,16 @@
+version: '3'
+services:
+  backend: 
+    command: "yarn be testUnit"
+    
+  watch: 
+    container_name: ti_watch01
+    restart: always
+    image: ti-base-node
+    volumes:
+    - ./:/app
+    - node_modules:/app/node_modules
+    links:
+    - mysql
+    command: "yarn be tsc"
+    tty: true

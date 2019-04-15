@@ -1,0 +1,25 @@
+{
+  "exclude": [ "node_modules" ],
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "moduleResolution": "node",
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "baseUrl": "./",
+    "paths": {
+      "@be/*": ["parts/backend/*"],
+      "@fe/*": ["parts/frontend/*"],
+      "@interfaces": ["parts/interfaces"],
+      "@mk/*": ["parts/femock/*"]
+    },
+    "plugins": [
+      { 
+        "name": "typescript-tslint-plugin", 
+        "configFile": "./tslint.json"
+      }
+    ],
+    "typeRoots" : ["./node_modules/@types", "./types"]
+  }
+}

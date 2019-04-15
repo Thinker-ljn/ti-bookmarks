@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "lib": [ "es6", "dom" ],
+    "module": "es6",
+    "jsx": "preserve",
+    "target": "es5",
+    "types": ["@types/mocha", "@types/power-assert", "@types/react-css-modules"]
+  },
+  "include": [ "src", "test"],
+  "exclude": [ "node_modules", "script", "public" ],
+}

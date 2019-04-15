@@ -1,0 +1,41 @@
+#! /usr/bin/env node
+
+const spawn = require('child_process').spawn
+const ts = require('typescript')
+const dotenv = require('dotenv')
+dotenv.config()
+process.env.MODE = 'cli'
+function parseTsOutDir (cwd) {
+  const tsconfigPath = ts.findConfigFile(cwd, ts.sys.fileExists);
+  const result = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
+  if (result.error) {
+    return '.'
+  }
+  return result.config && result.config.compilerOptions && result.config.compilerOptions && result.config.compilerOptions.outDir || '.'
+}
+
+const cwd = process.cwd();
+const args = process.argv.slice(2)
+const tsOutDir = parseTsOutDir(cwd).replace(/\/$/, '')
+const execCommanderFile = `src/core/terminate/main.js`
+const artisan = spawn('node', [execCommanderFile].concat(args), {cwd: `${tsOutDir}/`})
+artisan.stdout.on('data', function (data) {
+  console.log('stdout: ' + data.toString());
+});
+
+artisan.stderr.on('data', function (data) {
+  console.log('stderr: ' + data.toString());
+});
+
+artisan.on('exit', function (code) {
+  console.log('child process exited with code ' + code.toString());
+});
+
+// exec(`node ${execCommanderFile} ${args}`, {cwd: `${tsOutDir}/`}, function(error, stdout, stderr) {
+//   if (error) {
+//     console.error(`执行出错: ${error}`);
+//     return;
+//   }
+//   if (stdout)  console.log(`stdout: ${stdout}`);
+//   if (stderr)  console.log(`stderr: ${stderr}`);
+// });

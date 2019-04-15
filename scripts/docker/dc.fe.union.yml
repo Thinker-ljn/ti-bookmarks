@@ -1,0 +1,8 @@
+version: '3'
+services:
+  backend: 
+  frontend:
+    environment:
+      BACKEND: http://backend
+    links: 
+      - backend

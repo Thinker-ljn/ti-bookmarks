@@ -1,0 +1,37 @@
+{
+  "private": true,
+  "name": "ti-backend",
+  "version": "0.0.0",
+  "author": "thinker_ljn",
+  "description": "ti-backend",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "lodash": "^4.17.11",
+    "module-alias": "^2.2.0",
+    "mysql": "^2.16.0",
+    "parameter": "^3.5.0"
+  },
+  "types": "types/*",
+  "scripts": {
+    "nodemon": "nodemon -r module-alias/register -r dotenv/config --legacy-watch --watch build --inspect=0.0.0.0:9222 --nolazy --delay 1500ms build/src/index.js",
+    "tsc": "tsc -w",
+    "dev": "yarn tsc && yarn nodemon",
+    "test": "mocha -r dotenv/config -r module-alias/register -r intelli-espower-loader --inspect=0.0.0.0:9222 --nolazy -w",
+    "testApi": "yarn test build/test/api/**/*.spec.js",
+    "testUnit": "yarn test build/test/unit/**/*.spec.js",
+    "testTs": "yarn test --extension ts test/**/*.spec.ts",
+    "artisan": "node ./artisan"
+  },
+  "directories": {
+    "test": "build/test/"
+  },
+  "_moduleAliases": {
+    "______": "/defined/in/-/outside/package.json"
+  }
+}

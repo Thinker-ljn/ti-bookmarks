@@ -1,0 +1,27 @@
+{
+  "private": true,
+  "name": "ti-frontend",
+  "version": "0.1.0",
+  "author": "thinker_ljn",
+  "description": "ti-frontend",
+  "main": "/src/index.js",
+  "license": "ISC",
+  "dependencies": {
+    "antd": "^3.15.1",
+    "axios": "^0.18.0",
+    "lodash": "^4.17.11",
+    "react": "16.8",
+    "react-dom": "16.8",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "rxjs": "^6.4.0",
+    "rxjs-hooks": "^0.3.3"
+  },
+  "scripts": {
+    "start": "node ./script/dev-server.js",
+    "test": "karma start test/script/karma.dev.config.js",
+    "build": "node ./script/build.js",
+    "stats": "npx webpack --config ./script/webpack.prod.conf.js --mode production --profile --json > stats.json",
+    "tslint": "tslint"
+  }
+}

@@ -1,0 +1,13 @@
+version: '3'
+services:
+  frontend:
+    container_name: ti_frontend01
+    image: ti-base-node
+    ports:
+    - "8101:8101"
+    expose:
+      - "8101"
+    volumes:
+    - .:/app:delegated
+    - node_modules:/app/node_modules
+    command: sh -c "yarn fe start"
